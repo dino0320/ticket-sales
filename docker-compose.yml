@@ -1,0 +1,8 @@
+services:
+  web:
+    build: ./docker/web
+    volumes:
+      - .:/srv/ticket-sales.com
+    ports:
+      - "8080:80"
+    command: bash -c "/srv/ticket-sales.com/docker/web/start.sh"
