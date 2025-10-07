@@ -17,7 +17,6 @@ chmod 777 "$PROJECT_PATH/storage/logs"
 chmod 777 "$PROJECT_PATH/storage/framework/views"
 chmod 777 "$PROJECT_PATH/database"
 chmod 777 "$PROJECT_PATH/database/database.sqlite"
-chmod 755 "$PROJECT_PATH/docker/web/start.sh"
 
 # Start php-fpm and NGINX
 # By using -g "daemon off;", NGINX runs in the foreground, preventing the container from exiting automatically
