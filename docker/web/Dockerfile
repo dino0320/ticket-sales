@@ -19,3 +19,8 @@ RUN sed -i "s/php_admin_value\[error_log\]/;php_admin_value\[error_log\]/" /etc/
 
 # Xdebug
 RUN yum -y install php-pear php-devel
+
+# Node.js
+RUN touch ~/.bashrc
+COPY install-npm.sh /tmp/install-npm.sh
+RUN /tmp/install-npm.sh 20.14.0
