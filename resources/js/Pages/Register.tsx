@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
+import { useState } from 'react';
 
 import {
   Form,
@@ -39,10 +40,12 @@ export default function RegisterPreview() {
     },
   })
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // Assuming an async registration function
-      router.post(register(), values)
+      router.post(register(), values, { onError: (errors: Record<string, string>) => { setErrorMessage(Object.values(errors).join(' '))} })
     } catch (error) {
       console.error('Form submission error', error)
     }
@@ -55,6 +58,7 @@ export default function RegisterPreview() {
           <CardTitle className="text-2xl">Register</CardTitle>
           <CardDescription>
             Create a new account by filling out the form below.
+            <p className="text-destructive text-sm">{errorMessage}</p>
           </CardDescription>
         </CardHeader>
         <CardContent>

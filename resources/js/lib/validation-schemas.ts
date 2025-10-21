@@ -5,7 +5,7 @@ export const emailSchema = z.string().email({ message: 'Invalid email address' }
 export const passwordSchema = z
   .string()
   .min(6, { message: 'Password must be at least 6 characters long' })
-  .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' })
+  .regex(/^[a-zA-Z0-9]+$/, { message: 'Password must be alphanumeric' })
 
 export const nameSchema = z
   .string()
@@ -30,7 +30,6 @@ export const registerFormSchema = z
   .object({
     name: nameSchema,
     email: emailSchema,
-    //phone: phoneSchema,
     password: passwordSchema,
     password_confirmation: z.string(),
   })
