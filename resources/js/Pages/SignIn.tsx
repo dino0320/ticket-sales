@@ -1,10 +1,11 @@
-import { register } from "@/actions/App/Http/Controllers/SignUpController";
+import { authenticate } from "@/actions/App/Http/Controllers/SignInController";
 import { Link } from '@inertiajs/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
 import { useState } from 'react';
+import { setServerError } from '@/lib/form-utils'
 
 import {
   Form,
@@ -25,18 +26,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 
-import { registerFormSchema } from '@/lib/validation-schemas'
+import { loginFormSchema } from '@/lib/validation-schemas'
 
-const formSchema = registerFormSchema
+const formSchema = loginFormSchema
 
-export default function RegisterPreview() {
+export default function SignIn() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
       email: '',
       password: '',
-      password_confirmation: '',
     },
   })
 
@@ -45,7 +44,7 @@ export default function RegisterPreview() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // Assuming an async registration function
-      router.post(register(), values, { onError: (errors: Record<string, string>) => { setErrorMessage(Object.values(errors).join(' '))} })
+      router.post(authenticate(), values, { onError: (errors: Record<string, string>) => setServerError(errors, form, setErrorMessage) })
     } catch (error) {
       console.error('Form submission error', error)
     }
@@ -55,9 +54,9 @@ export default function RegisterPreview() {
     <div className="flex min-h-[60vh] h-full w-full items-center justify-center px-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Register</CardTitle>
+          <CardTitle className="text-2xl">Sign in</CardTitle>
           <CardDescription>
-            Create a new account by filling out the form below.
+            Sign in with your existing account by filling out the form below.
             <p className="text-destructive text-sm">{errorMessage}</p>
           </CardDescription>
         </CardHeader>
@@ -65,21 +64,6 @@ export default function RegisterPreview() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid gap-4">
-                {/* Name Field */}
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="name">Full Name</FormLabel>
-                      <FormControl>
-                        <Input id="name" placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 {/* Email Field */}
                 <FormField
                   control={form.control}
@@ -121,39 +105,17 @@ export default function RegisterPreview() {
                   )}
                 />
 
-                {/* Confirm Password Field */}
-                <FormField
-                  control={form.control}
-                  name="password_confirmation"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="password_confirmation">
-                        Confirm Password
-                      </FormLabel>
-                      <FormControl>
-                        <PasswordInput
-                          id="password_confirmation"
-                          placeholder="******"
-                          autoComplete="new-password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <Button type="submit" className="w-full">
-                  Register
+                  Sign in
                 </Button>
               </div>
             </form>
           </Form>
           {
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
-            <Link href="#">
-              Login
+            Don't have your account?{' '}
+            <Link href="/sign-up">
+              Sign up
             </Link>
           </div>
           }

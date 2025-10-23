@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class SignUpController extends Controller
 {
@@ -18,7 +17,7 @@ class SignUpController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function register(Request $request): Response
+    public function register(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -39,7 +38,6 @@ class SignUpController extends Controller
 
         $request->session()->regenerate();
 
-        return Inertia::render('Welcome');
-        //return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended('/home');
     }
 }
