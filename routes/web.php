@@ -7,13 +7,13 @@ use Inertia\Inertia;
 
 Route::get('/sign-up', function () {
     return Inertia::render('SignUp');
-});
+})->name('sign-up');
 
 Route::post('/register', [SignUpController::class, 'register']);
 
 Route::get('/sign-in', function () {
     return Inertia::render('SignIn');
-});
+})->name('sign-in');
     
 Route::post('/authenticate', [SignInController::class, 'authenticate']);
 

@@ -1,4 +1,5 @@
 import { register } from "@/actions/App/Http/Controllers/SignUpController";
+import { signIn } from "@/routes/index";
 import { Link } from '@inertiajs/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -153,7 +154,7 @@ export default function SignUp() {
           {
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
-            <Link href="/sign-in">
+            <Link href={signIn()}>
               Sign in
             </Link>
           </div>
