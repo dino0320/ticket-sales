@@ -1,0 +1,2 @@
+CREATE USER "user" WITH PASSWORD 'password';
+GRANT CREATE ON SCHEMA public TO "user";

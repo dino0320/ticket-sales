@@ -14,9 +14,24 @@ services:
     depends_on:
       composer:
         condition: service_completed_successfully
+      db:
+        condition: service_healthy
 
   composer:
     build: ./docker/composer
     volumes:
       - .:/srv/ticket-sales.com
     command: "/srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
+
+  db:
+    build: ./docker/db
+    volumes:
+      - ./docker/db/initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: ticket_sales
+      POSTGRES_PASSWORD: root_password
+    healthcheck:
+      test: "psql -U user -w -d ticket_sales -c 'select 1;'"
+      timeout: 5s
+      interval: 5s
+      retries: 10

@@ -6,6 +6,8 @@ PROJECT_PATH=/srv/ticket-sales.com
 
 cd $PROJECT_PATH
 
+php artisan migrate:fresh --force
+
 # Install Xdebug
 if [ "$APP_ENV" = "local" ]; then
   pecl install xdebug-3.3.1
