@@ -1,5 +1,3 @@
-'use client'
-
 import { forwardRef, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
