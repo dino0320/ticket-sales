@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\SignUpController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,4 +21,6 @@ Route::post('/authenticate', [SignInController::class, 'authenticate']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index']);
+
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 });
