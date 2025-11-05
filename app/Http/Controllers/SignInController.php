@@ -14,8 +14,8 @@ class SignInController extends Controller
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required|string|lowercase|email|max:255',
+            'password' => 'required',
         ]);
  
         if (Auth::attempt($credentials)) {
