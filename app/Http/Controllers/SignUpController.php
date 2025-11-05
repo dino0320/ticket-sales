@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,11 +27,9 @@ class SignUpController extends Controller
             'password_confirmation' => ['required'],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $userRepository = new UserRepository();
+
+        $user = $userRepository->create($request->name, $request->email, Hash::make($request->password));
 
         event(new Registered($user));
 
