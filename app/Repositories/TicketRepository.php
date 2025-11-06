@@ -29,4 +29,22 @@ class TicketRepository extends Repository
                 ['end_date', '>=', $now],
             ])->orderBy('event_start_date', 'asc')->cursorPaginate(10);
     }
+
+    /**
+     * Select by ids
+     *
+     * @param array $ids
+     * @return CursorPaginator
+     */
+    public function selectByIds(array $ids): CursorPaginator
+    {
+        return Ticket::select([
+                'id',
+                'event_title',
+                'event_description',
+                'price',
+                'event_start_date',
+                'event_end_date',
+            ])->whereIn('id', $ids)->cursorPaginate(10);
+    }
 }

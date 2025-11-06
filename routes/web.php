@@ -26,4 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 
     Route::post('/cart', [UserCartController::class, 'store']);
+
+    Route::get('/cart', [UserCartController::class, 'show']);
 });

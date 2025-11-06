@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:14
+* @see app/Http/Controllers/TicketController.php:20
 * @route '/tickets/{ticket}'
 */
 export const show = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:14
+* @see app/Http/Controllers/TicketController.php:20
 * @route '/tickets/{ticket}'
 */
 show.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ show.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: 
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:14
+* @see app/Http/Controllers/TicketController.php:20
 * @route '/tickets/{ticket}'
 */
 show.get = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ show.get = (args: { ticket: number | { id: number } } | [ticket: number | { id: 
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:14
+* @see app/Http/Controllers/TicketController.php:20
 * @route '/tickets/{ticket}'
 */
 show.head = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
