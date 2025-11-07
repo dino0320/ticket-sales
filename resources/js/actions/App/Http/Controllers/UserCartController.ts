@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\UserCartController::store
-* @see app/Http/Controllers/UserCartController.php:23
+* @see app/Http/Controllers/UserCartController.php:24
 * @route '/cart'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\UserCartController::store
-* @see app/Http/Controllers/UserCartController.php:23
+* @see app/Http/Controllers/UserCartController.php:24
 * @route '/cart'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserCartController::store
-* @see app/Http/Controllers/UserCartController.php:23
+* @see app/Http/Controllers/UserCartController.php:24
 * @route '/cart'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\UserCartController::show
-* @see app/Http/Controllers/UserCartController.php:56
+* @see app/Http/Controllers/UserCartController.php:57
 * @route '/cart'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -50,7 +50,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\UserCartController::show
-* @see app/Http/Controllers/UserCartController.php:56
+* @see app/Http/Controllers/UserCartController.php:57
 * @route '/cart'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -59,7 +59,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserCartController::show
-* @see app/Http/Controllers/UserCartController.php:56
+* @see app/Http/Controllers/UserCartController.php:57
 * @route '/cart'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -69,7 +69,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\UserCartController::show
-* @see app/Http/Controllers/UserCartController.php:56
+* @see app/Http/Controllers/UserCartController.php:57
 * @route '/cart'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -79,7 +79,7 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\UserCartController::updateNumberOfTickets
-* @see app/Http/Controllers/UserCartController.php:77
+* @see app/Http/Controllers/UserCartController.php:78
 * @route '/cart/{ticket}/number-of-tickets'
 */
 export const updateNumberOfTickets = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -94,7 +94,7 @@ updateNumberOfTickets.definition = {
 
 /**
 * @see \App\Http\Controllers\UserCartController::updateNumberOfTickets
-* @see app/Http/Controllers/UserCartController.php:77
+* @see app/Http/Controllers/UserCartController.php:78
 * @route '/cart/{ticket}/number-of-tickets'
 */
 updateNumberOfTickets.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -127,7 +127,7 @@ updateNumberOfTickets.url = (args: { ticket: number | { id: number } } | [ticket
 
 /**
 * @see \App\Http\Controllers\UserCartController::updateNumberOfTickets
-* @see app/Http/Controllers/UserCartController.php:77
+* @see app/Http/Controllers/UserCartController.php:78
 * @route '/cart/{ticket}/number-of-tickets'
 */
 updateNumberOfTickets.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({

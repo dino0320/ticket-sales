@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('event_title');
             $table->text('event_description')->nullable();
             $table->unsignedInteger('price');
+            $table->unsignedInteger('number_of_tickets');
             $table->dateTime('event_start_date');
             $table->dateTime('event_end_date')->nullable();
             $table->dateTime('start_date');

@@ -15,7 +15,7 @@ class TicketRepository extends Repository
      * @param Carbon $now
      * @return CursorPaginator
      */
-    public function selectPaginatedTickets(Carbon $now): CursorPaginator
+    public function selectPaginatedTicketsByDateTime(Carbon $now): CursorPaginator
     {
         return Ticket::select([
                 'id',
@@ -31,12 +31,12 @@ class TicketRepository extends Repository
     }
 
     /**
-     * Select by ids
+     * Select paginated tickets by ids
      *
      * @param array $ids
      * @return CursorPaginator
      */
-    public function selectByIds(array $ids): CursorPaginator
+    public function selectPaginatedTicketsByIds(array $ids): CursorPaginator
     {
         return Ticket::select([
                 'id',
@@ -46,5 +46,16 @@ class TicketRepository extends Repository
                 'event_start_date',
                 'event_end_date',
             ])->whereIn('id', $ids)->cursorPaginate(10);
+    }
+
+    /**
+     * Select by id
+     *
+     * @param integer $id
+     * @return Ticket
+     */
+    public function selectById(int $id): Ticket
+    {
+        return Ticket::where('id', $id)->first();
     }
 }
