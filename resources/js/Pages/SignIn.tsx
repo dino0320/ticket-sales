@@ -1,5 +1,5 @@
-import { authenticate } from "@/actions/App/Http/Controllers/SignInController";
-import { signUp } from "@/routes/index";
+import { authenticate } from '@/actions/App/Http/Controllers/SignInController';
+import { signUp } from '@/routes/index';
 import { Link } from '@inertiajs/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'

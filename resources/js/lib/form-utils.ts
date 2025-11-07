@@ -1,4 +1,4 @@
-import type { UseFormReturn, FieldValues, Path } from "react-hook-form"
+import type { UseFormReturn, FieldValues, Path } from 'react-hook-form'
 
 export function setServerError<TFieldValues extends FieldValues>(errors: Record<string, string>, form: UseFormReturn<TFieldValues>, setOtherErrorMessage: (value: React.SetStateAction<string>) => void) {
     Object.keys(errors).forEach(key => {

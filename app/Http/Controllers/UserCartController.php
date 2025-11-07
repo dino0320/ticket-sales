@@ -67,4 +67,34 @@ class UserCartController extends Controller
 
         return Inertia::render('Cart', ['tickets' => $tickets, 'numberOfTickets' => $numberOfTickets]);
     }
+
+    /**
+     * Update the number of tickets
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateNumberOfTickets(Request $request, Ticket $ticket): RedirectResponse
+    {
+        $request->validate([
+            'number_of_tickets' => 'required|integer',
+        ]);
+
+        $userCartController = new UserCartRepository();
+
+        if ($request->number_of_tickets <= 0) {
+            throw new ValidationException("Invalid number_of_tickets. number_of_tickets: {$request->number_of_tickets}");
+        }
+
+        $user = $request->user();
+        $userCart = $userCartController->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have the ticket. ticket_id: {$ticket->id}");
+
+        if ($userCart->number_of_tickets !== $request->number_of_tickets) {
+            $userCart->number_of_tickets = $request->number_of_tickets;
+        }
+
+        $userCartController->save($userCart);
+
+        return back();
+    }
 }

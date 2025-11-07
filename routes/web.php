@@ -28,4 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart', [UserCartController::class, 'store']);
 
     Route::get('/cart', [UserCartController::class, 'show']);
+
+    Route::post('/cart/{ticket}/number-of-tickets', [UserCartController::class, 'updateNumberOfTickets']);
 });
