@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UserCartController extends Controller
+class CartController extends Controller
 {
     /**
      * Store a ticket to cart
@@ -28,14 +28,14 @@ class UserCartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        $userCartController = new UserCartRepository();
+        $userCartRepository = new UserCartRepository();
         $ticketRepository = new TicketRepository();
 
         $ticket = $ticketRepository->selectById($request->id) ?? throw ValidationException::withMessages(['id' => "Invalid ticket_id. ticket_id: {$request->id}"]);
         TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
-        $userCart = $userCartController->selectByUserIdAndTicketId($user->id, $request->id) ?? new UserCart([
+        $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $request->id) ?? new UserCart([
             'user_id' => $user->id,
             'ticket_id' => $request->id,
             'number_of_tickets' => 0,
@@ -43,7 +43,7 @@ class UserCartController extends Controller
 
         $userCart->number_of_tickets += $request->number_of_tickets;
 
-        $userCartController->save($userCart);
+        $userCartRepository->save($userCart);
 
         return back();
     }
@@ -81,18 +81,18 @@ class UserCartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        $userCartController = new UserCartRepository();
+        $userCartRepository = new UserCartRepository();
 
         TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
-        $userCart = $userCartController->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have this ticket. ticket_id: {$ticket->id}");
+        $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have this ticket. ticket_id: {$ticket->id}");
 
         if ($userCart->number_of_tickets !== $request->number_of_tickets) {
             $userCart->number_of_tickets = $request->number_of_tickets;
         }
 
-        $userCartController->save($userCart);
+        $userCartRepository->save($userCart);
 
         return back();
     }

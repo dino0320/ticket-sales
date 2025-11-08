@@ -1,4 +1,4 @@
-import { store, updateNumberOfTickets } from '@/actions/App/Http/Controllers/UserCartController';
+import { store } from '@/actions/App/Http/Controllers/CartController';
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
