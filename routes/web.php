@@ -4,7 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\TicketController;
-use App\Http\Controllers\UserCartController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,9 +26,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 
-    Route::post('/cart', [UserCartController::class, 'store']);
+    Route::post('/cart', [CartController::class, 'store']);
 
-    Route::get('/cart', [UserCartController::class, 'show']);
+    Route::get('/cart', [CartController::class, 'show']);
 
-    Route::post('/cart/{ticket}/number-of-tickets', [UserCartController::class, 'updateNumberOfTickets']);
+    Route::post('/cart/{ticket}', [CartController::class, 'update']);
+
+    Route::delete('/cart/{ticket}', [CartController::class, 'destroy']);
+
+    Route::get('/checkout', [CheckoutController::class, 'show']);
 });

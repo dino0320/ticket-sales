@@ -7,8 +7,6 @@ use App\Models\UserCart;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserCartRepository;
 use App\Services\CartService;
-use App\Services\TicketService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +33,7 @@ class CartController extends Controller
         $ticketRepository = new TicketRepository();
 
         $ticket = $ticketRepository->selectById($request->id) ?? throw ValidationException::withMessages(['id' => "Invalid ticket_id. ticket_id: {$request->id}"]);
-        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        CartService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
         $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $request->id) ?? new UserCart([
@@ -72,17 +70,18 @@ class CartController extends Controller
         return Inertia::render('Cart', [
             'tickets' => $tickets,
             'numberOfTickets' => $numberOfTickets,
-            'totalPriceOfTickets' => TicketService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
+            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
         ]);
     }
 
     /**
-     * Update the number of tickets
+     * Update a ticket in cart
      *
      * @param Request $request
+     * @param Ticket $ticket
      * @return JsonResponse
      */
-    public function updateNumberOfTickets(Request $request, Ticket $ticket): JsonResponse
+    public function update(Request $request, Ticket $ticket): JsonResponse
     {
         $request->validate([
             'number_of_tickets' => 'required|integer',
@@ -90,7 +89,7 @@ class CartController extends Controller
 
         $userCartRepository = new UserCartRepository();
 
-        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        CartService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
         $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have this ticket. ticket_id: {$ticket->id}");
@@ -104,7 +103,26 @@ class CartController extends Controller
 
         return response()->json([
             'numberOfTickets' => $userCart->number_of_tickets,
-            'differenceInTotalPrice' => TicketService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket),
+            'differenceInTotalPrice' => CartService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket),
         ]);
+    }
+
+    /**
+     * Delete a ticket in cart
+     *
+     * @param Request $request
+     * @param Ticket $ticket
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, Ticket $ticket): RedirectResponse
+    {
+        $userCartRepository = new UserCartRepository();
+
+        $user = $request->user();
+        $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have this ticket. ticket_id: {$ticket->id}");
+        
+        $userCartRepository->delete($userCart);
+
+        return back();
     }
 }

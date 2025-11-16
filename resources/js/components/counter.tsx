@@ -5,7 +5,7 @@ export function Counter({ number, ticketId, updateNumber }: { number: number, ti
     try {
       updateNumber(isPlus ? number + 1 : number - 1, ticketId)
     } catch (error) {
-      console.error('Can\'t update the number of tickets', error)
+      console.error('Can\'t update the number', error)
     }
   }
 

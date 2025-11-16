@@ -1,7 +1,8 @@
 import { show as showTichet } from '@/actions/App/Http/Controllers/TicketController';
-import { updateNumberOfTickets } from '@/actions/App/Http/Controllers/CartController';
+import { update, destroy } from '@/actions/App/Http/Controllers/CartController';
 import { show as showCheckout } from '@/actions/App/Http/Controllers/CheckoutController';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { FaRegTrashAlt } from 'react-icons/fa';
 import { Link } from '@inertiajs/react'
 import { router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,10 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
   const [numberOfTicketsState, setNumberOfTicketsState] = useState<NumberOfTickets>(numberOfTickets)
   const [totalPriceOfTicketsState, setTotalPriceOfTicketsState] = useState(totalPriceOfTickets)
 
+  useEffect(() => {
+    setTotalPriceOfTicketsState(totalPriceOfTickets)
+  }, [totalPriceOfTickets])
+  
   async function onClick() {
     try {
       router.get(showCheckout())
@@ -32,14 +37,22 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
         return
       }
 
-      const updateNumberOfTicketsRoute = updateNumberOfTickets(ticketId)
-      const response = await axios.post(updateNumberOfTicketsRoute.url, {
+      const updateRoute = update(ticketId)
+      const response = await axios.post(updateRoute.url, {
         number_of_tickets: number,
       });
       setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
       setTotalPriceOfTicketsState(prev => prev - response.data.differenceInTotalPrice)
     } catch (error) {
       console.error('Can\'t update the number of thickets', error)
+    }
+  }
+
+  async function destroyTicket(ticketId: number) {
+    try {
+      router.delete(destroy(ticketId))
+    } catch (error) {
+      console.error('Can\'t delete a thicket', error)
     }
   }
 
@@ -54,6 +67,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
             <Ticket ticket={ticket} isEllipsis={true}/>
           </Link>
           <Counter number={numberOfTicketsState[ticket.id] ?? 0} ticketId={ticket.id} updateNumber={updateNumber}/>
+          <FaRegTrashAlt onClick={() => destroyTicket(ticket.id)}/>
         </div>
       ))}
 

@@ -78,26 +78,26 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\CartController::updateNumberOfTickets
-* @see app/Http/Controllers/CartController.php:83
-* @route '/cart/{ticket}/number-of-tickets'
+* @see \App\Http\Controllers\CartController::update
+* @see app/Http/Controllers/CartController.php:84
+* @route '/cart/{ticket}'
 */
-export const updateNumberOfTickets = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: updateNumberOfTickets.url(args, options),
+export const update = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: update.url(args, options),
     method: 'post',
 })
 
-updateNumberOfTickets.definition = {
+update.definition = {
     methods: ["post"],
-    url: '/cart/{ticket}/number-of-tickets',
+    url: '/cart/{ticket}',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\CartController::updateNumberOfTickets
-* @see app/Http/Controllers/CartController.php:83
-* @route '/cart/{ticket}/number-of-tickets'
+* @see \App\Http\Controllers\CartController::update
+* @see app/Http/Controllers/CartController.php:84
+* @route '/cart/{ticket}'
 */
-updateNumberOfTickets.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { ticket: args }
     }
@@ -120,21 +120,79 @@ updateNumberOfTickets.url = (args: { ticket: number | { id: number } } | [ticket
         : args.ticket,
     }
 
-    return updateNumberOfTickets.definition.url
+    return update.definition.url
             .replace('{ticket}', parsedArgs.ticket.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\CartController::updateNumberOfTickets
-* @see app/Http/Controllers/CartController.php:83
-* @route '/cart/{ticket}/number-of-tickets'
+* @see \App\Http\Controllers\CartController::update
+* @see app/Http/Controllers/CartController.php:84
+* @route '/cart/{ticket}'
 */
-updateNumberOfTickets.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: updateNumberOfTickets.url(args, options),
+update.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: update.url(args, options),
     method: 'post',
 })
 
-const CartController = { store, show, updateNumberOfTickets }
+/**
+* @see \App\Http\Controllers\CartController::destroy
+* @see app/Http/Controllers/CartController.php:117
+* @route '/cart/{ticket}'
+*/
+export const destroy = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+destroy.definition = {
+    methods: ["delete"],
+    url: '/cart/{ticket}',
+} satisfies RouteDefinition<["delete"]>
+
+/**
+* @see \App\Http\Controllers\CartController::destroy
+* @see app/Http/Controllers/CartController.php:117
+* @route '/cart/{ticket}'
+*/
+destroy.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { ticket: args }
+    }
+
+    if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
+        args = { ticket: args.id }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            ticket: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        ticket: typeof args.ticket === 'object'
+        ? args.ticket.id
+        : args.ticket,
+    }
+
+    return destroy.definition.url
+            .replace('{ticket}', parsedArgs.ticket.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CartController::destroy
+* @see app/Http/Controllers/CartController.php:117
+* @route '/cart/{ticket}'
+*/
+destroy.delete = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+const CartController = { store, show, update, destroy }
 
 export default CartController

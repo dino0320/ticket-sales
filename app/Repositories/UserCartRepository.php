@@ -41,4 +41,15 @@ class UserCartRepository extends Repository
     {
         return $userCart->save();
     }
+
+    /**
+     * Delete the user cart
+     *
+     * @param UserCart $userCart
+     * @return boolean|null
+     */
+    public function delete(UserCart $userCart): ?bool
+    {
+        return $userCart->delete();
+    }
 }
