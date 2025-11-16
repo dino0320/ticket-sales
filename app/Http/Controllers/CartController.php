@@ -6,7 +6,10 @@ use App\Models\Ticket;
 use App\Models\UserCart;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserCartRepository;
+use App\Services\CartService;
 use App\Services\TicketService;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -64,18 +67,22 @@ class CartController extends Controller
 
         $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts->all(), 'ticket_id'));
 
-        $numberOfTickets = array_column($userCarts->all(), 'number_of_tickets', 'ticket_id');
+        $numberOfTickets = CartService::getNumberOfTickets($userCarts);
 
-        return Inertia::render('Cart', ['tickets' => $tickets, 'numberOfTickets' => $numberOfTickets]);
+        return Inertia::render('Cart', [
+            'tickets' => $tickets,
+            'numberOfTickets' => $numberOfTickets,
+            'totalPriceOfTickets' => TicketService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
+        ]);
     }
 
     /**
      * Update the number of tickets
      *
      * @param Request $request
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function updateNumberOfTickets(Request $request, Ticket $ticket): RedirectResponse
+    public function updateNumberOfTickets(Request $request, Ticket $ticket): JsonResponse
     {
         $request->validate([
             'number_of_tickets' => 'required|integer',
@@ -87,13 +94,17 @@ class CartController extends Controller
 
         $user = $request->user();
         $userCart = $userCartRepository->selectByUserIdAndTicketId($user->id, $ticket->id) ?? throw new ValidationException("You don't have this ticket. ticket_id: {$ticket->id}");
+        $preNumberOfTickets = $userCart->number_of_tickets;
 
-        if ($userCart->number_of_tickets !== $request->number_of_tickets) {
+        if ($request->number_of_tickets !== $preNumberOfTickets) {
             $userCart->number_of_tickets = $request->number_of_tickets;
         }
 
         $userCartRepository->save($userCart);
 
-        return back();
+        return response()->json([
+            'numberOfTickets' => $userCart->number_of_tickets,
+            'differenceInTotalPrice' => TicketService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket),
+        ]);
     }
 }
