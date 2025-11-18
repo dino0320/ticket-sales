@@ -9,7 +9,7 @@ RUN ln -s /dev/stdout /var/log/nginx/access.log
 RUN ln -s /dev/stderr /var/log/nginx/error.log
 
 # php-fpm
-RUN yum -y install php8.2-fpm php8.2-pgsql php8.2-mbstring
+RUN yum -y install php8.2-fpm php8.2-pgsql php8.2-mbstring php8.2-bcmath
 RUN mkdir /run/php-fpm
 RUN mkdir /var/run/php
 COPY php/php-fpm.d/zzz-php-fpm.conf /etc/php-fpm.d/zzz-php-fpm.conf

@@ -108,7 +108,7 @@ class CartController extends Controller
     }
 
     /**
-     * Delete a ticket in cart
+     * Delete a ticket from cart
      *
      * @param Request $request
      * @param Ticket $ticket
