@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class CartService
@@ -11,10 +12,10 @@ class CartService
     /**
      * Get the number of tickets
      *
-     * @param Collection $tickets
+     * @param EloquentCollection $tickets
      * @return int[]
      */
-    public static function getNumberOfTickets(Collection $userCarts): array
+    public static function getNumberOfTickets(EloquentCollection $userCarts): array
     {
         return array_column($userCarts->all(), 'number_of_tickets', 'ticket_id');
     }
@@ -22,7 +23,7 @@ class CartService
     /**
      * Get the total price of tickets
      *
-     * @param Collection $tickets
+     * @param Collection<Ticket> $tickets
      * @param int[] $numberOfTickets
      * @return integer
      */

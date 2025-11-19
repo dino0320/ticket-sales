@@ -34,5 +34,10 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/cart/{ticket}', [CartController::class, 'destroy']);
 
-    Route::get('/checkout', [CheckoutController::class, 'show']);
+    Route::get('/review', [CheckoutController::class, 'show']);
+
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+ 
+    Route::get('/checkout/success', fn () => Inertia::render('CheckoutSuccess'))->name('checkout-success');
+    Route::get('/checkout/cancel', fn () => Inertia::render('CheckoutCancel'))->name('checkout-cancel');
 });

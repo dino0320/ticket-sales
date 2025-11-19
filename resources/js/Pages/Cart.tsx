@@ -58,7 +58,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
 
   return (
     <div>
-      <Button onClick={onClick}>Proceed to checkout</Button>
+      <Button onClick={onClick}>Proceed to review</Button>
       <p>${totalPriceOfTicketsState}</p>
 
       {tickets.data.map((ticket) => (
