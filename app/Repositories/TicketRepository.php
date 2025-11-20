@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Ticket;
 use App\Repositories\Repository;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
 
 class TicketRepository extends Repository
@@ -57,5 +58,16 @@ class TicketRepository extends Repository
     public function selectById(int $id): Ticket
     {
         return Ticket::where('id', $id)->first();
+    }
+
+    /**
+     * Select by ids
+     *
+     * @param int[] $ids
+     * @return Collection<Ticket>
+     */
+    public function selectByIds(array $ids): Collection
+    {
+        return Ticket::whereIn('id', $ids)->get();
     }
 }

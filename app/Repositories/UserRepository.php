@@ -13,7 +13,7 @@ class UserRepository extends Repository
      * @param string $name
      * @param string $email
      * @param string $password
-     * @return void
+     * @return User
      */
     public function create(string $name, string $email, string $password): User
     {

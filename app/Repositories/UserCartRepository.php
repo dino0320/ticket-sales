@@ -24,7 +24,7 @@ class UserCartRepository extends Repository
      * Select by user_id
      *
      * @param integer $userId
-     * @return Collection
+     * @return Collection<UserCart>
      */
     public function selectByUserId(int $userId): Collection
     {
@@ -32,7 +32,7 @@ class UserCartRepository extends Repository
     }
 
     /**
-     * Save the user cart
+     * Save a user cart
      *
      * @param UserCart $userCart
      * @return boolean
@@ -43,7 +43,7 @@ class UserCartRepository extends Repository
     }
 
     /**
-     * Delete the user cart
+     * Delete a user cart
      *
      * @param UserCart $userCart
      * @return boolean|null
@@ -51,5 +51,16 @@ class UserCartRepository extends Repository
     public function delete(UserCart $userCart): ?bool
     {
         return $userCart->delete();
+    }
+
+    /**
+     * Delete user carts
+     *
+     * @param Collection<UserCart> $userCarts
+     * @return boolean|null
+     */
+    public function deleteUserCarts(Collection $userCarts): ?bool
+    {
+        return UserCart::whereIn('id', array_column($userCarts->all(), 'id'))->delete();
     }
 }

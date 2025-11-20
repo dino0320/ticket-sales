@@ -20,6 +20,7 @@ class TicketFactory extends Factory
             'event_title' => fake()->name(),
             'event_description' => fake()->text(),
             'price' => fake()->randomNumber(),
+            'stripe_price_id' => 'price_1SUFodHlSPswWVDq15Vjkymj',
             'number_of_tickets' => fake()->randomNumber(),
             'event_start_date' => fake()->date(),
             'event_end_date' => fake()->date(),

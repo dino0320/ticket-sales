@@ -80,8 +80,52 @@ signIn.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\CheckoutController::review
+* @see app/Http/Controllers/CheckoutController.php:26
+* @route '/review'
+*/
+export const review = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: review.url(options),
+    method: 'get',
+})
+
+review.definition = {
+    methods: ["get","head"],
+    url: '/review',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\CheckoutController::review
+* @see app/Http/Controllers/CheckoutController.php:26
+* @route '/review'
+*/
+review.url = (options?: RouteQueryOptions) => {
+    return review.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\CheckoutController::review
+* @see app/Http/Controllers/CheckoutController.php:26
+* @route '/review'
+*/
+review.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: review.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\CheckoutController::review
+* @see app/Http/Controllers/CheckoutController.php:26
+* @route '/review'
+*/
+review.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: review.url(options),
+    method: 'head',
+})
+
+/**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:46
+* @see app/Http/Controllers/CheckoutController.php:51
 * @route '/checkout'
 */
 export const checkout = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,7 +140,7 @@ checkout.definition = {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:46
+* @see app/Http/Controllers/CheckoutController.php:51
 * @route '/checkout'
 */
 checkout.url = (options?: RouteQueryOptions) => {
@@ -105,7 +149,7 @@ checkout.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:46
+* @see app/Http/Controllers/CheckoutController.php:51
 * @route '/checkout'
 */
 checkout.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -115,7 +159,7 @@ checkout.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:46
+* @see app/Http/Controllers/CheckoutController.php:51
 * @route '/checkout'
 */
 checkout.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -124,7 +168,8 @@ checkout.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see routes/web.php:41
+* @see \App\Http\Controllers\CheckoutController::checkoutSuccess
+* @see app/Http/Controllers/CheckoutController.php:82
 * @route '/checkout/success'
 */
 export const checkoutSuccess = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -138,7 +183,8 @@ checkoutSuccess.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:41
+* @see \App\Http\Controllers\CheckoutController::checkoutSuccess
+* @see app/Http/Controllers/CheckoutController.php:82
 * @route '/checkout/success'
 */
 checkoutSuccess.url = (options?: RouteQueryOptions) => {
@@ -146,7 +192,8 @@ checkoutSuccess.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:41
+* @see \App\Http\Controllers\CheckoutController::checkoutSuccess
+* @see app/Http/Controllers/CheckoutController.php:82
 * @route '/checkout/success'
 */
 checkoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -155,51 +202,12 @@ checkoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 })
 
 /**
-* @see routes/web.php:41
+* @see \App\Http\Controllers\CheckoutController::checkoutSuccess
+* @see app/Http/Controllers/CheckoutController.php:82
 * @route '/checkout/success'
 */
 checkoutSuccess.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: checkoutSuccess.url(options),
-    method: 'head',
-})
-
-/**
-* @see routes/web.php:42
-* @route '/checkout/cancel'
-*/
-export const checkoutCancel = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: checkoutCancel.url(options),
-    method: 'get',
-})
-
-checkoutCancel.definition = {
-    methods: ["get","head"],
-    url: '/checkout/cancel',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see routes/web.php:42
-* @route '/checkout/cancel'
-*/
-checkoutCancel.url = (options?: RouteQueryOptions) => {
-    return checkoutCancel.definition.url + queryParams(options)
-}
-
-/**
-* @see routes/web.php:42
-* @route '/checkout/cancel'
-*/
-checkoutCancel.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: checkoutCancel.url(options),
-    method: 'get',
-})
-
-/**
-* @see routes/web.php:42
-* @route '/checkout/cancel'
-*/
-checkoutCancel.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: checkoutCancel.url(options),
     method: 'head',
 })
 
