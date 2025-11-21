@@ -12,8 +12,10 @@ use App\Services\CheckoutService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Checkout;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 class CheckoutController extends Controller
 {
@@ -70,6 +72,9 @@ class CheckoutController extends Controller
             'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('review'),
             'metadata' => ['user_order_id' => $userOrder->id],
+            'payment_intent_data' => [
+                'metadata' => ['user_order_id' => $userOrder->id],
+            ],
         ]);
     }
 
@@ -77,35 +82,26 @@ class CheckoutController extends Controller
      * Show checkout success
      *
      * @param Request $request
-     * @return Checkout
+     * @return Response
      */
     public function showCheckoutSuccess(Request $request): Response
     {
-        $userCartRepository = new UserCartRepository();
         $userOrderRepository = new UserOrderRepository();
 
-        $sessionId = $request->get('session_id');
- 
-        if ($sessionId === null) {
-            //return;
-        }
+        $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist.');
  
         $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
  
         if ($session->payment_status !== 'paid') {
-            //return;
+            throw new InvalidArgumentException('The order hasn\'t paid.');
         }
         
-        $userOrderId = $session['metadata']['user_order_id'] ?? null;
+        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing.');;
         
         $userOrder = $userOrderRepository->selectById($userOrderId);
-        $userOrder->status = CheckoutConst::ORDER_STATUS_COMPLETED;
 
-        $userCarts = $userCartRepository->selectByUserId($request->user()->id);
- 
-        $userCartRepository->deleteUserCarts($userCarts);
-        $userOrderRepository->save($userOrder);
-
-        return Inertia::render('CheckoutSuccess');
+        return Inertia::render('CheckoutSuccess', [
+            'userOrderId' => $userOrder->id,
+        ]);
     }
 }

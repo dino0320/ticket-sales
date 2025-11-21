@@ -1,7 +1,9 @@
-export default function CheckoutSuccess() {
+export default function CheckoutSuccess({ userOrderId }: { userOrderId: number}) {
   return (
     <div>
-      Checkout success
+      <p>Thank you for your purchase!</p>
+
+      <p>Order ID: {userOrderId}</p>
     </div>
   )
 }
