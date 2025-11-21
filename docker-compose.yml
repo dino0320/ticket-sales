@@ -35,3 +35,9 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+
+  stripe:
+    build: ./docker/stripe
+    tty: true
+    env_file:
+      - .env

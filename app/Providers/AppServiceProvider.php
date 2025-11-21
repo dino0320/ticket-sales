@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Listeners\StripeEventListener;
 use App\Models\Cashier\Subscription;
 use App\Models\Cashier\SubscriptionItem;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
+use Laravel\Cashier\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Cashier::useSubscriptionModel(Subscription::class);
         Cashier::useSubscriptionItemModel(SubscriptionItem::class);
+
+        Event::listen(WebhookReceived::class, StripeEventListener::class);
     }
 }
