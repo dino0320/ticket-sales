@@ -63,7 +63,7 @@ class CartController extends Controller
         $user = $request->user();
         $userCarts = $userCartRepository->selectByUserId($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts->all(), 'ticket_id'));
+        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts, 'ticket_id'));
 
         $numberOfTickets = CartService::getNumberOfTickets($userCarts);
 

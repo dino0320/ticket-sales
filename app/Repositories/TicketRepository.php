@@ -5,11 +5,15 @@ namespace App\Repositories;
 use App\Models\Ticket;
 use App\Repositories\Repository;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\CursorPaginator;
 
 class TicketRepository extends Repository
 {
+    /**
+     * Model class name
+     */
+    protected string $modelName = Ticket::class;
+
     /**
      * Select paginated tickets within the period
      *
@@ -47,27 +51,5 @@ class TicketRepository extends Repository
                 'event_start_date',
                 'event_end_date',
             ])->whereIn('id', $ids)->cursorPaginate(10);
-    }
-
-    /**
-     * Select by id
-     *
-     * @param integer $id
-     * @return Ticket
-     */
-    public function selectById(int $id): Ticket
-    {
-        return Ticket::where('id', $id)->first();
-    }
-
-    /**
-     * Select by ids
-     *
-     * @param int[] $ids
-     * @return Collection<Ticket>
-     */
-    public function selectByIds(array $ids): Collection
-    {
-        return Ticket::whereIn('id', $ids)->get();
     }
 }

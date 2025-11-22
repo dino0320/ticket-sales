@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use App\Models\UserCart;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class CartService
 {
     /**
-     * Get the number of tickets
+     * Get the number of user carts
      *
-     * @param EloquentCollection $tickets
+     * @param UserCart[] $userCarts
      * @return int[]
      */
-    public static function getNumberOfTickets(EloquentCollection $userCarts): array
+    public static function getNumberOfTickets(array $userCarts): array
     {
-        return array_column($userCarts->all(), 'number_of_tickets', 'ticket_id');
+        return array_column($userCarts, 'number_of_tickets', 'ticket_id');
     }
 
     /**

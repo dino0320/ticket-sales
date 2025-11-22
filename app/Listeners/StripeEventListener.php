@@ -40,7 +40,7 @@ class StripeEventListener
 
             $userCarts = $userCartRepository->selectByUserId($userOrder->user_id);
  
-            $userCartRepository->deleteUserCarts($userCarts);
+            $userCartRepository->deleteMultiple($userCarts);
             $userOrderRepository->save($userOrder);
         }
     }

@@ -33,9 +33,9 @@ class CheckoutController extends Controller
         $user = $request->user();
         $userCarts = $userCartRepository->selectByUserId($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts->all(), 'ticket_id'));
+        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts, 'ticket_id'));
 
-        $numberOfTickets = array_column($userCarts->all(), 'number_of_tickets', 'ticket_id');
+        $numberOfTickets = array_column($userCarts, 'number_of_tickets', 'ticket_id');
 
         return Inertia::render('Checkout', [
             'tickets' => $tickets,
@@ -58,7 +58,7 @@ class CheckoutController extends Controller
 
         $user = $request->user();
         $userCarts = $userCartRepository->selectByUserId($user->id);
-        $tickets = $ticketRepository->selectByIds(array_column($userCarts->all(), 'ticket_id'));
+        $tickets = $ticketRepository->selectByIds(array_column($userCarts, 'ticket_id'));
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,

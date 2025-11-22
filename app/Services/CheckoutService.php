@@ -4,24 +4,23 @@ namespace App\Services;
 
 use App\Models\Ticket;
 use App\Models\UserCart;
-use Illuminate\Database\Eloquent\Collection;
 
 class CheckoutService
 {
     /**
      * Get stripe price ids
      *
-     * @param Collection<UserCart> $userCarts
-     * @param Collection<Ticket> $tickets
+     * @param UserCart[] $userCarts
+     * @param Ticket[] $tickets
      * @return int[]
      */
-    public static function getStripePriceIds(Collection $userCarts, Collection $tickets): array
+    public static function getStripePriceIds(array $userCarts, array $tickets): array
     {
         if ($userCarts === []) {
             return [];
         }
 
-        $userCarts = array_column($userCarts->all(), null, 'ticket_id');
+        $userCarts = array_column($userCarts, null, 'ticket_id');
 
         $stripe_price_ids = [];
         foreach ($tickets as $ticket) {

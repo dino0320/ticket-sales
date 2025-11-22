@@ -8,13 +8,7 @@ use App\Repositories\Repository;
 class UserOrderRepository extends Repository
 {
     /**
-     * Select by id
-     *
-     * @param integer $id
-     * @return UserOrder
+     * Model class name
      */
-    public function selectById(int $id): UserOrder
-    {
-        return UserOrder::where('id', $id)->first();
-    }
+    protected string $modelName = UserOrder::class;
 }

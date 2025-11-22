@@ -4,10 +4,14 @@ namespace App\Repositories;
 
 use App\Models\UserCart;
 use App\Repositories\Repository;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserCartRepository extends Repository
 {
+    /**
+     * Model class name
+     */
+    protected string $modelName = UserCart::class;
+
     /**
      * Select by user_id and ticket_id
      *
@@ -24,21 +28,10 @@ class UserCartRepository extends Repository
      * Select by user_id
      *
      * @param integer $userId
-     * @return Collection<UserCart>
+     * @return UserCart[]
      */
-    public function selectByUserId(int $userId): Collection
+    public function selectByUserId(int $userId): array
     {
-        return UserCart::where('user_id', $userId)->get();
-    }
-
-    /**
-     * Delete user carts
-     *
-     * @param Collection<UserCart> $userCarts
-     * @return boolean|null
-     */
-    public function deleteUserCarts(Collection $userCarts): ?bool
-    {
-        return UserCart::whereIn('id', array_column($userCarts->all(), 'id'))->delete();
+        return UserCart::where('user_id', $userId)->get()->all();
     }
 }
