@@ -13,7 +13,7 @@ class UserOrder extends Model
      */
     protected $fillable = [
         'user_id',
-        'stripe_price_ids',
+        'order_items',
         'status',
     ];
 
@@ -25,7 +25,7 @@ class UserOrder extends Model
     protected function casts(): array
     {
         return [
-            'stripe_price_ids' => 'array',
+            'order_items' => 'array',
         ];
     }
 }

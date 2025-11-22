@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->json('stripe_price_ids');
+            $table->json('order_items');
             $table->unsignedTinyInteger('status');
             $table->timestamps();
         });

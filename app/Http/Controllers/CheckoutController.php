@@ -62,13 +62,13 @@ class CheckoutController extends Controller
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,
-            'stripe_price_ids' => CheckoutService::getStripePriceIds($userCarts, $tickets),
+            'order_items' => CheckoutService::getOrderItems($userCarts, $tickets),
             'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
         ]);
 
         $userOrderRepository->save($userOrder);
         
-        return $user->checkout($userOrder->stripe_price_ids, [
+        return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
             'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('review'),
             'metadata' => ['user_order_id' => $userOrder->id],
