@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignInController;
 use App\Http\Controllers\SignUpController;
@@ -39,4 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
  
     Route::get('/checkout/success', [CheckoutController::class, 'showCheckoutSuccess'])->name('checkout-success');
+
+    Route::get('/my-account', [AccountController::class, 'show']);
 });
