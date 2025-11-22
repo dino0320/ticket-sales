@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('ticket_id');
+            $table->unsignedInteger('number_of_tickets');
             $table->timestamps();
             $table->index(['user_id', 'ticket_id']);
         });
