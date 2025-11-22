@@ -29,7 +29,13 @@ class SignUpController extends Controller
 
         $userRepository = new UserRepository();
 
-        $user = $userRepository->create($request->name, $request->email, Hash::make($request->password));
+        $user = new User([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        
+        $userRepository->save($user);
 
         event(new Registered($user));
 

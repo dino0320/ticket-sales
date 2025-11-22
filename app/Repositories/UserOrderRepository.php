@@ -17,15 +17,4 @@ class UserOrderRepository extends Repository
     {
         return UserOrder::where('id', $id)->first();
     }
-
-    /**
-     * Save the user order
-     *
-     * @param UserOder $userCart
-     * @return boolean
-     */
-    public function save(UserOrder $userOrder): bool
-    {
-        return $userOrder->save();
-    }
 }
