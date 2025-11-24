@@ -37,7 +37,7 @@ class CheckoutController extends Controller
 
         $numberOfTickets = array_column($userCarts, 'number_of_tickets', 'ticket_id');
 
-        return Inertia::render('Checkout', [
+        return Inertia::render('Review', [
             'tickets' => $tickets,
             'numberOfTickets' => $numberOfTickets,
             'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
