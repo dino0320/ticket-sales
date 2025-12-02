@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Consts\CommonConst;
 use App\Models\Ticket;
 use App\Repositories\Repository;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class TicketRepository extends Repository
         return Ticket::where([
                 ['start_date', '<=', $now],
                 ['end_date', '>=', $now],
-            ])->orderBy('event_start_date', 'asc')->cursorPaginate(10);
+            ])->orderBy('event_start_date', 'asc')->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
     }
 
     /**
@@ -36,11 +37,11 @@ class TicketRepository extends Repository
      */
     public function selectPaginatedTicketsByIds(array $ids): CursorPaginator
     {
-        return Ticket::whereIn('id', $ids)->cursorPaginate(10);
+        return Ticket::whereIn('id', $ids)->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
     }
 
     /**
-     * Select tickets during the event by ids
+     * Select paginated tickets during the event by ids
      *
      * @param int[] $ids
      * @param Carbon $now
@@ -48,6 +49,6 @@ class TicketRepository extends Repository
      */
     public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now): CursorPaginator
     {
-        return Ticket::whereIn('id', $ids)->where('event_end_date', '>=', $now)->orderBy('event_start_date', 'asc')->cursorPaginate(10);
+        return Ticket::whereIn('id', $ids)->where('event_end_date', '>=', $now)->orderBy('event_start_date', 'asc')->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
     }
 }

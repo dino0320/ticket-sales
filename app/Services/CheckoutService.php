@@ -28,8 +28,11 @@ class CheckoutService
         foreach ($tickets as $ticket) {
             $orderItems[] = [
                 'ticket_id' => $ticket->id,
-                'number_of_tickets' => $userCarts[$ticket->id]->number_of_tickets,
+                'event_title' => $ticket->event_title,
+                'event_description' => $ticket->event_description,
+                'price' => $ticket->price,
                 'stripe_price_id' => $ticket->stripe_price_id,
+                'number_of_tickets' => $userCarts[$ticket->id]->number_of_tickets,
             ];
         }
 

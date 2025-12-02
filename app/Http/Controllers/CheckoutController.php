@@ -63,6 +63,7 @@ class CheckoutController extends Controller
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,
+            'amount' => 0,
             'order_items' => CheckoutService::getOrderItems($userCarts, $tickets),
             'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
         ]);

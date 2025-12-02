@@ -13,6 +13,7 @@ class UserOrder extends Model
      */
     protected $fillable = [
         'user_id',
+        'amount',
         'order_items',
         'status',
     ];

@@ -42,4 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/success', [CheckoutController::class, 'showCheckoutSuccess'])->name('checkout-success');
 
     Route::get('/my-account', [AccountController::class, 'show']);
+
+    Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
 });
