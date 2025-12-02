@@ -15,21 +15,14 @@ class TicketRepository extends Repository
     protected string $modelName = Ticket::class;
 
     /**
-     * Select paginated tickets within the period
+     * Select paginated tickets during the period
      *
      * @param Carbon $now
      * @return CursorPaginator
      */
-    public function selectPaginatedTicketsByDateTime(Carbon $now): CursorPaginator
+    public function selectPaginatedTicketsDuringPeriod(Carbon $now): CursorPaginator
     {
-        return Ticket::select([
-                'id',
-                'event_title',
-                'event_description',
-                'price',
-                'event_start_date',
-                'event_end_date',
-            ])->where([
+        return Ticket::where([
                 ['start_date', '<=', $now],
                 ['end_date', '>=', $now],
             ])->orderBy('event_start_date', 'asc')->cursorPaginate(10);
@@ -38,18 +31,23 @@ class TicketRepository extends Repository
     /**
      * Select paginated tickets by ids
      *
-     * @param array $ids
+     * @param int[] $ids
      * @return CursorPaginator
      */
     public function selectPaginatedTicketsByIds(array $ids): CursorPaginator
     {
-        return Ticket::select([
-                'id',
-                'event_title',
-                'event_description',
-                'price',
-                'event_start_date',
-                'event_end_date',
-            ])->whereIn('id', $ids)->cursorPaginate(10);
+        return Ticket::whereIn('id', $ids)->cursorPaginate(10);
+    }
+
+    /**
+     * Select tickets during the event by ids
+     *
+     * @param int[] $ids
+     * @param Carbon $now
+     * @return CursorPaginator
+     */
+    public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now): CursorPaginator
+    {
+        return Ticket::whereIn('id', $ids)->where('event_end_date', '>=', $now)->orderBy('event_start_date', 'asc')->cursorPaginate(10);
     }
 }

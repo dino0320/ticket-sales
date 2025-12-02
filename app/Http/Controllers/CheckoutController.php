@@ -9,6 +9,7 @@ use App\Repositories\UserCartRepository;
 use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -38,7 +39,7 @@ class CheckoutController extends Controller
         $numberOfTickets = array_column($userCarts, 'number_of_tickets', 'ticket_id');
 
         return Inertia::render('Review', [
-            'tickets' => $tickets,
+            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
             'numberOfTickets' => $numberOfTickets,
             'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
         ]);

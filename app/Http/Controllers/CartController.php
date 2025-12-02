@@ -7,6 +7,7 @@ use App\Models\UserCart;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserCartRepository;
 use App\Services\CartService;
+use App\Services\TicketService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class CartController extends Controller
         $numberOfTickets = CartService::getNumberOfTickets($userCarts);
 
         return Inertia::render('Cart', [
-            'tickets' => $tickets,
+            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
             'numberOfTickets' => $numberOfTickets,
             'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
         ]);
