@@ -17,10 +17,13 @@ COPY php/php-fpm.d/zzz-www.conf /etc/php-fpm.d/zzz-www.conf
 RUN sed -i "s/error_log/;error_log/" /etc/php-fpm.conf
 RUN sed -i "s/php_admin_value\[error_log\]/;php_admin_value\[error_log\]/" /etc/php-fpm.d/www.conf
 
-# Xdebug
-RUN yum -y install php-pear php-devel
-
 # Node.js
+RUN yum -y install tar
 RUN touch ~/.bashrc
 COPY install-npm.sh /tmp/install-npm.sh
 RUN /tmp/install-npm.sh 20.14.0
+
+# Install PhpRedis
+RUN yum -y install php-pear-1:1.10.13 php8.2-devel
+RUN pecl install redis-6.1.0
+COPY php/conf.d/50-valkey.ini /etc/php.d/50-valkey.ini

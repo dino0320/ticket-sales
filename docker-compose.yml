@@ -36,6 +36,9 @@ services:
       interval: 5s
       retries: 10
 
+  valkey:
+    build: ./docker/valkey
+
   stripe:
     build: ./docker/stripe
     tty: true
