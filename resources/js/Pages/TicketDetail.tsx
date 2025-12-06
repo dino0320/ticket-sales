@@ -11,7 +11,7 @@ export default function TicketDetail({ ticket }: { ticket: TicketData}) {
 
   async function onClick() {
     try {
-      router.post(store(), { id: ticket.id, number_of_tickets: numberOfTickets }, { 
+      router.post(store(ticket.id), { number_of_tickets: numberOfTickets }, { 
         onSuccess: () => console.log('The thicket was added to cart'),
         onError: () => console.error('Can\'t add to cart'),
       })

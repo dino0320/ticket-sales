@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Consts\CheckoutConst;
-use App\Repositories\UserCartRepository;
 use App\Repositories\UserOrderRepository;
 use App\Repositories\UserTicketRepository;
+use App\Services\CartService;
 use App\Services\CheckoutService;
 use Laravel\Cashier\Events\WebhookReceived;
 
@@ -25,7 +25,6 @@ class StripeEventListener
     public function handle(WebhookReceived $event): void
     {
         if ($event->payload['type'] === 'payment_intent.succeeded') {
-            $userCartRepository = new UserCartRepository();
             $userOrderRepository = new UserOrderRepository();
             $userTicketRepository = new UserTicketRepository();
             
@@ -40,12 +39,11 @@ class StripeEventListener
                 return;
             }
 
-            $userCarts = $userCartRepository->selectByUserId($userOrder->user_id);
+            CartService::deleteAllUserCarts($userOrder->user_id);
 
             $userOrder->amount = $amount;
             $userOrder->status = CheckoutConst::ORDER_STATUS_COMPLETED;
  
-            $userCartRepository->deleteMultiple($userCarts);
             $userOrderRepository->save($userOrder);
             $userTicketRepository->upsert(CheckoutService::createUserTickets($userOrder));
         }

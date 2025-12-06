@@ -27,11 +27,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 
-    Route::post('/cart', [CartController::class, 'store']);
+    Route::post('/cart/{ticket}', [CartController::class, 'store']);
 
     Route::get('/cart', [CartController::class, 'show']);
 
-    Route::post('/cart/{ticket}', [CartController::class, 'update']);
+    Route::put('/cart/{ticket}', [CartController::class, 'update']);
 
     Route::delete('/cart/{ticket}', [CartController::class, 'destroy']);
 

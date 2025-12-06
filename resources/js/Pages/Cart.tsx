@@ -38,7 +38,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
       }
 
       const updateRoute = update(ticketId)
-      const response = await axios.post(updateRoute.url, {
+      const response = await axios.put(updateRoute.url, {
         number_of_tickets: number,
       });
       setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
@@ -66,7 +66,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
           <Link href={showTichet(ticket.id)}>
             <Ticket ticket={ticket} isEllipsis={true}/>
           </Link>
-          <Counter number={numberOfTicketsState[ticket.id] ?? 0} ticketId={ticket.id} updateNumber={updateNumber}/>
+          <Counter number={Number(numberOfTicketsState[ticket.id] ?? 0)} ticketId={ticket.id} updateNumber={updateNumber}/>
           <FaRegTrashAlt onClick={() => destroyTicket(ticket.id)}/>
         </div>
       ))}

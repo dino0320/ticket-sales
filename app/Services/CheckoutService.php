@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Ticket;
-use App\Models\UserCart;
 use App\Models\UserOrder;
 use App\Models\UserTicket;
 
@@ -12,17 +11,15 @@ class CheckoutService
     /**
      * Get order items
      *
-     * @param UserCart[] $userCarts
+     * @param int[] $numberOfTickets
      * @param Ticket[] $tickets
      * @return array
      */
-    public static function getOrderItems(array $userCarts, array $tickets): array
+    public static function getOrderItems(array $numberOfTickets, array $tickets): array
     {
-        if ($userCarts === []) {
+        if ($numberOfTickets === []) {
             return [];
         }
-
-        $userCarts = array_column($userCarts, null, 'ticket_id');
 
         $orderItems = [];
         foreach ($tickets as $ticket) {
@@ -32,7 +29,7 @@ class CheckoutService
                 'event_description' => $ticket->event_description,
                 'price' => $ticket->price,
                 'stripe_price_id' => $ticket->stripe_price_id,
-                'number_of_tickets' => $userCarts[$ticket->id]->number_of_tickets,
+                'number_of_tickets' => $numberOfTickets[$ticket->id],
             ];
         }
 

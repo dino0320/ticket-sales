@@ -1,41 +1,65 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:26
-* @route '/cart'
+* @see app/Http/Controllers/CartController.php:23
+* @route '/cart/{ticket}'
 */
-export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: store.url(options),
+export const store = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
     method: 'post',
 })
 
 store.definition = {
     methods: ["post"],
-    url: '/cart',
+    url: '/cart/{ticket}',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:26
-* @route '/cart'
+* @see app/Http/Controllers/CartController.php:23
+* @route '/cart/{ticket}'
 */
-store.url = (options?: RouteQueryOptions) => {
-    return store.definition.url + queryParams(options)
+store.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { ticket: args }
+    }
+
+    if (typeof args === 'object' && !Array.isArray(args) && 'id' in args) {
+        args = { ticket: args.id }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            ticket: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        ticket: typeof args.ticket === 'object'
+        ? args.ticket.id
+        : args.ticket,
+    }
+
+    return store.definition.url
+            .replace('{ticket}', parsedArgs.ticket.toString())
+            .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:26
-* @route '/cart'
+* @see app/Http/Controllers/CartController.php:23
+* @route '/cart/{ticket}'
 */
-store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: store.url(options),
+store.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
     method: 'post',
 })
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:59
+* @see app/Http/Controllers/CartController.php:43
 * @route '/cart'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -50,7 +74,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:59
+* @see app/Http/Controllers/CartController.php:43
 * @route '/cart'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -59,7 +83,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:59
+* @see app/Http/Controllers/CartController.php:43
 * @route '/cart'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -69,7 +93,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:59
+* @see app/Http/Controllers/CartController.php:43
 * @route '/cart'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -79,22 +103,22 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:85
+* @see app/Http/Controllers/CartController.php:66
 * @route '/cart/{ticket}'
 */
-export const update = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const update = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
-    method: 'post',
+    method: 'put',
 })
 
 update.definition = {
-    methods: ["post"],
+    methods: ["put"],
     url: '/cart/{ticket}',
-} satisfies RouteDefinition<["post"]>
+} satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:85
+* @see app/Http/Controllers/CartController.php:66
 * @route '/cart/{ticket}'
 */
 update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -127,17 +151,17 @@ update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:85
+* @see app/Http/Controllers/CartController.php:66
 * @route '/cart/{ticket}'
 */
-update.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+update.put = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
-    method: 'post',
+    method: 'put',
 })
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:118
+* @see app/Http/Controllers/CartController.php:94
 * @route '/cart/{ticket}'
 */
 export const destroy = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -152,7 +176,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:118
+* @see app/Http/Controllers/CartController.php:94
 * @route '/cart/{ticket}'
 */
 destroy.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -185,7 +209,7 @@ destroy.url = (args: { ticket: number | { id: number } } | [ticket: number | { i
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:118
+* @see app/Http/Controllers/CartController.php:94
 * @route '/cart/{ticket}'
 */
 destroy.delete = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({

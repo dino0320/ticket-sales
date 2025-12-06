@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Consts\CheckoutConst;
 use App\Models\UserOrder;
 use App\Repositories\TicketRepository;
-use App\Repositories\UserCartRepository;
 use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
@@ -28,15 +27,12 @@ class CheckoutController extends Controller
      */
     public function show(Request $request): Response
     {
-        $userCartRepository = new UserCartRepository();
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $userCarts = $userCartRepository->selectByUserId($user->id);
+        $numberOfTickets = CartService::getUserCarts($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_column($userCarts, 'ticket_id'));
-
-        $numberOfTickets = array_column($userCarts, 'number_of_tickets', 'ticket_id');
+        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numberOfTickets));
 
         return Inertia::render('Review', [
             'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
@@ -53,18 +49,17 @@ class CheckoutController extends Controller
      */
     public function checkout(Request $request): Checkout
     {
-        $userCartRepository = new UserCartRepository();
         $userOrderRepository = new UserOrderRepository();
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $userCarts = $userCartRepository->selectByUserId($user->id);
-        $tickets = $ticketRepository->selectByIds(array_column($userCarts, 'ticket_id'));
+        $numberOfTickets = CartService::getUserCarts($user->id);
+        $tickets = $ticketRepository->selectByIds(array_keys($numberOfTickets));
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,
             'amount' => 0,
-            'order_items' => CheckoutService::getOrderItems($userCarts, $tickets),
+            'order_items' => CheckoutService::getOrderItems($numberOfTickets, $tickets),
             'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
         ]);
 
