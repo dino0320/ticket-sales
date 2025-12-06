@@ -1,4 +1,4 @@
-import { showOrderHistory } from '@/actions/App/Http/Controllers/AccountController';
+import { showOrderHistory, resetPassword } from '@/actions/App/Http/Controllers/AccountController';
 import { show } from '@/actions/App/Http/Controllers/TicketController';
 import { Link } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import type { TicketData } from '@/components/ticket'
 export default function Account({ tickets }: { tickets: PaginationData<TicketData>}) {
   return (
     <div>
+      <a href={resetPassword().url}><Button>Reset password</Button></a>
       <a href={showOrderHistory().url}><Button>Order history</Button></a>
 
       {tickets.data.map((ticket) => (

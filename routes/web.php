@@ -43,5 +43,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-account', [AccountController::class, 'show']);
 
+    Route::get('/reset-password', function () {
+        return Inertia::render('ResetPassword');
+    });
+    
+    Route::post('/reset-password', [AccountController::class, 'resetPassword']);
+
     Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
 });

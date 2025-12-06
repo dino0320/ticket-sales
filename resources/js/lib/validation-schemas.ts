@@ -40,10 +40,12 @@ export const registerFormSchema = z
 
 export const resetPasswordFormSchema = z
   .object({
+    email: emailSchema,
     password: passwordSchema,
-    password_confirmation: z.string(),
+    new_password: passwordSchema,
+    new_password_confirmation: z.string(),
   })
-  .refine((data) => data.password === data.password_confirmation, {
-    path: ['password_confirmation'],
+  .refine((data) => data.new_password === data.new_password_confirmation, {
+    path: ['new_password_confirmation'],
     message: 'Passwords do not match',
   })

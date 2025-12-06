@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrderHistoryService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends Controller
 {
@@ -50,5 +54,38 @@ class AccountController extends Controller
         return Inertia::render('OrderHistory', [
             'userOrders' => OrderHistoryService::getPaginatedUserOrdersResponse($userOrders),
         ]);
+    }
+
+    /**
+     * Reset password
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => 'required|string|lowercase|email|max:255',
+            'password' => ['required', Password::defaults()],
+            'new_password' => ['required', 'confirmed', Password::defaults()],
+            'new_password_confirmation' => ['required'],
+        ]);
+
+        $userRepository = new UserRepository();
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $user = $request->user();
+            $user->password = $request->new_password;
+
+            $userRepository->save($user);
+ 
+            return redirect()->intended('/my-account');
+        }
+ 
+        return back()->withErrors([
+            'other' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 }
