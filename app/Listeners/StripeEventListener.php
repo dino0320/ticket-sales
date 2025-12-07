@@ -40,6 +40,9 @@ class StripeEventListener
             }
 
             CartService::deleteAllUserCarts($userOrder->user_id);
+            $numbersOfTickets = CheckoutService::getNumbersOfTickets($userOrder);
+            CheckoutService::decreaseTotalReservedTickets($numbersOfTickets);
+            CheckoutService::decreaseReservedTickets($userOrder->user_id, $numbersOfTickets);
 
             $userOrder->amount = $amount;
             $userOrder->status = CheckoutConst::ORDER_STATUS_COMPLETED;

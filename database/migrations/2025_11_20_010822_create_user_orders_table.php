@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('order_items');
             $table->unsignedTinyInteger('status');
             $table->timestamps();
+            $table->index(['user_id', 'status']);
         });
     }
 

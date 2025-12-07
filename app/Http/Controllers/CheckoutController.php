@@ -30,14 +30,14 @@ class CheckoutController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $numberOfTickets = CartService::getUserCarts($user->id);
+        $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numberOfTickets));
+        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Review', [
             'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
-            'numberOfTickets' => $numberOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
+            'numberOfTickets' => $numbersOfTickets,
+            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numbersOfTickets),
         ]);
     }
 
@@ -53,17 +53,22 @@ class CheckoutController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $numberOfTickets = CartService::getUserCarts($user->id);
-        $tickets = $ticketRepository->selectByIds(array_keys($numberOfTickets));
+        $numbersOfTickets = CartService::getUserCarts($user->id);
+        $tickets = $ticketRepository->selectByIds(array_keys($numbersOfTickets));
+
+        CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets, CheckoutService::getTotalReservedTickets(array_column($tickets, 'id')));
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,
             'amount' => 0,
-            'order_items' => CheckoutService::getOrderItems($numberOfTickets, $tickets),
+            'order_items' => CheckoutService::getOrderItems($numbersOfTickets, $tickets),
             'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
         ]);
 
         $userOrderRepository->save($userOrder);
+
+        CheckoutService::increaseTotalReservedTickets($numbersOfTickets);
+        CheckoutService::increaseReservedTickets($user->id, $numbersOfTickets);
         
         return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
             'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Consts\CheckoutConst;
 use App\Consts\CommonConst;
 use App\Models\UserOrder;
 use App\Repositories\Repository;
@@ -22,6 +23,9 @@ class UserOrderRepository extends Repository
      */
     public function selectPaginatedUserOrdersByUserId(int $userId): CursorPaginator
     {
-        return UserOrder::where('user_id', $userId)->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
+        return UserOrder::where([
+            ['user_id', $userId],
+            ['status', CheckoutConst::ORDER_STATUS_COMPLETED],
+        ])->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
     }
 }

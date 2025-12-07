@@ -17,28 +17,38 @@ class CartService
      * @param int[] $numberOfTickets
      * @return integer
      */
-    public static function getTotalPrice(Collection $tickets, array $numberOfTickets): int
+    public static function getTotalPrice(Collection $tickets, array $numbersOfTickets): int
     {
         $totalPrice = 0;
         foreach ($tickets as $ticket) {
-            $totalPrice += $ticket->price * $numberOfTickets[$ticket->id];
+            $totalPrice += $ticket->price * $numbersOfTickets[$ticket->id];
         }
 
         return $totalPrice;
     }
 
     /**
-     * Check if the given number is not less than 0 or more than the number of tickets
+     * Get the difference in the total price of tickets
      *
+     * @param integer $preNumberOfTickets
      * @param integer $numberOfTickets
      * @param Ticket $ticket
-     * @return void
+     * @return integer
      */
-    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
+    public static function getDifferenceInTotalPrice(int $preNumberOfTickets, int $numberOfTickets, Ticket $ticket): int
     {
-        if ($numberOfTickets <= 0 || $numberOfTickets > $ticket->number_of_tickets) {
-            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
-        }
+        return ($preNumberOfTickets - $numberOfTickets) * $ticket->price;
+    }
+
+    /**
+     * Get a user cart key
+     *
+     * @param integer $userId
+     * @return string
+     */
+    private static function getUserCartKey(int $userId): string
+    {
+        return sprintf(CartConst::CART_KEY, $userId);
     }
 
     /**
@@ -54,17 +64,6 @@ class CartService
         $key = self::getUserCartKey($userId);
         Redis::hIncrBy($key, $ticketId, $numberOfTickets);
         Redis::expire($key, CartConst::CART_EXPIRATION);
-    }
-
-    /**
-     * Get a cart key
-     *
-     * @param integer $userId
-     * @return string
-     */
-    private static function getUserCartKey(int $userId): string
-    {
-        return "cart:{$userId}";
     }
 
     /**
@@ -88,32 +87,6 @@ class CartService
     public static function getUserCart(int $userId, int $ticketId): int
     {
         return Redis::hGet(self::getUserCartKey($userId), $ticketId) ?? throw new InvalidArgumentException("Can't get this ticket. ticket_id: {$ticketId}");
-    }
-
-    /**
-     * Update user cart
-     *
-     * @param integer $userId
-     * @param integer $ticketId
-     * @param integer $numberOfTickets
-     * @return void
-     */
-    public static function updateUserCart(int $userId, int $ticketId, int $numberOfTickets): void
-    {
-        Redis::hSet(self::getUserCartKey($userId), $ticketId, $numberOfTickets);
-    }
-
-    /**
-     * Get the difference in the total price of tickets
-     *
-     * @param integer $preNumberOfTickets
-     * @param integer $numberOfTickets
-     * @param Ticket $ticket
-     * @return integer
-     */
-    public static function getDifferenceInTotalPrice(int $preNumberOfTickets, int $numberOfTickets, Ticket $ticket): int
-    {
-        return ($preNumberOfTickets - $numberOfTickets) * $ticket->price;
     }
 
     /**

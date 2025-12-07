@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Repositories\TicketRepository;
 use App\Services\CartService;
+use App\Services\CheckoutService;
 use App\Services\TicketService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,7 @@ class CartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        CartService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket, CheckoutService::getTotalReservedTicket($ticket->id));
 
         $user = $request->user();
         CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets);
@@ -45,14 +46,14 @@ class CartController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $numberOfTickets = CartService::getUserCarts($user->id);
+        $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numberOfTickets));
+        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Cart', [
             'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
-            'numberOfTickets' => $numberOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numberOfTickets),
+            'numberOfTickets' => $numbersOfTickets,
+            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numbersOfTickets),
         ]);
     }
 
@@ -69,13 +70,13 @@ class CartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        CartService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket, CheckoutService::getTotalReservedTicket($ticket->id));
 
         $user = $request->user();
         $preNumberOfTickets = CartService::getUserCart($user->id, $ticket->id);
 
         if ($request->number_of_tickets !== $preNumberOfTickets) {
-            CartService::updateUserCart($user->id, $ticket->id, $request->number_of_tickets);
+            CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets - $preNumberOfTickets);
         }
 
         return response()->json([
