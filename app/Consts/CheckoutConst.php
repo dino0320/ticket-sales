@@ -15,17 +15,12 @@ class CheckoutConst
     public const ORDER_STATUS_COMPLETED = 2;
 
     /**
-     * Total reserved ticket key
+     * Order status expired
      */
-    public const TOTAL_RESERVED_TICKET_KEY = 'reserved_ticket';
+    public const ORDER_STATUS_EXPIRED = 3;
 
     /**
      * Reserved ticket key
      */
-    public const RESERVED_TICKET_KEY = 'reserved_ticket:%1$d:%2$d';
-
-    /**
-     * Reserved ticket expiration
-     */
-    public const RESERVED_TICKET_EXPIRATION = 86400;
+    public const RESERVED_TICKET_KEY = 'reserved_ticket';
 }

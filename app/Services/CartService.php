@@ -52,21 +52,6 @@ class CartService
     }
 
     /**
-     * Increase user cart
-     *
-     * @param integer $userId
-     * @param integer $ticketId
-     * @param integer $numberOfTickets
-     * @return void
-     */
-    public static function increaseUserCart(int $userId, int $ticketId, int $numberOfTickets): void
-    {
-        $key = self::getUserCartKey($userId);
-        Redis::hIncrBy($key, $ticketId, $numberOfTickets);
-        Redis::expire($key, CartConst::CART_EXPIRATION);
-    }
-
-    /**
      * Get user carts
      *
      * @param integer $userId
@@ -87,6 +72,21 @@ class CartService
     public static function getUserCart(int $userId, int $ticketId): int
     {
         return Redis::hGet(self::getUserCartKey($userId), $ticketId) ?? throw new InvalidArgumentException("Can't get this ticket. ticket_id: {$ticketId}");
+    }
+
+    /**
+     * Increase user cart
+     *
+     * @param integer $userId
+     * @param integer $ticketId
+     * @param integer $numberOfTickets
+     * @return void
+     */
+    public static function increaseUserCart(int $userId, int $ticketId, int $numberOfTickets): void
+    {
+        $key = self::getUserCartKey($userId);
+        Redis::hIncrBy($key, $ticketId, $numberOfTickets);
+        Redis::expire($key, CartConst::CART_EXPIRATION);
     }
 
     /**

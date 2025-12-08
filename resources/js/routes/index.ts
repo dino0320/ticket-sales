@@ -169,7 +169,7 @@ checkout.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:89
+* @see app/Http/Controllers/CheckoutController.php:88
 * @route '/checkout/success'
 */
 export const checkoutSuccess = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -184,7 +184,7 @@ checkoutSuccess.definition = {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:89
+* @see app/Http/Controllers/CheckoutController.php:88
 * @route '/checkout/success'
 */
 checkoutSuccess.url = (options?: RouteQueryOptions) => {
@@ -193,7 +193,7 @@ checkoutSuccess.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:89
+* @see app/Http/Controllers/CheckoutController.php:88
 * @route '/checkout/success'
 */
 checkoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -203,7 +203,7 @@ checkoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:89
+* @see app/Http/Controllers/CheckoutController.php:88
 * @route '/checkout/success'
 */
 checkoutSuccess.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
