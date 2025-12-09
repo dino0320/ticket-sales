@@ -11,6 +11,7 @@ use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -64,28 +65,30 @@ class AccountController extends Controller
      */
     public function resetPassword(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => 'required|string|lowercase|email|max:255',
-            'password' => ['required', Password::defaults()],
-            'new_password' => ['required', 'confirmed', Password::defaults()],
-            'new_password_confirmation' => ['required'],
-        ]);
+        return DB::transaction(function () use ($request) {
+            $credentials = $request->validate([
+                'email' => 'required|string|lowercase|email|max:255',
+                'password' => ['required', Password::defaults()],
+                'new_password' => ['required', 'confirmed', Password::defaults()],
+                'new_password_confirmation' => ['required'],
+            ]);
 
-        $userRepository = new UserRepository();
+            $userRepository = new UserRepository();
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
 
-            $user = $request->user();
-            $user->password = $request->new_password;
+                $user = $request->user();
+                $user->password = $request->new_password;
 
-            $userRepository->save($user);
+                $userRepository->save($user);
  
-            return redirect()->intended('/my-account');
-        }
+                return redirect()->intended('/my-account');
+            }
  
-        return back()->withErrors([
-            'other' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            return back()->withErrors([
+                'other' => 'The provided credentials do not match our records.',
+            ])->onlyInput('email');
+        });
     }
 }

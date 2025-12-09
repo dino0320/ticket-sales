@@ -10,6 +10,7 @@ use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use InvalidArgumentException;
@@ -49,35 +50,37 @@ class CheckoutController extends Controller
      */
     public function checkout(Request $request): Checkout
     {
-        $userOrderRepository = new UserOrderRepository();
-        $ticketRepository = new TicketRepository();
+        return DB::transaction(function () use ($request) {
+            $userOrderRepository = new UserOrderRepository();
+            $ticketRepository = new TicketRepository();
 
-        $user = $request->user();
-        $numbersOfTickets = CartService::getUserCarts($user->id);
-        $tickets = $ticketRepository->selectByIdsForUpdate(array_keys($numbersOfTickets));
+            $user = $request->user();
+            $numbersOfTickets = CartService::getUserCarts($user->id);
+            $tickets = $ticketRepository->selectByIdsForUpdate(array_keys($numbersOfTickets));
 
-        CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
+            CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
 
-        CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
+            CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
         
-        $userOrder = new UserOrder([
-            'user_id' => $user->id,
-            'amount' => 0,
-            'order_items' => CheckoutService::getOrderItems($numbersOfTickets, $tickets),
-            'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
-        ]);
+            $userOrder = new UserOrder([
+                'user_id' => $user->id,
+                'amount' => 0,
+                'order_items' => CheckoutService::getOrderItems($numbersOfTickets, $tickets),
+                'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
+            ]);
 
-        $userOrderRepository->save($userOrder);
-        $ticketRepository->upsert($tickets);
+            $userOrderRepository->save($userOrder);
+            $ticketRepository->upsert($tickets);
         
-        return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
-            'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('review'),
-            'metadata' => ['user_order_id' => $userOrder->id],
-            'payment_intent_data' => [
+            return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
+                'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('review'),
                 'metadata' => ['user_order_id' => $userOrder->id],
-            ],
-        ]);
+                'payment_intent_data' => [
+                    'metadata' => ['user_order_id' => $userOrder->id],
+                ],
+            ]);
+        });
     }
 
     /**
