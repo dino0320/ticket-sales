@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('price');
             $table->string('stripe_price_id');
             $table->unsignedInteger('number_of_tickets');
+            $table->unsignedInteger('number_of_reserved_tickets');
             $table->dateTime('event_start_date');
             $table->dateTime('event_end_date')->nullable();
             $table->dateTime('start_date');

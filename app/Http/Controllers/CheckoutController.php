@@ -54,9 +54,11 @@ class CheckoutController extends Controller
 
         $user = $request->user();
         $numbersOfTickets = CartService::getUserCarts($user->id);
-        $tickets = $ticketRepository->selectByIds(array_keys($numbersOfTickets));
+        $tickets = $ticketRepository->selectByIdsForUpdate(array_keys($numbersOfTickets));
 
-        CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets, CheckoutService::getReservedTickets(array_column($tickets, 'id')));
+        CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
+
+        CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
         
         $userOrder = new UserOrder([
             'user_id' => $user->id,
@@ -66,8 +68,7 @@ class CheckoutController extends Controller
         ]);
 
         $userOrderRepository->save($userOrder);
-
-        CheckoutService::increaseReservedTickets($numbersOfTickets);
+        $ticketRepository->upsert($tickets);
         
         return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
             'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',

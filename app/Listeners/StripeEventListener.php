@@ -41,13 +41,12 @@ class StripeEventListener
                 return;
             }
 
+            $tickets = $ticketRepository->selectByIdsForUpdate(array_column($userOrder->order_items, 'ticket_id'));
             $numbersOfTickets = CheckoutService::getNumbersOfTickets($userOrder);
-
-            $tickets = $ticketRepository->selectByIds(array_column($userOrder->order_items, 'ticket_id'));
             CheckoutService::decreaseNumbersOfTickets($tickets, $numbersOfTickets);
+            CheckoutService::decreaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
 
             CartService::deleteAllUserCarts($userOrder->user_id);
-            CheckoutService::decreaseReservedTickets($numbersOfTickets);
 
             $userOrder->amount = $amount;
             $userOrder->status = CheckoutConst::ORDER_STATUS_COMPLETED;
@@ -59,6 +58,7 @@ class StripeEventListener
 
         if ($event->payload['type'] === 'checkout.session.expired') {
             $userOrderRepository = new UserOrderRepository();
+            $ticketRepository = new TicketRepository();
             
             $userOrderId = $event->payload['data']['object']['metadata']['user_order_id'] ?? null;
             if ($userOrderId === null) {
@@ -70,11 +70,14 @@ class StripeEventListener
                 return;
             }
 
-            CheckoutService::decreaseReservedTickets(CheckoutService::getNumbersOfTickets($userOrder));
+            $tickets = $ticketRepository->selectByIdsForUpdate(array_column($userOrder->order_items, 'ticket_id'));
+            $numbersOfTickets = CheckoutService::getNumbersOfTickets($userOrder);
+            CheckoutService::decreaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
 
             $userOrder->status = CheckoutConst::ORDER_STATUS_EXPIRED;
  
             $userOrderRepository->save($userOrder);
+            $ticketRepository->upsert($tickets);
         }
     }
 }

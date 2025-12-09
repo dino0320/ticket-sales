@@ -27,7 +27,7 @@ class CartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket, CheckoutService::getReservedTicket($ticket->id));
+        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
         CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets);
@@ -70,7 +70,7 @@ class CartController extends Controller
             'number_of_tickets' => 'required|integer',
         ]);
 
-        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket, CheckoutService::getReservedTicket($ticket->id));
+        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
         $preNumberOfTickets = CartService::getUserCart($user->id, $ticket->id);

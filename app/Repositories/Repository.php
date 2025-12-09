@@ -28,14 +28,14 @@ abstract class Repository
     }
 
     /**
-     * Select by ids
+     * Select by ids for update
      *
      * @param int[] $ids
      * @return TModel[]
      */
-    public function selectByIds(array $ids): array
+    public function selectByIdsForUpdate(array $ids): array
     {
-        return $this->modelName::whereIn('id', $ids)->get()->all();
+        return $this->modelName::whereIn('id', $ids)->lockForUpdate()->get()->all();
     }
 
     /**

@@ -22,6 +22,7 @@ class TicketFactory extends Factory
             'price' => fake()->randomNumber(),
             'stripe_price_id' => 'price_1SUFodHlSPswWVDq15Vjkymj',
             'number_of_tickets' => fake()->randomNumber(),
+            'number_of_reserved_tickets' => 0,
             'event_start_date' => fake()->date(),
             'event_end_date' => fake()->date(),
             'start_date' => fake()->date(),

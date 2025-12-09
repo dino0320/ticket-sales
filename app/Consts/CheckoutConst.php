@@ -18,9 +18,4 @@ class CheckoutConst
      * Order status expired
      */
     public const ORDER_STATUS_EXPIRED = 3;
-
-    /**
-     * Reserved ticket key
-     */
-    public const RESERVED_TICKET_KEY = 'reserved_ticket';
 }

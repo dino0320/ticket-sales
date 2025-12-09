@@ -17,12 +17,11 @@ class CheckoutService
      *
      * @param integer $numberOfTickets
      * @param Ticket $ticket
-     * @param integer $numberOfReservedTickets
      * @return void
      */
-    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket, int $numberOfReservedTickets): void
+    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
     {
-        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $numberOfReservedTickets)) {
+        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
             throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
         }
     }
@@ -35,11 +34,25 @@ class CheckoutService
      * @param int[] $numbersOfReservedTickets
      * @return void
      */
-    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets, array $numbersOfReservedTickets): void
+    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets): void
     {
         $tickets = array_column($tickets, null, 'id');
         foreach ($numbersOfTickets as $ticketId => $numberOfTickets) {
-            self::checkIfNumberOfTicketsIsValid($numberOfTickets, $tickets[$ticketId], $numbersOfReservedTickets[$ticketId]);
+            self::checkIfNumberOfTicketsIsValid($numberOfTickets, $tickets[$ticketId]);
+        }
+    }
+
+    /**
+     * Increase the numbers of reserved tickets
+     *
+     * @param Ticket[] $tickets
+     * @param int[] $numbersOfTickets
+     * @return void
+     */
+    public static function increaseNumbersOfReservedTickets(array $tickets, array $numbersOfTickets): void
+    {
+        foreach ($tickets as $ticket) {
+            $ticket->number_of_reserved_tickets += $numbersOfTickets[$ticket->id];
         }
     }
 
@@ -109,10 +122,28 @@ class CheckoutService
     {
         foreach ($tickets as $ticket) {
             if (($ticket->number_of_tickets - $numbersOfTickets[$ticket->id]) <= 0) {
-                throw new RuntimeException("The number of tickets is less than 0. ticket_id: {$ticket->id}");
+                throw new RuntimeException("The number of tickets is 0 or less. ticket_id: {$ticket->id}");
             }
             
             $ticket->number_of_tickets -= $numbersOfTickets[$ticket->id];
+        }
+    }
+
+    /**
+     * Decrease the numbers of reserved tickets
+     *
+     * @param Ticket[] $tickets
+     * @param int[] $numbersOfTickets
+     * @return void
+     */
+    public static function decreaseNumbersOfReservedTickets(array $tickets, array $numbersOfTickets): void
+    {
+        foreach ($tickets as $ticket) {
+            if (($ticket->number_of_reserved_tickets - $numbersOfTickets[$ticket->id]) < 0) {
+                throw new RuntimeException("The number of reserved tickets is less than 0. ticket_id: {$ticket->id}");
+            }
+            
+            $ticket->number_of_reserved_tickets -= $numbersOfTickets[$ticket->id];
         }
     }
 
@@ -134,75 +165,5 @@ class CheckoutService
         }
 
         return $userTickets;
-    }
-
-    /**
-     * Get a reserved ticket key
-     *
-     * @return string
-     */
-    private static function getReservedTicketKey(): string
-    {
-        return CheckoutConst::RESERVED_TICKET_KEY;
-    }
-
-    /**
-     * Get the number of reserved tickets
-     *
-     * @param integer $ticketId
-     * @return int
-     */
-    public static function getReservedTicket(int $ticketId): int
-    {
-        return Redis::hGet(self::getReservedTicketKey(), $ticketId) ?? throw new InvalidArgumentException("Can't get the number of reserved tickets. ticket_id: {$ticketId}");
-    }
-
-    /**
-     * Get the numbers of reserved tickets
-     *
-     * @param int[] $ticketIds
-     * @return int[]
-     */
-    public static function getReservedTickets(array $ticketIds): array
-    {
-        return array_combine($ticketIds, Redis::hMGet(self::getReservedTicketKey(), $ticketIds));
-    }
-
-    /**
-     * Increase the number of reserved tickets
-     *
-     * @param integer $ticketId
-     * @param integer $numberOfTickets
-     * @return void
-     */
-    private static function increaseReservedTicket(int $ticketId, int $numberOfTickets): void
-    {
-        Redis::hIncrBy(self::getReservedTicketKey(), $ticketId, $numberOfTickets);
-    }
-
-    /**
-     * Increase the numbers of reserved tickets
-     *
-     * @param int[] $numbersOfTickets
-     * @return void
-     */
-    public static function increaseReservedTickets(array $numbersOfTickets): void
-    {
-        foreach ($numbersOfTickets as $tticketId => $numberOfTickets) {
-            self::increaseReservedTicket($tticketId, $numberOfTickets);
-        }
-    }
-
-    /**
-     * Decrease the numbers of reserved tickets
-     *
-     * @param int[] $numbersOfTickets
-     * @return void
-     */
-    public static function decreaseReservedTickets(array $numbersOfTickets): void
-    {
-        foreach ($numbersOfTickets as $tticketId => $numberOfTickets) {
-            self::increaseReservedTicket($tticketId, -$numberOfTickets);
-        }
     }
 }
