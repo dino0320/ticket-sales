@@ -71,7 +71,7 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t composer ./docker/composer
-        docker run --rm -v `pwd`:/srv/ticket-sales.com composer bash -c "chmod 755 /srv/ticket-sales.com/docker/composer/start.sh && /srv/ticket-sales.com/docker/composer/start.sh"
+        docker run --rm -v `pwd`:/srv/ticket-sales.com composer bash -c "chmod 755 /srv/ticket-sales.com/docker/composer/start.sh && /srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
         
         # Build a docker container and
         # push it to ECR so that it can
