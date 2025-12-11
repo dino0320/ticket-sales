@@ -23,6 +23,7 @@ RUN sed -i "s/php_admin_value\[error_log\]/;php_admin_value\[error_log\]/" /etc/
 RUN yum -y install tar
 RUN touch ~/.bashrc
 COPY docker/web/install-npm.sh /tmp/install-npm.sh
+RUN chmod 755 /tmp/install-npm.sh
 RUN /tmp/install-npm.sh 20.14.0
 
 # Install PhpRedis
