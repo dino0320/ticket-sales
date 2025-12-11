@@ -6,6 +6,9 @@ PROJECT_PATH=/srv/ticket-sales.com
 
 cd $PROJECT_PATH
 
+php artisan env:decrypt --force --env=$APP_ENV
+cp .env.$APP_ENV .env
+
 php artisan migrate:fresh --force
 
 # Install Xdebug
@@ -19,6 +22,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 npm ci
+
+if [ "$APP_ENV" = "production" ] || [ $IS_NPM_BUILT -eq 1 ]; then
+  npm run build
+fi
 
 # Add the nginx user to the root group for permission access
 usermod -aG root nginx

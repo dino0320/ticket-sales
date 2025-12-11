@@ -8,11 +8,14 @@ services:
     ports:
       - "8080:80"
       - "5173:5173"
-    command: /srv/ticket-sales.com/docker/web/start.sh
+    command: bash -c "chmod 755 /srv/ticket-sales.com/docker/web/start.sh &&
+             /srv/ticket-sales.com/docker/web/start.sh"
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
       APP_ENV: "local"
+      LARAVEL_ENV_ENCRYPTION_KEY: "base64:4Dy9ZtHXIT3usjNI0t+PEm7hOPMg6LulhGwyo0X3KPs="
+      IS_NPM_BUILT: ${IS_NPM_BUILT:-0}
     depends_on:
       composer:
         condition: service_completed_successfully
@@ -23,7 +26,8 @@ services:
     build: ./docker/composer
     volumes:
       - .:/srv/ticket-sales.com
-    command: "/srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
+    command: bash -c "chmod 755 /srv/ticket-sales.com/docker/composer/start.sh &&
+             /srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
 
   db:
     build: ./docker/db
