@@ -23,6 +23,9 @@ npm ci
 # Add the nginx user to the root group for permission access
 usermod -aG root nginx
 
+# Give permissions for log output.
+chmod 664 "$PROJECT_PATH/storage/logs/laravel.log"
+
 # Start php-fpm and NGINX
 # By using -g "daemon off;", NGINX runs in the foreground, preventing the container from exiting automatically
 php-fpm
