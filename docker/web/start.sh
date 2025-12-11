@@ -17,7 +17,7 @@ if [ "$APP_ENV" = "local" ]; then
   cp docker/web/php/conf.d/99-xdebug.ini /etc/php.d/99-xdebug.ini
 fi
 
-# nvm is not loaded so load it.
+# nvm is not loaded so load it
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
@@ -29,6 +29,9 @@ fi
 
 # Add the nginx user to the root group for permission access
 usermod -aG root nginx
+
+# Give a permission for views
+chmod 775 "$PROJECT_PATH/storage/framework/views"
 
 # Start php-fpm and NGINX
 # By using -g "daemon off;", NGINX runs in the foreground, preventing the container from exiting automatically
