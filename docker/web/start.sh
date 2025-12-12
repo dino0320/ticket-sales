@@ -21,6 +21,9 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+node -v
+npm -v
+
 npm ci
 
 if [ "$APP_ENV" = "production" ] || [ $IS_NPM_BUILT -eq 1 ]; then
