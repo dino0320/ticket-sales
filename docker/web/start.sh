@@ -24,7 +24,7 @@ export NVM_DIR="$HOME/.nvm"
 node -v
 npm -v
 
-npm ci
+#npm ci
 
 if [ "$APP_ENV" = "production" ] || [ $IS_NPM_BUILT -eq 1 ]; then
   npm run build

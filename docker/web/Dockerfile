@@ -1,6 +1,7 @@
 FROM amazonlinux:2023
 
-COPY . /srv/ticket-sales.com
+ARG PROJECT_PATH=/srv/ticket-sales.com
+COPY . PROJECT_PATH
 
 # NGINX
 RUN yum -y install yum-utils
@@ -24,7 +25,7 @@ RUN yum -y install tar
 RUN touch ~/.bashrc
 COPY docker/web/install-npm.sh /tmp/install-npm.sh
 RUN chmod 755 /tmp/install-npm.sh
-RUN /tmp/install-npm.sh 20.19.6
+RUN /tmp/install-npm.sh 20.19.6 PROJECT_PATH
 
 # Install PhpRedis
 RUN yum -y install php-pear-1:1.10.13 php8.2-devel
