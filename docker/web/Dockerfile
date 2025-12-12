@@ -24,7 +24,7 @@ RUN yum -y install tar
 RUN touch ~/.bashrc
 COPY docker/web/install-npm.sh /tmp/install-npm.sh
 RUN chmod 755 /tmp/install-npm.sh
-RUN /tmp/install-npm.sh 20.14.0
+RUN /tmp/install-npm.sh 20.19.6
 
 # Install PhpRedis
 RUN yum -y install php-pear-1:1.10.13 php8.2-devel
