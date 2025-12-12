@@ -33,7 +33,8 @@ fi
 # Add the nginx user to the root group for permission access
 usermod -aG root nginx
 
-# Give a permission for views
+# Give permissions for log output etc.
+chmod 775 "$PROJECT_PATH/storage/logs"
 chmod 775 "$PROJECT_PATH/storage/framework/views"
 
 # Start php-fpm and NGINX
