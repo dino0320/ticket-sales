@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\AccountConst;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Auth\Events\Registered;
@@ -35,6 +36,7 @@ class SignUpController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'organizer_status' => AccountConst::ORGANIZER_STATUS_UNAPPROVED,
             ]);
         
             $userRepository->save($user);

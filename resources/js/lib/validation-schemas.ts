@@ -15,6 +15,12 @@ export const messageSchema = z
   .string()
   .min(10, { message: 'Message must be at least 10 characters long' })
 
+export const descriptionSchema = z
+  .string()
+  .min(1, { message: 'Message must be at least 1 characters long' })
+
+export const urlSchema = z.string().url({ message: 'Invalid URL' })
+
 export const contactFormSchema = z.object({
   name: nameSchema,
   email: emailSchema,
@@ -48,4 +54,11 @@ export const resetPasswordFormSchema = z
   .refine((data) => data.new_password === data.new_password_confirmation, {
     path: ['new_password_confirmation'],
     message: 'Passwords do not match',
+  })
+
+export const applyToBeOrganizerFormSchema = z
+  .object({
+    event_description: descriptionSchema,
+    is_individual: z.boolean(),
+    website_url: urlSchema,
   })

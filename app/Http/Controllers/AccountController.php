@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\AccountConst;
+use App\Models\UserOrganizerApplication;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
+use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrderHistoryService;
@@ -89,6 +92,45 @@ class AccountController extends Controller
             return back()->withErrors([
                 'other' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
+        });
+    }
+
+    /**
+     * Apply to be an organizer
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function applyToBeOrganizer(Request $request): RedirectResponse
+    {
+        return DB::transaction(function () use ($request) {
+            $request->validate([
+                'event_description' => 'required|string|max:255',
+                'is_individual' => 'required|boolean',
+                'website_url' => 'url:http,https',
+            ]);
+
+            $userRepository = new UserRepository();
+            $userOrganizerApplicationRepository = new UserOrganizerApplicationRepository();
+
+            $user = $request->user();
+            if ($user->organizer_status !== AccountConst::ORGANIZER_STATUS_UNAPPROVED) {
+                return back()->withErrors([
+                    'other' => 'You already applied for this.',
+                ]);
+            }
+
+            $user->organizer_status = AccountConst::ORGANIZER_STATUS_PENDING;
+
+            $userOrganizerApplication = $userOrganizerApplicationRepository->selectByUserId($user->id) ?? new UserOrganizerApplication(['user_id' => $user->id]);
+            $userOrganizerApplication->event_description = $request->event_description;
+            $userOrganizerApplication->is_individual = $request->is_individual;
+            $userOrganizerApplication->website_url = $request->website_url;
+
+            $userRepository->save($user);
+            $userOrganizerApplicationRepository->save($userOrganizerApplication);
+ 
+            return redirect()->intended('/my-account');
         });
     }
 }

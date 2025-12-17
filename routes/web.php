@@ -50,4 +50,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/reset-password', [AccountController::class, 'resetPassword']);
 
     Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
+
+    Route::get('/organizer_application', function () {
+        return Inertia::render('OrganizerApplication');
+    });
+
+    Route::post('/organizer_application', [AccountController::class, 'applyToBeOrganizer']);
 });

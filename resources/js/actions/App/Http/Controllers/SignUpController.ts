@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\SignUpController::register
-* @see app/Http/Controllers/SignUpController.php:22
+* @see app/Http/Controllers/SignUpController.php:23
 * @route '/register'
 */
 export const register = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ register.definition = {
 
 /**
 * @see \App\Http\Controllers\SignUpController::register
-* @see app/Http/Controllers/SignUpController.php:22
+* @see app/Http/Controllers/SignUpController.php:23
 * @route '/register'
 */
 register.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ register.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\SignUpController::register
-* @see app/Http/Controllers/SignUpController.php:22
+* @see app/Http/Controllers/SignUpController.php:23
 * @route '/register'
 */
 register.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
