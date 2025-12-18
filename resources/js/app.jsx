@@ -3,11 +3,17 @@ import '../css/utils.css'
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import Layout from './Layout'
+import AdminLayout from './AdminLayout'
 
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true })
     const page = pages[`./Pages/${name}.tsx`]
+    if (name.startsWith('Admin/')) {
+      page.default.layout = page.default.layout || (page => <AdminLayout children={page} />)
+      return page
+    }
+
     page.default.layout = page.default.layout || (page => <Layout children={page} />)
     return page
   },

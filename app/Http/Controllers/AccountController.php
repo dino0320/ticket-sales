@@ -10,6 +10,7 @@ use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrderHistoryService;
+use App\Services\OrganizerApplicationService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class AccountController extends Controller
      */
     public function show(Request $request): Response
     {
+        $userOrganizerApplicationRepository = new UserOrganizerApplicationRepository();
         $userTicketRepository = new UserTicketRepository();
         $ticketRepository = new TicketRepository();
 
@@ -37,8 +39,15 @@ class AccountController extends Controller
         $userTickets = $userTicketRepository->selectByUserId($user->id);
         $tickets = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon('2000/01/01 00:00:00'));
 
+        $isOrganizerApplicationApplied = true;
+        if (!$user->is_organizer) {
+            $userOrganizerApplication = $userOrganizerApplicationRepository->selectByUserId($user->id);
+            $isOrganizerApplicationApplied = OrganizerApplicationService::isOrganizerApplicationApplied($userOrganizerApplication);
+        }
+
         return Inertia::render('Account', [
             'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'isOrganizerApplicationApplied' => $isOrganizerApplicationApplied,
         ]);
     }
 

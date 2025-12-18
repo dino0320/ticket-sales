@@ -26,4 +26,15 @@ class UserOrganizerApplicationRepository extends Repository
     {
         return UserOrganizerApplication::where('user_id', $userId)->first();
     }
+
+    /**
+     * Select paginated user organizer applications by status
+     *
+     * @param integer $status
+     * @return CursorPaginator
+     */
+    public function selectByStatus(int $status): CursorPaginator
+    {
+        return UserOrganizerApplication::where('status', $status)->orderBy('applied_at', 'asc')->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
+    }
 }

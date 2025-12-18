@@ -10,6 +10,7 @@ php artisan env:decrypt --force --env=$APP_ENV
 cp .env.$APP_ENV .env
 
 php artisan migrate:fresh --force
+php artisan db:seed --class=AdminSeeder
 
 # Install Xdebug
 if [ "$APP_ENV" = "local" ]; then

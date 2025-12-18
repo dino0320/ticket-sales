@@ -1,6 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../wayfinder'
 /**
-* @see routes/web.php:13
+* @see routes/web.php:16
 * @route '/sign-up'
 */
 export const signUp = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -14,7 +14,7 @@ signUp.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:13
+* @see routes/web.php:16
 * @route '/sign-up'
 */
 signUp.url = (options?: RouteQueryOptions) => {
@@ -22,7 +22,7 @@ signUp.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:13
+* @see routes/web.php:16
 * @route '/sign-up'
 */
 signUp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -31,7 +31,7 @@ signUp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:13
+* @see routes/web.php:16
 * @route '/sign-up'
 */
 signUp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -40,7 +40,7 @@ signUp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see routes/web.php:19
+* @see routes/web.php:22
 * @route '/sign-in'
 */
 export const signIn = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -54,7 +54,7 @@ signIn.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:19
+* @see routes/web.php:22
 * @route '/sign-in'
 */
 signIn.url = (options?: RouteQueryOptions) => {
@@ -62,7 +62,7 @@ signIn.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:19
+* @see routes/web.php:22
 * @route '/sign-in'
 */
 signIn.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -71,7 +71,7 @@ signIn.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:19
+* @see routes/web.php:22
 * @route '/sign-in'
 */
 signIn.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -208,6 +208,86 @@ checkoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => (
 */
 checkoutSuccess.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: checkoutSuccess.url(options),
+    method: 'head',
+})
+
+/**
+* @see routes/web.php:50
+* @route '/reset-password'
+*/
+export const resetPassword = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: resetPassword.url(options),
+    method: 'get',
+})
+
+resetPassword.definition = {
+    methods: ["get","head"],
+    url: '/reset-password',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see routes/web.php:50
+* @route '/reset-password'
+*/
+resetPassword.url = (options?: RouteQueryOptions) => {
+    return resetPassword.definition.url + queryParams(options)
+}
+
+/**
+* @see routes/web.php:50
+* @route '/reset-password'
+*/
+resetPassword.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: resetPassword.url(options),
+    method: 'get',
+})
+
+/**
+* @see routes/web.php:50
+* @route '/reset-password'
+*/
+resetPassword.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: resetPassword.url(options),
+    method: 'head',
+})
+
+/**
+* @see routes/web.php:58
+* @route '/organizer_application'
+*/
+export const organizerApplication = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: organizerApplication.url(options),
+    method: 'get',
+})
+
+organizerApplication.definition = {
+    methods: ["get","head"],
+    url: '/organizer_application',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see routes/web.php:58
+* @route '/organizer_application'
+*/
+organizerApplication.url = (options?: RouteQueryOptions) => {
+    return organizerApplication.definition.url + queryParams(options)
+}
+
+/**
+* @see routes/web.php:58
+* @route '/organizer_application'
+*/
+organizerApplication.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: organizerApplication.url(options),
+    method: 'get',
+})
+
+/**
+* @see routes/web.php:58
+* @route '/organizer_application'
+*/
+organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: organizerApplication.url(options),
     method: 'head',
 })
 
