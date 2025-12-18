@@ -107,25 +107,28 @@ class AccountController extends Controller
             $request->validate([
                 'event_description' => 'required|string|max:255',
                 'is_individual' => 'required|boolean',
-                'website_url' => 'url:http,https',
+                'website_url' => 'nullable|url:http,https',
             ]);
 
             $userRepository = new UserRepository();
             $userOrganizerApplicationRepository = new UserOrganizerApplicationRepository();
 
             $user = $request->user();
-            if ($user->organizer_status !== AccountConst::ORGANIZER_STATUS_UNAPPROVED) {
+            $userOrganizerApplication = $userOrganizerApplicationRepository->selectByUserId($user->id) ?? new UserOrganizerApplication([
+                'user_id' => $user->id,
+                'status' => AccountConst::ORGANIZER_STATUS_UNAPPROVED,
+            ]);
+            if ($userOrganizerApplication->status !== AccountConst::ORGANIZER_STATUS_UNAPPROVED) {
                 return back()->withErrors([
                     'other' => 'You already applied for this.',
                 ]);
             }
 
-            $user->organizer_status = AccountConst::ORGANIZER_STATUS_PENDING;
-
-            $userOrganizerApplication = $userOrganizerApplicationRepository->selectByUserId($user->id) ?? new UserOrganizerApplication(['user_id' => $user->id]);
+            $userOrganizerApplication->status = AccountConst::ORGANIZER_STATUS_PENDING;
             $userOrganizerApplication->event_description = $request->event_description;
             $userOrganizerApplication->is_individual = $request->is_individual;
             $userOrganizerApplication->website_url = $request->website_url;
+            $userOrganizerApplication->applied_at = new Carbon();
 
             $userRepository->save($user);
             $userOrganizerApplicationRepository->save($userOrganizerApplication);

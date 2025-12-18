@@ -60,5 +60,8 @@ export const applyToBeOrganizerFormSchema = z
   .object({
     event_description: descriptionSchema,
     is_individual: z.boolean(),
-    website_url: urlSchema,
+    website_url: z.union([
+      z.literal(""),
+      urlSchema,
+    ]),
   })

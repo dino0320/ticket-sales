@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('user_organizer_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->unsignedTinyInteger('status');
             $table->string('event_description');
             $table->boolean('is_individual');
             $table->string('website_url')->nullable();
+            $table->dateTime('applied_at');
             $table->timestamps();
             $table->index('user_id');
+            $table->index(['status', 'applied_at']);
         });
     }
 

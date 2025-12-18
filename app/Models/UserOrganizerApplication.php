@@ -13,8 +13,22 @@ class UserOrganizerApplication extends Model
      */
     protected $fillable = [
         'user_id',
+        'status',
         'event_description',
         'is_individual',
         'website_url',
+        'applied_at',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'applied_at' => 'datetime',
+        ];
+    }
 }
