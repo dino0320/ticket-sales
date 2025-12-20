@@ -53,6 +53,7 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
                 nextDatetime.setFullYear(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate())
                 field.onChange(nextDatetime)
               }}
+              defaultMonth={datetime ?? new Date()}
             />
           </PopoverContent>
         </Popover>
