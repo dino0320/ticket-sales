@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('organizer_user_id')->references('id')->on('users');
             $table->string('event_title');
             $table->text('event_description')->nullable();
             $table->unsignedInteger('price');

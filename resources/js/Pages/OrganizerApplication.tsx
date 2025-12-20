@@ -1,5 +1,5 @@
 import { applyToBeOrganizer } from '@/actions/App/Http/Controllers/AccountController';
-import { number, z } from 'zod'
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'

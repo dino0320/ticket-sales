@@ -17,6 +17,7 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
+            'organizer_user_id' => 1,
             'event_title' => fake()->name(),
             'event_description' => fake()->text(),
             'price' => fake()->randomNumber(),

@@ -16,6 +16,18 @@ export type TicketData = {
   event_end_date: string | null,
 }
 
+export type IssuedTicketData = {
+  id: number,
+  event_title: string,
+  event_description: string | null,
+  price: number,
+  number_of_tickets: number,
+  event_start_date: string,
+  event_end_date: string | null,
+  start_date: string,
+  end_date: string,
+}
+
 export function Ticket({ ticket, isEllipsis = false }: { ticket: TicketData, isEllipsis?: boolean }) {
   const eventDate = ticket.event_start_date + (ticket.event_end_date === null ? '' : ` - ${ticket.event_end_date}`)
 

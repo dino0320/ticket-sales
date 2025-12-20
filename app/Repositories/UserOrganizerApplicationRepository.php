@@ -31,10 +31,11 @@ class UserOrganizerApplicationRepository extends Repository
      * Select paginated user organizer applications by status
      *
      * @param integer $status
+     * @param integer $numberOfItemsPerPage
      * @return CursorPaginator
      */
-    public function selectByStatus(int $status): CursorPaginator
+    public function selectByStatus(int $status, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
-        return UserOrganizerApplication::where('status', $status)->orderBy('applied_at', 'asc')->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
+        return UserOrganizerApplication::where('status', $status)->orderBy('applied_at', 'asc')->cursorPaginate($numberOfItemsPerPage);
     }
 }

@@ -60,6 +60,12 @@ Route::middleware('auth')->group(function () {
     })->name('organizer-application');
 
     Route::post('/organizer_application', [AccountController::class, 'applyToBeOrganizer']);
+
+    Route::get('/issued_tickets', [AccountController::class, 'showIssuedTickets']);
+
+    Route::get('/issued_tickets/{ticket}', [TicketController::class, 'showIssuedTicket']);
+
+    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
 });
 
 Route::middleware('guest:admin')->prefix('admin')->group(function () {

@@ -145,4 +145,22 @@ class AccountController extends Controller
             return redirect()->intended('/my-account');
         });
     }
+
+    /**
+     * Show issued tickets
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function showIssuedTickets(Request $request): Response
+    {
+        $ticketRepository = new TicketRepository();
+
+        $user = $request->user();
+        $tickets = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
+
+        return Inertia::render('IssuedTicketIndex', [
+            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+        ]);
+    }
 }

@@ -19,13 +19,14 @@ class UserOrderRepository extends Repository
      * Select paginated user orders by user_id
      *
      * @param integer $userId
+     * @param integer $numberOfItemsPerPage
      * @return CursorPaginator
      */
-    public function selectPaginatedUserOrdersByUserId(int $userId): CursorPaginator
+    public function selectPaginatedUserOrdersByUserId(int $userId, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
         return UserOrder::where([
             ['user_id', $userId],
             ['status', CheckoutConst::ORDER_STATUS_COMPLETED],
-        ])->cursorPaginate(CommonConst::NUMBER_OF_RECORDS_PER_PAGE);
+        ])->cursorPaginate($numberOfItemsPerPage);
     }
 }

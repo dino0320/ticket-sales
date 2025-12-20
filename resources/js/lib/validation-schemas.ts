@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const emailSchema = z.string().email({ message: 'Invalid email address' })
+export const emailSchema = z.email({ message: 'Invalid email address' })
 
 export const passwordSchema = z
   .string()
@@ -17,9 +17,11 @@ export const messageSchema = z
 
 export const descriptionSchema = z
   .string()
-  .min(1, { message: 'Message must be at least 1 characters long' })
+  .min(1, { message: 'Message must be at least 1 character long' })
 
-export const urlSchema = z.string().url({ message: 'Invalid URL' })
+export const urlSchema = z.url({ message: 'Invalid URL' })
+
+export const dateSchema = z.date({message: 'Invalid date'})
 
 export const contactFormSchema = z.object({
   name: nameSchema,
@@ -64,4 +66,18 @@ export const applyToBeOrganizerFormSchema = z
       z.literal(""),
       urlSchema,
     ]),
+  })
+
+export const editIssuedTicketFormSchema = z
+  .object({
+    event_title: nameSchema,
+    event_description: z.union([
+      z.literal(""),
+      descriptionSchema,
+    ]),
+    number_of_tickets: z.number().min(1, 'The number of tickets must be at least 1 character long'),
+    event_start_date: dateSchema,
+    event_end_date: dateSchema.nullable(),
+    start_date: dateSchema,
+    end_date: dateSchema,
   })

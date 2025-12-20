@@ -155,6 +155,50 @@ applyToBeOrganizer.post = (options?: RouteQueryOptions): RouteDefinition<'post'>
     method: 'post',
 })
 
-const AccountController = { show, resetPassword, showOrderHistory, applyToBeOrganizer }
+/**
+* @see \App\Http\Controllers\AccountController::showIssuedTickets
+* @see app/Http/Controllers/AccountController.php:155
+* @route '/issued_tickets'
+*/
+export const showIssuedTickets = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: showIssuedTickets.url(options),
+    method: 'get',
+})
+
+showIssuedTickets.definition = {
+    methods: ["get","head"],
+    url: '/issued_tickets',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\AccountController::showIssuedTickets
+* @see app/Http/Controllers/AccountController.php:155
+* @route '/issued_tickets'
+*/
+showIssuedTickets.url = (options?: RouteQueryOptions) => {
+    return showIssuedTickets.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\AccountController::showIssuedTickets
+* @see app/Http/Controllers/AccountController.php:155
+* @route '/issued_tickets'
+*/
+showIssuedTickets.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: showIssuedTickets.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\AccountController::showIssuedTickets
+* @see app/Http/Controllers/AccountController.php:155
+* @route '/issued_tickets'
+*/
+showIssuedTickets.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: showIssuedTickets.url(options),
+    method: 'head',
+})
+
+const AccountController = { show, resetPassword, showOrderHistory, applyToBeOrganizer, showIssuedTickets }
 
 export default AccountController
