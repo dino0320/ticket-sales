@@ -26,7 +26,7 @@ class SignInController extends Controller
         }
  
         return back()->withErrors([
-            'other' => 'The provided credentials do not match our records.',
+            'root' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
 }

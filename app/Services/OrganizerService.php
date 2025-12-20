@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Consts\AccountConst;
+use App\Models\User;
 use App\Models\UserOrganizerApplication;
 use Illuminate\Pagination\CursorPaginator;
+use InvalidArgumentException;
 
-class OrganizerApplicationService
+class OrganizerService
 {
     /**
      * Get paginated user organizer applications response
@@ -60,7 +62,7 @@ class OrganizerApplicationService
     }
 
     /**
-     * Weather an organizer application is applied or not
+     * Wether an organizer application is applied or not
      *
      * @param UserOrganizerApplication|null $userOrganizerApplication
      * @return boolean
@@ -76,5 +78,20 @@ class OrganizerApplicationService
         }
 
         return true;
+    }
+
+    /**
+     * Check if the user is an organizer
+     *
+     * @param User $user
+     * @return void
+     */
+    public static function checkIfUserIsOrganizer(User $user): void
+    {
+        if ($user->is_organizer) {
+            return;
+        }
+
+        throw new InvalidArgumentException("The User ID is not an organizer. user_id: {$user->id}");
     }
 }

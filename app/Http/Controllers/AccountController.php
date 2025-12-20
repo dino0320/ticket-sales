@@ -10,7 +10,7 @@ use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrderHistoryService;
-use App\Services\OrganizerApplicationService;
+use App\Services\OrganizerService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -42,7 +42,7 @@ class AccountController extends Controller
         $isOrganizerApplicationApplied = true;
         if (!$user->is_organizer) {
             $userOrganizerApplication = $userOrganizerApplicationRepository->selectByUserId($user->id);
-            $isOrganizerApplicationApplied = OrganizerApplicationService::isOrganizerApplicationApplied($userOrganizerApplication);
+            $isOrganizerApplicationApplied = OrganizerService::isOrganizerApplicationApplied($userOrganizerApplication);
         }
 
         return Inertia::render('Account', [
@@ -99,7 +99,7 @@ class AccountController extends Controller
             }
  
             return back()->withErrors([
-                'other' => 'The provided credentials do not match our records.',
+                'root' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         });
     }
@@ -129,7 +129,7 @@ class AccountController extends Controller
             ]);
             if ($userOrganizerApplication->status !== AccountConst::ORGANIZER_STATUS_UNAPPROVED) {
                 return back()->withErrors([
-                    'other' => 'You already applied for this.',
+                    'root' => 'You already applied for this.',
                 ]);
             }
 

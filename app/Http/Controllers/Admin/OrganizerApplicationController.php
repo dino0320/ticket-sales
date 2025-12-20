@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
-use App\Services\OrganizerApplicationService;
+use App\Services\OrganizerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -28,7 +28,7 @@ class OrganizerApplicationController extends Controller
         $userOrganizerApplications = $userOrganizerApplicationRepository->selectByStatus(AccountConst::ORGANIZER_STATUS_PENDING);
 
         return Inertia::render('Admin/OrganizerApplication', [
-            'userOrganizerApplications' => OrganizerApplicationService::getPaginatedUserOrganizerApplicationsResponse($userOrganizerApplications),
+            'userOrganizerApplications' => OrganizerService::getPaginatedUserOrganizerApplicationsResponse($userOrganizerApplications),
         ]);
     }
 
@@ -41,7 +41,7 @@ class OrganizerApplicationController extends Controller
     public function show(UserOrganizerApplication $userOrganizerApplication): Response
     {
         return Inertia::render('Admin/OrganizerApplicationDetail', [
-            'userOrganizerApplication' => OrganizerApplicationService::getUserOrganizerApplicationResponse($userOrganizerApplication),
+            'userOrganizerApplication' => OrganizerService::getUserOrganizerApplicationResponse($userOrganizerApplication),
         ]);
     }
 
