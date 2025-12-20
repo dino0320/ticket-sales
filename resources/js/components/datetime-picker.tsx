@@ -14,7 +14,7 @@ import {
 
 export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {field: ControllerRenderProps<TFieldValues> }) {
   const [open, setOpen] = React.useState(false)
-  const datetime: Date | null = field.value
+  const datetime: Date | undefined = field.value
 
   return (
     <div className="flex gap-4">
@@ -29,14 +29,14 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
               id="date-picker"
               className="w-32 justify-between font-normal"
             >
-              {datetime === null ? "Select date" : datetime.toLocaleDateString()}
+              {datetime === undefined ? "Select date" : datetime.toLocaleDateString()}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto overflow-hidden p-0" align="start">
             <Calendar
               mode="single"
-              selected={datetime ?? undefined}
+              selected={datetime}
               captionLayout="dropdown"
               onSelect={(nextDate) => {
                 setOpen(false)
@@ -44,7 +44,7 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
                   return
                 }
 
-                if (datetime === null) {
+                if (datetime === undefined) {
                   field.onChange(nextDate)
                   return
                 }
@@ -53,7 +53,7 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
                 nextDatetime.setFullYear(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate())
                 field.onChange(nextDatetime)
               }}
-              defaultMonth={datetime ?? new Date()}
+              defaultMonth={datetime === undefined ? new Date() : datetime}
             />
           </PopoverContent>
         </Popover>
@@ -66,10 +66,10 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
           type="time"
           id="time-picker"
           step="1"
-          value={datetime === null ? undefined : `${String(datetime.getHours()).padStart(2, '0')}:${String(datetime.getMinutes()).padStart(2, '0')}:${String(datetime.getSeconds()).padStart(2, '0')}`}
+          value={datetime === undefined ? '' : `${String(datetime.getHours()).padStart(2, '0')}:${String(datetime.getMinutes()).padStart(2, '0')}:${String(datetime.getSeconds()).padStart(2, '0')}`}
           className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           onChange={(event) => {
-            if (datetime === null) {
+            if (datetime === undefined) {
               return
             }
 

@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Pagination\CursorPaginator;
+use InvalidArgumentException;
 
 class TicketService
 {
@@ -81,7 +83,7 @@ class TicketService
     }
 
     /**
-     * Weather a ticket is during the period
+     * Wether a ticket is during the period
      *
      * @param Ticket $ticket
      * @return boolean
@@ -90,5 +92,76 @@ class TicketService
     {
         $now = new Carbon();
         return $now >= $ticket->start_date && $now <= $ticket->end_date;
+    }
+
+    /**
+     * Check if the user is the organizer for a ticket
+     *
+     * @param User $user
+     * @param Ticket $ticket
+     * @return void
+     */
+    public static function checkIfUserIsOrganizerForTicket(User $user, Ticket $ticket): void
+    {
+        OrganizerService::checkIfUserIsOrganizer($user);
+
+        if ($user->id === $ticket->organizer_user_id) {
+            return;
+        }
+
+        throw new InvalidArgumentException("The User ID is not the organizer's User ID of this ticket. user_id: {$user->id}, ticket_id: {$ticket->organizer_user_id}");
+    }
+
+    /**
+     * Wether the event and ticket sales dates are valid
+     *
+     * @param Carbon $eventStartDate
+     * @param Carbon|null $eventEndDate
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @param Ticket|null $ticket
+     * @param array $errorMessage
+     * @return boolean
+     */
+    public static function areEventAndTicketSalesDatesValid(Carbon $eventStartDate, ?Carbon $eventEndDate, Carbon $startDate, Carbon $endDate, Ticket $ticket = null, array &$errorMessage = []): bool
+    {
+        if ($eventStartDate <= $endDate) {
+            $errorMessage = ['event_start_date' => 'The event start date must be after the ticket sales end date.'];
+            return false;
+        }
+
+        if ($ticket !== null && $ticket->event_end_date === null && $eventEndDate !== null) {
+            $errorMessage = ['event_end_date' => 'The event end date cannot be specified because it is not set.'];
+            return false;
+        }
+
+        if ($eventEndDate !== null && $eventEndDate <= $eventStartDate) {
+            $errorMessage = ['event_end_date' => 'The event end date must be after the event start date.'];
+            return false;
+        }
+
+        $now = new Carbon();
+        if ($ticket !== null && TicketService::isDuringPeriod($ticket)) {
+            if ($now > $endDate) {
+                $errorMessage = ['end_date' => 'The ticket sales end date must be in the future.'];
+                return false;
+            }
+
+            return true;
+        }
+
+        // Not during the period
+
+        if ($now > $startDate) {
+            $errorMessage = ['start_date' => 'The ticket sales start date must be in the future.'];
+            return false;
+        }
+
+        if ($endDate <= $startDate) {
+            $errorMessage = ['end_date' => 'The ticket sales end date must be after the ticket sales start date.'];
+            return false;
+        }
+
+        return true;
     }
 }

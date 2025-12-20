@@ -27,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
             $table->index(['event_start_date', 'event_end_date']);
             $table->index(['start_date', 'end_date']);
+            $table->index(['organizer_user_id', 'id']);
         });
     }
 

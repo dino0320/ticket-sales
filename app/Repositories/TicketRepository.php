@@ -64,6 +64,6 @@ class TicketRepository extends Repository
      */
     public function selectPaginatedTicketsByOrganizerUserId(int $organizerUserId, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
-        return Ticket::where('organizer_user_id', $organizerUserId)->cursorPaginate($numberOfItemsPerPage);
+        return Ticket::where('organizer_user_id', $organizerUserId)->orderBy('id', 'desc')->cursorPaginate($numberOfItemsPerPage);
     }
 }

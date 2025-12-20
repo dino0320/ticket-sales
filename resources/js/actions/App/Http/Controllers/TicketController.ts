@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:25
+* @see app/Http/Controllers/TicketController.php:23
 * @route '/tickets/{ticket}'
 */
 export const show = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:25
+* @see app/Http/Controllers/TicketController.php:23
 * @route '/tickets/{ticket}'
 */
 show.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ show.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: 
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:25
+* @see app/Http/Controllers/TicketController.php:23
 * @route '/tickets/{ticket}'
 */
 show.get = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ show.get = (args: { ticket: number | { id: number } } | [ticket: number | { id: 
 
 /**
 * @see \App\Http\Controllers\TicketController::show
-* @see app/Http/Controllers/TicketController.php:25
+* @see app/Http/Controllers/TicketController.php:23
 * @route '/tickets/{ticket}'
 */
 show.head = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -68,8 +68,42 @@ show.head = (args: { ticket: number | { id: number } } | [ticket: number | { id:
 })
 
 /**
+* @see \App\Http\Controllers\TicketController::store
+* @see app/Http/Controllers/TicketController.php:55
+* @route '/tickets'
+*/
+export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(options),
+    method: 'post',
+})
+
+store.definition = {
+    methods: ["post"],
+    url: '/tickets',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\TicketController::store
+* @see app/Http/Controllers/TicketController.php:55
+* @route '/tickets'
+*/
+store.url = (options?: RouteQueryOptions) => {
+    return store.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\TicketController::store
+* @see app/Http/Controllers/TicketController.php:55
+* @route '/tickets'
+*/
+store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(options),
+    method: 'post',
+})
+
+/**
 * @see \App\Http\Controllers\TicketController::showIssuedTicket
-* @see app/Http/Controllers/TicketController.php:42
+* @see app/Http/Controllers/TicketController.php:40
 * @route '/issued_tickets/{ticket}'
 */
 export const showIssuedTicket = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -84,7 +118,7 @@ showIssuedTicket.definition = {
 
 /**
 * @see \App\Http\Controllers\TicketController::showIssuedTicket
-* @see app/Http/Controllers/TicketController.php:42
+* @see app/Http/Controllers/TicketController.php:40
 * @route '/issued_tickets/{ticket}'
 */
 showIssuedTicket.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -117,7 +151,7 @@ showIssuedTicket.url = (args: { ticket: number | { id: number } } | [ticket: num
 
 /**
 * @see \App\Http\Controllers\TicketController::showIssuedTicket
-* @see app/Http/Controllers/TicketController.php:42
+* @see app/Http/Controllers/TicketController.php:40
 * @route '/issued_tickets/{ticket}'
 */
 showIssuedTicket.get = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -127,7 +161,7 @@ showIssuedTicket.get = (args: { ticket: number | { id: number } } | [ticket: num
 
 /**
 * @see \App\Http\Controllers\TicketController::showIssuedTicket
-* @see app/Http/Controllers/TicketController.php:42
+* @see app/Http/Controllers/TicketController.php:40
 * @route '/issued_tickets/{ticket}'
 */
 showIssuedTicket.head = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -137,7 +171,7 @@ showIssuedTicket.head = (args: { ticket: number | { id: number } } | [ticket: nu
 
 /**
 * @see \App\Http\Controllers\TicketController::update
-* @see app/Http/Controllers/TicketController.php:61
+* @see app/Http/Controllers/TicketController.php:111
 * @route '/tickets/{ticket}'
 */
 export const update = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -152,7 +186,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\TicketController::update
-* @see app/Http/Controllers/TicketController.php:61
+* @see app/Http/Controllers/TicketController.php:111
 * @route '/tickets/{ticket}'
 */
 update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -185,7 +219,7 @@ update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id
 
 /**
 * @see \App\Http\Controllers\TicketController::update
-* @see app/Http/Controllers/TicketController.php:61
+* @see app/Http/Controllers/TicketController.php:111
 * @route '/tickets/{ticket}'
 */
 update.put = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -193,6 +227,6 @@ update.put = (args: { ticket: number | { id: number } } | [ticket: number | { id
     method: 'put',
 })
 
-const TicketController = { show, showIssuedTicket, update }
+const TicketController = { show, store, showIssuedTicket, update }
 
 export default TicketController

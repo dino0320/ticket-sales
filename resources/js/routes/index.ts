@@ -291,3 +291,43 @@ organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head
     method: 'head',
 })
 
+/**
+* @see routes/web.php:66
+* @route '/issue_ticket'
+*/
+export const issueTicket = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: issueTicket.url(options),
+    method: 'get',
+})
+
+issueTicket.definition = {
+    methods: ["get","head"],
+    url: '/issue_ticket',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see routes/web.php:66
+* @route '/issue_ticket'
+*/
+issueTicket.url = (options?: RouteQueryOptions) => {
+    return issueTicket.definition.url + queryParams(options)
+}
+
+/**
+* @see routes/web.php:66
+* @route '/issue_ticket'
+*/
+issueTicket.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: issueTicket.url(options),
+    method: 'get',
+})
+
+/**
+* @see routes/web.php:66
+* @route '/issue_ticket'
+*/
+issueTicket.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: issueTicket.url(options),
+    method: 'head',
+})
+

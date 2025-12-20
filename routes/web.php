@@ -63,6 +63,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/issued_tickets', [AccountController::class, 'showIssuedTickets']);
 
+    Route::get('/issue_ticket', function () {
+        return Inertia::render('IssueTicket');
+    })->name('issue-ticket');
+
+    Route::post('/tickets', [TicketController::class, 'store']);
+
     Route::get('/issued_tickets/{ticket}', [TicketController::class, 'showIssuedTicket']);
 
     Route::put('/tickets/{ticket}', [TicketController::class, 'update']);

@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Repositories\TicketRepository;
+use App\Services\OrganizerService;
 use App\Services\TicketService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
-use InvalidArgumentException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TicketController extends Controller
 {
@@ -41,10 +39,7 @@ class TicketController extends Controller
      */
     public function showIssuedTicket(Request $request, Ticket $ticket): Response
     {
-        $user = $request->user();
-        if ($user->id !== $ticket->organizer_user_id) {
-            throw new InvalidArgumentException("The User ID is not the organizer's User ID of this ticket. user_id: {$user->id}, ticket_id: {$ticket->id}");
-        }
+        TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
 
         return Inertia::render('EditIssuedTicket', [
             'ticket' => TicketService::getIssuedTicketResponse($ticket),
@@ -52,7 +47,62 @@ class TicketController extends Controller
     }
 
     /**
-     * Update an issued ticket
+     * Store a ticket
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        return DB::transaction(function () use ($request) {
+            $request->validate([
+                'event_title' => 'required|string|max:255',
+                'event_description' => 'nullable|string|max:255',
+                'price' => 'required|integer|min:1',
+                'number_of_tickets' => 'required|integer|min:1',
+                'event_start_date' => 'required|date',
+                'event_end_date' => 'nullable|date',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+            ]);
+
+            $ticketRepository = new TicketRepository();
+
+            $user = $request->user();
+            OrganizerService::checkIfUserIsOrganizer($user);
+
+            $startDate = $request->date('start_date');
+            $endDate = $request->date('end_date');
+            $eventStartDate = $request->date('event_start_date');
+            $eventEndDate = $request->date('event_end_date');
+
+            $errorMessage = [];
+            if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, null, $errorMessage)) {
+                return back()->withErrors($errorMessage);
+            }
+
+            $ticket = new Ticket([
+                'organizer_user_id' => $user->id,
+                'event_title' => $request->event_title,
+                'event_description' => $request->event_description,
+                'price' => $request->price,
+                'stripe_price_id' => '',
+                'number_of_tickets' => $request->number_of_tickets,
+                'number_of_reserved_tickets' => 0,
+                'event_start_date' => $eventStartDate,
+                'event_end_date' => $eventEndDate,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ]);
+
+            $ticketRepository->save($ticket);
+            
+            return redirect()->intended('/issued_tickets');
+        });
+    }
+
+    /**
+     * Update a ticket
      *
      * @param Request $request
      * @param Ticket $ticket
@@ -73,68 +123,29 @@ class TicketController extends Controller
 
             $ticketRepository = new TicketRepository();
 
+            TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
+
             $startDate = $request->date('start_date');
             $endDate = $request->date('end_date');
             $eventStartDate = $request->date('event_start_date');
             $eventEndDate = $request->date('event_end_date');
 
-            if ($request->number_of_tickets < $ticket->number_of_tickets) {
-                return back()->withErrors([
-                    'number_of_tickets' => 'The number of tickets must be the previous value or more.',
-                ]);
+            $errorMessage = [];
+            if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
+                return back()->withErrors($errorMessage);
             }
 
-            if ($eventStartDate <= $endDate) {
-                return back()->withErrors([
-                    'event_start_date' => 'The event start date must be after the ticket sales end date.',
-                ]);
+            if (!TicketService::isDuringPeriod($ticket)) {
+                $ticket->start_date = $startDate;
             }
 
-            if ($eventEndDate <= $eventStartDate) {
-                return back()->withErrors([
-                    'event_end_date' => 'The event end date must be after the event start date.',
-                ]);
-            }
-
-            $now = new Carbon();
-            if (TicketService::isDuringPeriod($ticket)) {
-                if ($now > $endDate) {
-                    return back()->withErrors([
-                        'end_date' => 'The ticket sales end date must be in the future.',
-                    ]);
-                }
-
-                $ticket->end_date = $endDate;
-                $ticket->event_start_date = $eventStartDate;
-                $ticket->event_end_date = $eventEndDate;
-
-                $ticketRepository->save($ticket);
-
-                return redirect()->intended('/issued_tickets');
-            }
-
-            // Not during the period
-
-            if ($now > $startDate) {
-                return back()->withErrors([
-                    'start_date' => 'The ticket sales start date must be in the future.',
-                ]);
-            }
-
-            if ($endDate <= $startDate) {
-                return back()->withErrors([
-                    'end_date' => 'The ticket sales end date must be after the ticket sales start date.',
-                ]);
-            }
-
-            $ticket->start_date = $startDate;
             $ticket->end_date = $endDate;
             $ticket->event_start_date = $eventStartDate;
             $ticket->event_end_date = $eventEndDate;
 
             $ticketRepository->save($ticket);
             
-            return redirect()->intended('/issued_tickets');
+            return back();
         });
     }
 }

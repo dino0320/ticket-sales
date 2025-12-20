@@ -1,10 +1,10 @@
-import { update } from '@/actions/App/Http/Controllers/TicketController';
+import { store } from '@/actions/App/Http/Controllers/TicketController';
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
 import { useState } from 'react';
-import { setManualFormErrors } from '@/lib/form-utils'
+import { setManualFormErrors, convertZodError } from '@/lib/form-utils'
 
 import {
   Form,
@@ -25,24 +25,24 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-import { editIssuedTicketFormSchema } from '@/lib/validation-schemas'
+import { issueTicketFormSchema, issueTicketValidationSchema } from '@/lib/validation-schemas'
 
 import { DatetimePicker } from '@/components/datetime-picker'
-import type { IssuedTicketData } from '@/components/ticket'
 
-const formSchema = editIssuedTicketFormSchema
+const formSchema = issueTicketFormSchema
 
-export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}) {
+export default function IssueTicket() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      event_title: ticket.event_title,
-      event_description: ticket.event_description ?? '',
-      number_of_tickets: ticket.number_of_tickets,
-      event_start_date: new Date(ticket.event_start_date),
-      event_end_date: ticket.event_end_date === null ? undefined : new Date(ticket.event_end_date),
-      start_date: new Date(ticket.start_date),
-      end_date: new Date(ticket.end_date),
+      event_title: '',
+      event_description: '',
+      price: 1,
+      number_of_tickets: 1,
+      event_start_date: undefined,
+      event_end_date: undefined,
+      start_date: undefined,
+      end_date: undefined,
     },
   })
 
@@ -50,8 +50,12 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Assuming an async registration function
-      router.put(update(ticket.id), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
+      const result = issueTicketValidationSchema.safeParse(values)
+      if (!result.success) {
+        setManualFormErrors(convertZodError(result.error), form, setErrorMessage)
+        return
+      }
+      router.post(store(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
     } catch (error) {
       console.error('Form submission error', error)
     }
@@ -61,9 +65,9 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
     <div className="flex min-h-[60vh] h-full w-full items-center justify-center px-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Edit Ticket</CardTitle>
+          <CardTitle className="text-2xl">Issue Ticket</CardTitle>
           <CardDescription>
-            Edit a ticket by filling out the form below.
+            Issue a ticket by filling out the form below.
             <p className="text-destructive text-sm">{errorMessage}</p>
           </CardDescription>
         </CardHeader>
@@ -105,10 +109,19 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
                 />
 
                 {/* Price Field */}
-                <FormItem className="grid gap-2">
-                  <FormLabel htmlFor="price">Price</FormLabel>
-                  {ticket.price}
-                </FormItem>
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel htmlFor="price">Price</FormLabel>
+                      <FormControl>
+                        <Input id="price" type="number" placeholder="" min="1" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {/* The Number of Tickets Field */}
                 <FormField
@@ -118,7 +131,7 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
                     <FormItem className="grid gap-2">
                       <FormLabel htmlFor="number_of_tickets">The Number of Tickets</FormLabel>
                       <FormControl>
-                        <Input id="number_of_tickets" type="number" placeholder="" min={ticket.number_of_tickets} {...field} />
+                        <Input id="number_of_tickets" type="number" placeholder="" min="1" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
