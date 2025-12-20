@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
 import { useState } from 'react';
-import { setServerError } from '@/lib/form-utils'
+import { setManualFormErrors } from '@/lib/form-utils'
 
 import {
   Form,
@@ -47,7 +47,7 @@ export default function SignUp() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // Assuming an async registration function
-      router.post(register(), values, { onError: (errors: Record<string, string>) => setServerError(errors, form, setErrorMessage) })
+      router.post(register(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
     } catch (error) {
       console.error('Form submission error', error)
     }
