@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('ticket_id');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('ticket_id')->references('id')->on('tickets');
             $table->unsignedInteger('number_of_tickets');
             $table->timestamps();
             $table->index(['user_id', 'ticket_id']);

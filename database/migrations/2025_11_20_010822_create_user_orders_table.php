@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->unsignedInteger('amount');
             $table->json('order_items');
             $table->unsignedTinyInteger('status');
