@@ -37,7 +37,7 @@ class AccountController extends Controller
 
         $user = $request->user();
         $userTickets = $userTicketRepository->selectByUserId($user->id);
-        $tickets = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon('2000/01/01 00:00:00'));
+        $tickets = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon());
 
         $isOrganizerApplicationApplied = true;
         if (!$user->is_organizer) {
