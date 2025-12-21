@@ -25,9 +25,9 @@ class TicketRepository extends Repository
     public function selectPaginatedTicketsDuringPeriod(Carbon $now, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
         return Ticket::where([
-                ['start_date', '<=', $now],
-                ['end_date', '>=', $now],
-            ])->orderBy('event_start_date', 'asc')->cursorPaginate($numberOfItemsPerPage);
+            ['start_date', '<=', $now],
+            ['end_date', '>=', $now],
+        ])->orderBy('event_start_date', 'asc')->orderBy('id', 'asc')->cursorPaginate($numberOfItemsPerPage);
     }
 
     /**
@@ -39,7 +39,7 @@ class TicketRepository extends Repository
      */
     public function selectPaginatedTicketsByIds(array $ids, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
-        return Ticket::whereIn('id', $ids)->cursorPaginate($numberOfItemsPerPage);
+        return Ticket::whereIn('id', $ids)->orderBy('id', 'asc')->cursorPaginate($numberOfItemsPerPage);
     }
 
     /**
@@ -52,7 +52,11 @@ class TicketRepository extends Repository
      */
     public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
     {
-        return Ticket::whereIn('id', $ids)->where('event_end_date', '>=', $now)->orderBy('event_start_date', 'asc')->cursorPaginate($numberOfItemsPerPage);
+        return Ticket::where('event_end_date', '>=', $now)
+            ->whereIn('id', $ids)
+            ->orderBy('event_start_date', 'asc')
+            ->orderBy('id', 'asc')
+            ->cursorPaginate($numberOfItemsPerPage);
     }
 
     /**
