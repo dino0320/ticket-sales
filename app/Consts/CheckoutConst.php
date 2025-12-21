@@ -5,9 +5,9 @@ namespace App\Consts;
 class CheckoutConst
 {
     /**
-     * Order status incomplete
+     * Order status pending
      */
-    public const ORDER_STATUS_INCOMPLETE = 1;
+    public const ORDER_STATUS_PENDING = 1;
 
     /**
      * Order status completed
@@ -15,7 +15,7 @@ class CheckoutConst
     public const ORDER_STATUS_COMPLETED = 2;
 
     /**
-     * Order status expired
+     * Order status canceled
      */
-    public const ORDER_STATUS_EXPIRED = 3;
+    public const ORDER_STATUS_CANCELED = 3;
 }

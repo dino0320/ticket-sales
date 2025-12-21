@@ -8,6 +8,7 @@ use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
+use App\Services\StripeService;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +51,7 @@ class CheckoutController extends Controller
      */
     public function checkout(Request $request): Checkout
     {
-        return DB::transaction(function () use ($request) {
+        $userOrder = DB::transaction(function () use ($request) {
             $userOrderRepository = new UserOrderRepository();
             $ticketRepository = new TicketRepository();
 
@@ -66,21 +67,18 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
                 'amount' => 0,
                 'order_items' => CheckoutService::getOrderItems($numbersOfTickets, $tickets),
-                'status' => CheckoutConst::ORDER_STATUS_INCOMPLETE,
+                'status' => CheckoutConst::ORDER_STATUS_PENDING,
             ]);
 
             $userOrderRepository->save($userOrder);
             $ticketRepository->upsert($tickets);
-        
-            return $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
-                'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('review'),
-                'metadata' => ['user_order_id' => $userOrder->id],
-                'payment_intent_data' => [
-                    'metadata' => ['user_order_id' => $userOrder->id],
-                ],
-            ]);
+
+            return $userOrder;
         });
+        
+
+        // Invoke external APIs outside the transaction to prevent long-term DB locks
+        return StripeService::checkout($request->user(), $userOrder);
     }
 
     /**
