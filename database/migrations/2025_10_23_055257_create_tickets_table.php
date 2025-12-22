@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('number_of_tickets');
             $table->unsignedInteger('number_of_reserved_tickets');
             $table->dateTime('event_start_date');
-            $table->dateTime('event_end_date')->nullable();
+            $table->dateTime('event_end_date');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->timestamps();

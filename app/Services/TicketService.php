@@ -116,32 +116,32 @@ class TicketService
      * Wether the event and ticket sales dates are valid
      *
      * @param Carbon $eventStartDate
-     * @param Carbon|null $eventEndDate
+     * @param Carbon $eventEndDate
      * @param Carbon $startDate
      * @param Carbon $endDate
      * @param Ticket|null $ticket
      * @param array $errorMessage
      * @return boolean
      */
-    public static function areEventAndTicketSalesDatesValid(Carbon $eventStartDate, ?Carbon $eventEndDate, Carbon $startDate, Carbon $endDate, Ticket $ticket = null, array &$errorMessage = []): bool
+    public static function areEventAndTicketSalesDatesValid(Carbon $eventStartDate, Carbon $eventEndDate, Carbon $startDate, Carbon $endDate, Ticket $ticket = null, array &$errorMessage = []): bool
     {
         if ($eventStartDate <= $endDate) {
             $errorMessage = ['event_start_date' => 'The event start date must be after the ticket sales end date.'];
             return false;
         }
 
-        if ($ticket !== null && $ticket->event_end_date === null && $eventEndDate !== null) {
-            $errorMessage = ['event_end_date' => 'The event end date cannot be specified because it is not set.'];
-            return false;
-        }
-
-        if ($eventEndDate !== null && $eventEndDate <= $eventStartDate) {
+        if ($eventEndDate <= $eventStartDate) {
             $errorMessage = ['event_end_date' => 'The event end date must be after the event start date.'];
             return false;
         }
 
         $now = new Carbon();
         if ($ticket !== null && TicketService::isDuringPeriod($ticket)) {
+            if (!$startDate->equalTo($ticket->start_date)) {
+                $errorMessage = ['start_date' => 'The ticket sales start date cannot be changed.'];
+                return false;
+            }
+
             if ($now > $endDate) {
                 $errorMessage = ['end_date' => 'The ticket sales end date must be in the future.'];
                 return false;

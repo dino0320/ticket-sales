@@ -40,7 +40,7 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
       event_description: ticket.event_description ?? '',
       number_of_tickets: ticket.number_of_tickets,
       event_start_date: new Date(ticket.event_start_date),
-      event_end_date: ticket.event_end_date === null ? undefined : new Date(ticket.event_end_date),
+      event_end_date: new Date(ticket.event_end_date),
       start_date: new Date(ticket.start_date),
       end_date: new Date(ticket.end_date),
     },

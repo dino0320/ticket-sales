@@ -85,6 +85,7 @@ export const issueTicketFormSchema = z
 
 export const issueTicketValidationSchema = issueTicketFormSchema.extend({
   event_start_date: dateSchema,
+  event_end_date: dateSchema,
   start_date: dateSchema,
   end_date: dateSchema,
 })
@@ -98,7 +99,7 @@ export const editIssuedTicketFormSchema = z
     ]),
     number_of_tickets: z.coerce.number<number>().min(1, 'The number of tickets must be at least 1 character long'),
     event_start_date: dateSchema,
-    event_end_date: dateSchema.optional(),
+    event_end_date: dateSchema,
     start_date: dateSchema,
     end_date: dateSchema,
   })

@@ -62,7 +62,7 @@ class TicketController extends Controller
             'price' => 'required|integer|min:1',
             'number_of_tickets' => 'required|integer|min:1',
             'event_start_date' => 'required|date',
-            'event_end_date' => 'nullable|date',
+            'event_end_date' => 'required|date',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
@@ -122,7 +122,7 @@ class TicketController extends Controller
                 'event_description' => 'nullable|string|max:255',
                 'number_of_tickets' => 'required|integer|min:1',
                 'event_start_date' => 'required|date',
-                'event_end_date' => 'nullable|date',
+                'event_end_date' => 'required|date',
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',
             ]);

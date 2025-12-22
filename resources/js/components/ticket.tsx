@@ -13,7 +13,7 @@ export type TicketData = {
   event_description: string | null,
   price: number,
   event_start_date: string,
-  event_end_date: string | null,
+  event_end_date: string,
 }
 
 export type IssuedTicketData = {
@@ -23,13 +23,14 @@ export type IssuedTicketData = {
   price: number,
   number_of_tickets: number,
   event_start_date: string,
-  event_end_date: string | null,
+  event_end_date: string,
   start_date: string,
   end_date: string,
 }
 
 export function Ticket({ ticket, isEllipsis = false }: { ticket: TicketData, isEllipsis?: boolean }) {
-  const eventDate = ticket.event_start_date + (ticket.event_end_date === null ? '' : ` - ${ticket.event_end_date}`)
+  const eventStartDate = new Date(ticket.event_start_date)
+  const eventEndDate = new Date(ticket.event_end_date)
 
   return (
     <Card>
@@ -43,7 +44,7 @@ export function Ticket({ ticket, isEllipsis = false }: { ticket: TicketData, isE
         ${ticket.price}
       </CardContent>
       <CardFooter>
-        {eventDate}
+        {eventStartDate.toLocaleString()} - {eventEndDate.toLocaleString()}
       </CardFooter>
     </Card>
   )
