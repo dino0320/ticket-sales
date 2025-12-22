@@ -16,8 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('ticket_id')->references('id')->on('tickets');
             $table->unsignedInteger('number_of_tickets');
+            $table->dateTime('used_at')->nullable();
             $table->timestamps();
             $table->index(['user_id', 'ticket_id']);
+            $table->index(['user_id', 'used_at']);
         });
     }
 

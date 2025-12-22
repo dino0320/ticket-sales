@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-account', [AccountController::class, 'show']);
 
+    Route::get('/user_tickets/{ticket}', [TicketController::class, 'showUserTicket']);
+
+    Route::get('/user_tickets/{user_ticket}/use', [TicketController::class, 'useTicket'])->name('user_tickets.use');
+
     Route::get('/reset-password', function () {
         return Inertia::render('ResetPassword');
     })->name('reset-password');

@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use App\Models\UserTicket;
 use App\Repositories\TicketRepository;
+use App\Repositories\UserTicketRepository;
 use App\Services\OrganizerService;
 use App\Services\StripeService;
 use App\Services\TicketService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,11 +29,36 @@ class TicketController extends Controller
     public function show(Ticket $ticket): Response
     {
         if (!TicketService::isDuringPeriod($ticket)) {
-            throw new NotFoundHttpException('The event is outside the specified time period.');
+            throw new NotFoundHttpException('The ticket is outside the specified time period.');
         }
 
         return Inertia::render('TicketDetail', [
             'ticket' => TicketService::getTicketResponse($ticket),
+        ]);
+    }
+
+    /**
+     * Show a purchased ticket detail
+     *
+     * @param Ticket $ticket
+     * @return Response
+     */
+    public function showUserTicket(Request $request, Ticket $ticket): Response
+    {
+        if (!TicketService::isDuringEvent($ticket)) {
+            throw new NotFoundHttpException('The ticket is outside the specified time period.');
+        }
+
+        $userTicketRepository = new UserTicketRepository();
+
+        $user = $request->user();
+        $userTicket = $userTicketRepository->selectByUserIdAndTicketId($user->id, $ticket->id);
+
+        TicketService::checkIfTicketIsUsed($userTicket);
+
+        return Inertia::render('UserTicketDetail', [
+            'ticket' => TicketService::getTicketResponse($ticket),
+            'ticket_use_url' => URL::temporarySignedRoute('user_tickets.use', now()->addMinutes(10), ['user_ticket' => $userTicket->id]),
         ]);
     }
 
@@ -152,6 +181,39 @@ class TicketController extends Controller
             $ticketRepository->save($ticket);
             
             return back();
+        });
+    }
+
+    /**
+     * Use a ticket
+     *
+     * @param Request $request
+     * @param UserTicket $userTicket
+     * @return Response
+     */
+    public function useTicket(Request $request, UserTicket $userTicket): Response
+    {
+        return DB::transaction(function () use ($request, $userTicket) {
+            $userTicketRepository = new UserTicketRepository();
+            $ticketRepository = new TicketRepository();
+
+            TicketService::checkIfTicketIsUsed($userTicket);
+
+            $ticket = $ticketRepository->selectById($userTicket->ticket_id);
+
+            TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
+
+            if (!TicketService::isDuringEvent($ticket)) {
+                throw new NotFoundHttpException('The ticket is outside the specified time period.');
+            }
+
+            $userTicket->used_at = new Carbon();
+
+            $userTicketRepository->save($userTicket);
+
+            return Inertia::render('UseTicket', [
+                'userTicketId' => $userTicket->id,
+            ]);
         });
     }
 }

@@ -15,5 +15,18 @@ class UserTicket extends Model
         'user_id',
         'ticket_id',
         'number_of_tickets',
+        'used_at',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'used_at' => 'datetime',
+        ];
+    }
 }

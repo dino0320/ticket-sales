@@ -1,6 +1,6 @@
 import { showOrderHistory,showIssuedTickets } from '@/actions/App/Http/Controllers/AccountController';
 import { resetPassword, organizerApplication } from '@/routes/index';
-import { show } from '@/actions/App/Http/Controllers/TicketController';
+import { showUserTicket } from '@/actions/App/Http/Controllers/TicketController';
 import { usePage, Link } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'
@@ -20,7 +20,7 @@ export default function Account({ tickets, isOrganizerApplicationApplied }: { ti
       {auth.user.is_organizer ? <a href={showIssuedTickets().url}><Button>Issued Tickets</Button></a> : ''}
 
       {tickets.data.map((ticket) => (
-        <Link key={ticket.id} href={show(ticket.id)}>
+        <Link key={ticket.id} href={showUserTicket(ticket.id)}>
           <Ticket ticket={ticket} isEllipsis={true}/>
         </Link>
       ))}

@@ -161,6 +161,7 @@ class CheckoutService
                 'user_id' => $userOrder->user_id,
                 'ticket_id' => $orderItem['ticket_id'],
                 'number_of_tickets' => $orderItem['number_of_tickets'],
+                'used_at' => null,
             ]);
         }
 

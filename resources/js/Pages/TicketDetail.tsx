@@ -6,7 +6,7 @@ import { Counter } from '@/components/counter'
 import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
 
-export default function TicketDetail({ ticket }: { ticket: TicketData}) {
+export default function TicketDetail({ ticket }: { ticket: TicketData }) {
   const [numberOfTickets, setNumberOfTickets] = useState(1);
 
   async function onClick() {

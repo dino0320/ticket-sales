@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\UserTicket;
 use Carbon\Carbon;
 use Illuminate\Pagination\CursorPaginator;
 use InvalidArgumentException;
@@ -95,6 +96,18 @@ class TicketService
     }
 
     /**
+     * Wether a ticket is during the event
+     *
+     * @param Ticket $ticket
+     * @return boolean
+     */
+    public static function isDuringEvent(Ticket $ticket): bool
+    {
+        $now = new Carbon();
+        return $now >= $ticket->event_start_date && $now <= $ticket->event_end_date;
+    }
+
+    /**
      * Check if the user is the organizer for a ticket
      *
      * @param User $user
@@ -163,5 +176,18 @@ class TicketService
         }
 
         return true;
+    }
+
+    /**
+     * Check if the ticket is used
+     *
+     * @param UserTicket $userTicket
+     * @return void
+     */
+    public static function checkIfTicketIsUsed(UserTicket $userTicket): void
+    {
+        if ($userTicket->used_at !== null) {
+            throw new InvalidArgumentException("The ticket has already been used. user_ticket_id: {$userTicket->id}");
+        }
     }
 }

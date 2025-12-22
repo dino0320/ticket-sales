@@ -13,13 +13,28 @@ class UserTicketRepository extends Repository
     protected string $modelName = UserTicket::class;
 
     /**
-     * Select by user_id
+     * Select not used tickets by user_id
      *
      * @param integer $userId
      * @return UserTicket[]
      */
-    public function selectByUserId(int $userId): array
+    public function selectNotUsedTicketsByUserId(int $userId): array
     {
-        return UserTicket::where('user_id', $userId)->get()->all();
+        return UserTicket::where('user_id', $userId)->whereNull('used_at')->get()->all();
+    }
+
+    /**
+     * Select by user_id and ticket_id
+     *
+     * @param integer $userId
+     * @param integer $ticketId
+     * @return UserTicket
+     */
+    public function selectByUserIdAndTicketId(int $userId, int $ticketId): UserTicket
+    {
+        return UserTicket::where([
+            ['user_id', $userId],
+            ['ticket_id', $ticketId]
+        ])->first();
     }
 }
