@@ -45,9 +45,7 @@ class TicketController extends Controller
      */
     public function showUserTicket(Request $request, Ticket $ticket): Response
     {
-        if (!TicketService::isDuringEvent($ticket)) {
-            throw new NotFoundHttpException('The ticket is outside the specified time period.');
-        }
+        TicketService::checkIfEventIsOver($ticket);
 
         $userTicketRepository = new UserTicketRepository();
 
@@ -202,10 +200,7 @@ class TicketController extends Controller
             $ticket = $ticketRepository->selectById($userTicket->ticket_id);
 
             TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
-
-            if (!TicketService::isDuringEvent($ticket)) {
-                throw new NotFoundHttpException('The ticket is outside the specified time period.');
-            }
+            TicketService::checkIfTicketIsDuringEvent($ticket);
 
             $userTicket->used_at = new Carbon();
 

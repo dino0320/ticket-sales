@@ -96,15 +96,17 @@ class TicketService
     }
 
     /**
-     * Wether a ticket is during the event
+     * Check if the event is over
      *
      * @param Ticket $ticket
-     * @return boolean
+     * @return void
      */
-    public static function isDuringEvent(Ticket $ticket): bool
+    public static function checkIfEventIsOver(Ticket $ticket): void
     {
         $now = new Carbon();
-        return $now >= $ticket->event_start_date && $now <= $ticket->event_end_date;
+        if ($now > $ticket->event_end_date) {
+            throw new InvalidArgumentException("The event is over. ticket_id: {$ticket->id}");
+        }
     }
 
     /**
@@ -188,6 +190,20 @@ class TicketService
     {
         if ($userTicket->used_at !== null) {
             throw new InvalidArgumentException("The ticket has already been used. user_ticket_id: {$userTicket->id}");
+        }
+    }
+
+    /**
+     * Check if the ticket is during the event
+     *
+     * @param Ticket $ticket
+     * @return void
+     */
+    public static function checkIfTicketIsDuringEvent(Ticket $ticket): void
+    {
+        $now = new Carbon();
+        if ($now < $ticket->event_start_date || $now > $ticket->event_end_date) {
+            throw new InvalidArgumentException("The ticket is outside the specified time period. ticket_id: {$ticket->id}");
         }
     }
 }
