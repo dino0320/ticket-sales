@@ -253,7 +253,7 @@ resetPassword.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 
 /**
 * @see routes/web.php:62
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 export const organizerApplication = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: organizerApplication.url(options),
@@ -262,12 +262,12 @@ export const organizerApplication = (options?: RouteQueryOptions): RouteDefiniti
 
 organizerApplication.definition = {
     methods: ["get","head"],
-    url: '/organizer_application',
+    url: '/organizer-application',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see routes/web.php:62
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 organizerApplication.url = (options?: RouteQueryOptions) => {
     return organizerApplication.definition.url + queryParams(options)
@@ -275,7 +275,7 @@ organizerApplication.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see routes/web.php:62
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 organizerApplication.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: organizerApplication.url(options),
@@ -284,7 +284,7 @@ organizerApplication.get = (options?: RouteQueryOptions): RouteDefinition<'get'>
 
 /**
 * @see routes/web.php:62
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: organizerApplication.url(options),
@@ -293,7 +293,7 @@ organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head
 
 /**
 * @see routes/web.php:70
-* @route '/issue_ticket'
+* @route '/issue-ticket'
 */
 export const issueTicket = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: issueTicket.url(options),
@@ -302,12 +302,12 @@ export const issueTicket = (options?: RouteQueryOptions): RouteDefinition<'get'>
 
 issueTicket.definition = {
     methods: ["get","head"],
-    url: '/issue_ticket',
+    url: '/issue-ticket',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see routes/web.php:70
-* @route '/issue_ticket'
+* @route '/issue-ticket'
 */
 issueTicket.url = (options?: RouteQueryOptions) => {
     return issueTicket.definition.url + queryParams(options)
@@ -315,7 +315,7 @@ issueTicket.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see routes/web.php:70
-* @route '/issue_ticket'
+* @route '/issue-ticket'
 */
 issueTicket.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: issueTicket.url(options),
@@ -324,7 +324,7 @@ issueTicket.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see routes/web.php:70
-* @route '/issue_ticket'
+* @route '/issue-ticket'
 */
 issueTicket.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: issueTicket.url(options),

@@ -124,7 +124,7 @@ showOrderHistory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
 * @see app/Http/Controllers/AccountController.php:113
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 export const applyToBeOrganizer = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: applyToBeOrganizer.url(options),
@@ -133,13 +133,13 @@ export const applyToBeOrganizer = (options?: RouteQueryOptions): RouteDefinition
 
 applyToBeOrganizer.definition = {
     methods: ["post"],
-    url: '/organizer_application',
+    url: '/organizer-application',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
 * @see app/Http/Controllers/AccountController.php:113
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 applyToBeOrganizer.url = (options?: RouteQueryOptions) => {
     return applyToBeOrganizer.definition.url + queryParams(options)
@@ -148,7 +148,7 @@ applyToBeOrganizer.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
 * @see app/Http/Controllers/AccountController.php:113
-* @route '/organizer_application'
+* @route '/organizer-application'
 */
 applyToBeOrganizer.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: applyToBeOrganizer.url(options),
@@ -158,7 +158,7 @@ applyToBeOrganizer.post = (options?: RouteQueryOptions): RouteDefinition<'post'>
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
 * @see app/Http/Controllers/AccountController.php:155
-* @route '/issued_tickets'
+* @route '/issued-tickets'
 */
 export const showIssuedTickets = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showIssuedTickets.url(options),
@@ -167,13 +167,13 @@ export const showIssuedTickets = (options?: RouteQueryOptions): RouteDefinition<
 
 showIssuedTickets.definition = {
     methods: ["get","head"],
-    url: '/issued_tickets',
+    url: '/issued-tickets',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
 * @see app/Http/Controllers/AccountController.php:155
-* @route '/issued_tickets'
+* @route '/issued-tickets'
 */
 showIssuedTickets.url = (options?: RouteQueryOptions) => {
     return showIssuedTickets.definition.url + queryParams(options)
@@ -182,7 +182,7 @@ showIssuedTickets.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
 * @see app/Http/Controllers/AccountController.php:155
-* @route '/issued_tickets'
+* @route '/issued-tickets'
 */
 showIssuedTickets.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: showIssuedTickets.url(options),
@@ -192,7 +192,7 @@ showIssuedTickets.get = (options?: RouteQueryOptions): RouteDefinition<'get'> =>
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
 * @see app/Http/Controllers/AccountController.php:155
-* @route '/issued_tickets'
+* @route '/issued-tickets'
 */
 showIssuedTickets.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: showIssuedTickets.url(options),

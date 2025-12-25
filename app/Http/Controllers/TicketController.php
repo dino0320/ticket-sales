@@ -56,7 +56,7 @@ class TicketController extends Controller
 
         return Inertia::render('UserTicketDetail', [
             'ticket' => TicketService::getTicketResponse($ticket),
-            'ticket_use_url' => URL::temporarySignedRoute('user_tickets.use', now()->addMinutes(10), ['user_ticket' => $userTicket->id]),
+            'ticket_use_url' => URL::temporarySignedRoute('user-tickets.use', now()->addMinutes(10), ['user_ticket' => $userTicket->id]),
         ]);
     }
 

@@ -1,8 +1,8 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:194
-* @route '/user_tickets/{user_ticket}/use'
+* @see app/Http/Controllers/TicketController.php:192
+* @route '/user-tickets/{user_ticket}/use'
 */
 export const use = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: use.url(args, options),
@@ -11,13 +11,13 @@ export const use = (args: { user_ticket: string | number } | [user_ticket: strin
 
 use.definition = {
     methods: ["get","head"],
-    url: '/user_tickets/{user_ticket}/use',
+    url: '/user-tickets/{user_ticket}/use',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:194
-* @route '/user_tickets/{user_ticket}/use'
+* @see app/Http/Controllers/TicketController.php:192
+* @route '/user-tickets/{user_ticket}/use'
 */
 use.url = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -43,8 +43,8 @@ use.url = (args: { user_ticket: string | number } | [user_ticket: string | numbe
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:194
-* @route '/user_tickets/{user_ticket}/use'
+* @see app/Http/Controllers/TicketController.php:192
+* @route '/user-tickets/{user_ticket}/use'
 */
 use.get = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: use.url(args, options),
@@ -53,16 +53,16 @@ use.get = (args: { user_ticket: string | number } | [user_ticket: string | numbe
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:194
-* @route '/user_tickets/{user_ticket}/use'
+* @see app/Http/Controllers/TicketController.php:192
+* @route '/user-tickets/{user_ticket}/use'
 */
 use.head = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: use.url(args, options),
     method: 'head',
 })
 
-const user_tickets = {
+const userTickets = {
     use: Object.assign(use, use),
 }
 
-export default user_tickets
+export default userTickets

@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefa
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
-* @route '/admin/organizer_applications'
+* @route '/admin/organizer-applications'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,13 +11,13 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/admin/organizer_applications',
+    url: '/admin/organizer-applications',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
-* @route '/admin/organizer_applications'
+* @route '/admin/organizer-applications'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ index.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
-* @route '/admin/organizer_applications'
+* @route '/admin/organizer-applications'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -36,7 +36,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
-* @route '/admin/organizer_applications'
+* @route '/admin/organizer-applications'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -46,7 +46,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 export const show = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -55,13 +55,13 @@ export const show = (args: { user_organizer_application: string | number } | [us
 
 show.definition = {
     methods: ["get","head"],
-    url: '/admin/organizer_applications/{user_organizer_application}',
+    url: '/admin/organizer-applications/{user_organizer_application}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.url = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -88,7 +88,7 @@ show.url = (args: { user_organizer_application: string | number } | [user_organi
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.get = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
@@ -98,7 +98,7 @@ show.get = (args: { user_organizer_application: string | number } | [user_organi
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.head = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
@@ -108,7 +108,7 @@ show.head = (args: { user_organizer_application: string | number } | [user_organ
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 export const updateStatus = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updateStatus.url(args, options),
@@ -117,13 +117,13 @@ export const updateStatus = (args: { user_organizer_application: string | number
 
 updateStatus.definition = {
     methods: ["put"],
-    url: '/admin/organizer_applications/{user_organizer_application}',
+    url: '/admin/organizer-applications/{user_organizer_application}',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 updateStatus.url = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -150,7 +150,7 @@ updateStatus.url = (args: { user_organizer_application: string | number } | [use
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
 * @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
-* @route '/admin/organizer_applications/{user_organizer_application}'
+* @route '/admin/organizer-applications/{user_organizer_application}'
 */
 updateStatus.put = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: updateStatus.url(args, options),

@@ -47,9 +47,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-account', [AccountController::class, 'show']);
 
-    Route::get('/user_tickets/{ticket}', [TicketController::class, 'showUserTicket']);
+    Route::get('/user-tickets/{ticket}', [TicketController::class, 'showUserTicket']);
 
-    Route::get('/user_tickets/{user_ticket}/use', [TicketController::class, 'useTicket'])->name('user_tickets.use');
+    Route::get('/user-tickets/{user_ticket}/use', [TicketController::class, 'useTicket'])->name('user-tickets.use');
 
     Route::get('/reset-password', function () {
         return Inertia::render('ResetPassword');
@@ -59,21 +59,21 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
 
-    Route::get('/organizer_application', function () {
+    Route::get('/organizer-application', function () {
         return Inertia::render('OrganizerApplication');
     })->name('organizer-application');
 
-    Route::post('/organizer_application', [AccountController::class, 'applyToBeOrganizer']);
+    Route::post('/organizer-application', [AccountController::class, 'applyToBeOrganizer']);
 
-    Route::get('/issued_tickets', [AccountController::class, 'showIssuedTickets']);
+    Route::get('/issued-tickets', [AccountController::class, 'showIssuedTickets']);
 
-    Route::get('/issue_ticket', function () {
+    Route::get('/issue-ticket', function () {
         return Inertia::render('IssueTicket');
     })->name('issue-ticket');
 
     Route::post('/tickets', [TicketController::class, 'store']);
 
-    Route::get('/issued_tickets/{ticket}', [TicketController::class, 'showIssuedTicket']);
+    Route::get('/issued-tickets/{ticket}', [TicketController::class, 'showIssuedTicket']);
 
     Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
 });
@@ -91,9 +91,9 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         return Inertia::render('Admin/Dashboard');
     });
 
-    Route::get('/organizer_applications', [OrganizerApplicationController::class, 'index']);
+    Route::get('/organizer-applications', [OrganizerApplicationController::class, 'index']);
 
-    Route::get('/organizer_applications/{user_organizer_application}', [OrganizerApplicationController::class, 'show']);
+    Route::get('/organizer-applications/{user_organizer_application}', [OrganizerApplicationController::class, 'show']);
 
-    Route::put('/organizer_applications/{user_organizer_application}', [OrganizerApplicationController::class, 'updateStatus']);
+    Route::put('/organizer-applications/{user_organizer_application}', [OrganizerApplicationController::class, 'updateStatus']);
 });
