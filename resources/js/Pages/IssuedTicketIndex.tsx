@@ -1,7 +1,6 @@
 import { showIssuedTicket } from '@/actions/App/Http/Controllers/TicketController';
 import { issueTicket } from '@/routes/index';
-import { Link } from '@inertiajs/react'
-import { router } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'
@@ -10,11 +9,9 @@ import type { TicketData } from '@/components/ticket'
 
 export default function IssuedTicketIndex({ tickets }: { tickets: PaginationData<TicketData>}) {
   async function onClick() {
-    try {
-      router.get(issueTicket())
-    } catch (error) {
-      console.error('Can\'t go to issue ticket form', error)
-    }
+    router.get(issueTicket(), undefined, {
+      onError: () => console.error('Failed to get to issue ticket form')
+    })
   }
 
   return (

@@ -1,10 +1,9 @@
 import { show as showTichet } from '@/actions/App/Http/Controllers/TicketController';
 import { update, destroy } from '@/actions/App/Http/Controllers/CartController';
-import { show as showCheckout } from '@/actions/App/Http/Controllers/CheckoutController';
+import { show as showReview } from '@/actions/App/Http/Controllers/CheckoutController';
 import { useState, useEffect } from 'react'
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { Link } from '@inertiajs/react'
-import { router } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Counter } from '@/components/counter'
 import { Pagination } from '@/components/pagination'
@@ -24,11 +23,9 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
   }, [totalPriceOfTickets])
   
   async function onClick() {
-    try {
-      router.get(showCheckout())
-    } catch (error) {
-      console.error('Can\'t go to checkout', error)
-    }
+    router.get(showReview(), undefined, {
+      onError: () => console.error('Failed to get to checkout')
+    })
   }
 
   async function updateNumber(number: number, ticketId: number) {
@@ -44,16 +41,14 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
       setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
       setTotalPriceOfTicketsState(prev => prev - response.data.differenceInTotalPrice)
     } catch (error) {
-      console.error('Can\'t update the number of thickets', error)
+      console.error('Failed to update the number of thickets', error)
     }
   }
 
   async function destroyTicket(ticketId: number) {
-    try {
-      router.delete(destroy(ticketId))
-    } catch (error) {
-      console.error('Can\'t delete a thicket', error)
-    }
+    router.delete(destroy(ticketId), {
+      onError: () => console.error('Failed to delete a ticket')
+    })
   }
 
   return (
