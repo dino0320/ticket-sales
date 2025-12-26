@@ -1,10 +1,9 @@
 import { register } from '@/actions/App/Http/Controllers/SignUpController';
 import { signIn } from '@/routes/index';
-import { Link } from '@inertiajs/react'
+import { Link, router } from '@inertiajs/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { router } from '@inertiajs/react'
 import { useState } from 'react';
 import { setManualFormErrors } from '@/lib/form-utils'
 
@@ -16,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -26,6 +24,8 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+
+import { LoadingButton } from '@/components/loading-button'
 
 import { registerFormSchema } from '@/lib/validation-schemas'
 
@@ -42,15 +42,15 @@ export default function SignUp() {
     },
   })
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async registration function
-      router.post(register(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
-    } catch (error) {
-      console.error('Form submission error', error)
-    }
+    setIsLoading(true)
+    router.post(register(), values, {
+      onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
+      onFinish: () => setIsLoading(false)
+    })
   }
 
   return (
@@ -145,9 +145,9 @@ export default function SignUp() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <LoadingButton type="submit" className="w-full" isLoading={isLoading}>
                   Sign up
-                </Button>
+                </LoadingButton>
               </div>
             </form>
           </Form>

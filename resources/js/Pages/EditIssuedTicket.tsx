@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -28,6 +27,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { editIssuedTicketFormSchema } from '@/lib/validation-schemas'
 
 import { DatetimePicker } from '@/components/datetime-picker'
+import { LoadingButton } from '@/components/loading-button'
 import type { IssuedTicketData } from '@/components/ticket'
 
 const formSchema = editIssuedTicketFormSchema
@@ -46,15 +46,15 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
     },
   })
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async registration function
-      router.put(update(ticket.id), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
-    } catch (error) {
-      console.error('Form submission error', error)
-    }
+    setIsLoading(true)
+    router.put(update(ticket.id), values, { 
+      onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
+      onFinish: () => setIsLoading(false)
+    })
   }
 
   return (
@@ -185,9 +185,9 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <LoadingButton type="submit" className="w-full" isLoading={isLoading}>
                   Submit
-                </Button>
+                </LoadingButton>
               </div>
             </form>
           </Form>

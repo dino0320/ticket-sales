@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -26,6 +25,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
+
+import { LoadingButton } from '@/components/loading-button'
 
 import { applyToBeOrganizerFormSchema } from '@/lib/validation-schemas'
 
@@ -41,15 +42,15 @@ export default function OrganizerApplication() {
     },
   })
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async registration function
-      router.post(applyToBeOrganizer(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
-    } catch (error) {
-      console.error('Form submission error', error)
-    }
+    setIsLoading(true)
+    router.post(applyToBeOrganizer(), values, {
+      onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
+      onFinish: () => setIsLoading(false)
+    })
   }
 
   return (
@@ -132,9 +133,9 @@ export default function OrganizerApplication() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <LoadingButton type="submit" className="w-full" isLoading={isLoading}>
                   Apply
-                </Button>
+                </LoadingButton>
               </div>
             </form>
           </Form>

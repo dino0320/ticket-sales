@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -28,6 +27,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { issueTicketFormSchema, issueTicketValidationSchema } from '@/lib/validation-schemas'
 
 import { DatetimePicker } from '@/components/datetime-picker'
+import { LoadingButton } from '@/components/loading-button'
 
 const formSchema = issueTicketFormSchema
 
@@ -46,19 +46,21 @@ export default function IssueTicket() {
     },
   })
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const result = issueTicketValidationSchema.safeParse(values)
-      if (!result.success) {
-        setManualFormErrors(convertZodError(result.error), form, setErrorMessage)
-        return
-      }
-      router.post(store(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
-    } catch (error) {
-      console.error('Form submission error', error)
+    const result = issueTicketValidationSchema.safeParse(values)
+    if (!result.success) {
+      setManualFormErrors(convertZodError(result.error), form, setErrorMessage)
+      return
     }
+      
+    setIsLoading(true)
+    router.post(store(), values, {
+      onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
+      onFinish: () => setIsLoading(false)
+    })
   }
 
   return (
@@ -198,9 +200,9 @@ export default function IssueTicket() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <LoadingButton type="submit" className="w-full" isLoading={isLoading}>
                   Submit
-                </Button>
+                </LoadingButton>
               </div>
             </form>
           </Form>

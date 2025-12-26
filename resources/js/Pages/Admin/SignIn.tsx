@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -24,6 +23,8 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
+
+import { LoadingButton } from '@/components/loading-button'
 
 import { loginFormSchema } from '@/lib/validation-schemas'
 
@@ -38,15 +39,15 @@ export default function SignIn() {
     },
   })
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async registration function
-      router.post(authenticate(), values, { onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage) })
-    } catch (error) {
-      console.error('Form submission error', error)
-    }
+    setIsLoading(true)
+    router.post(authenticate(), values, {
+      onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
+      onFinish: () => setIsLoading(false)
+    })
   }
 
   return (
@@ -104,9 +105,9 @@ export default function SignIn() {
                   )}
                 />
 
-                <Button type="submit" className="w-full">
+                <LoadingButton type="submit" className="w-full" isLoading={isLoading}>
                   Sign in
-                </Button>
+                </LoadingButton>
               </div>
             </form>
           </Form>
