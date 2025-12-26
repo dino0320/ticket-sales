@@ -77,13 +77,13 @@ class OrganizerApplicationController extends Controller
             $userRepository->save($user);
             $userOrganizerApplicationRepository->save($userOrganizerApplication);
 
-            return redirect()->intended('/admin/organizer_applications');
+            return redirect()->intended('/admin/organizer-applications');
         }
 
         $userOrganizerApplication->status = AccountConst::ORGANIZER_STATUS_UNAPPROVED;
 
         $userOrganizerApplicationRepository->save($userOrganizerApplication);
 
-        return redirect()->intended('/admin/organizer_applications');
+        return redirect()->intended('/admin/organizer-applications');
     }
 }

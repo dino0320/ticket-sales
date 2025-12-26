@@ -131,7 +131,7 @@ class TicketController extends Controller
         // and a transaction is not necessary for a single DB operation here.
         $ticketRepository->save($ticket);
             
-        return redirect()->intended('/issued_tickets');
+        return redirect()->intended('/issued-tickets');
     }
 
     /**
