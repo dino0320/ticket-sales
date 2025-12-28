@@ -1,3 +1,5 @@
+import { formatCurrency } from '@/lib/utils'
+
 import {
   Card,
   CardContent,
@@ -24,7 +26,7 @@ export function OrderItem({ orderItem, isEllipsis = false }: { orderItem: OrderI
         </CardDescription>
       </CardHeader>
       <CardContent>
-        ${orderItem.price}
+        {formatCurrency(orderItem.price)}
       </CardContent>
       <CardFooter>
         {orderItem.number_of_tickets}

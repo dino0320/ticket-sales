@@ -106,7 +106,7 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
 
                 {/* Price Field */}
                 <FormItem className="grid gap-2">
-                  <FormLabel htmlFor="price">Price</FormLabel>
+                  <FormLabel htmlFor="price">Price (USD)</FormLabel>
                   {ticket.price}
                 </FormItem>
 

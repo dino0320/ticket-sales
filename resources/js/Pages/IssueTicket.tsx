@@ -116,7 +116,7 @@ export default function IssueTicket() {
                   name="price"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="price">Price</FormLabel>
+                      <FormLabel htmlFor="price">Price (USD)</FormLabel>
                       <FormControl>
                         <Input id="price" type="number" placeholder="" min="1" {...field} />
                       </FormControl>

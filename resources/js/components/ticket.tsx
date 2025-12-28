@@ -1,3 +1,5 @@
+import { formatCurrency } from '@/lib/utils'
+
 import {
   Card,
   CardContent,
@@ -41,7 +43,7 @@ export function Ticket({ ticket, isEllipsis = false }: { ticket: TicketData, isE
         </CardDescription>
       </CardHeader>
       <CardContent>
-        ${ticket.price}
+        {formatCurrency(ticket.price)}
       </CardContent>
       <CardFooter>
         {eventStartDate.toLocaleString()} - {eventEndDate.toLocaleString()}
