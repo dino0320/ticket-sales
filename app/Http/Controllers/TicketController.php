@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\UserTicket;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserTicketRepository;
+use App\Services\MoneyService;
 use App\Services\OrganizerService;
 use App\Services\StripeService;
 use App\Services\TicketService;
@@ -86,7 +87,7 @@ class TicketController extends Controller
         $request->validate([
             'event_title' => 'required|string|max:255',
             'event_description' => 'nullable|string|max:255',
-            'price' => 'required|integer|min:1',
+            'price' => 'required|decimal:1,2|min:1',
             'number_of_tickets' => 'required|integer|min:1',
             'event_start_date' => 'required|date',
             'event_end_date' => 'required|date',
@@ -109,14 +110,23 @@ class TicketController extends Controller
             return back()->withErrors($errorMessage);
         }
 
-        [, $price] = StripeService::createProduct($request->event_title, $request->event_description, $request->price);
+        $price = MoneyService::convertDollarsToCents($request->price);
+        if (!TicketService::isPriceValid($price, $errorMessage)) {
+            return back()->withErrors($errorMessage);
+        }
+        
+        if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $errorMessage)) {
+            return back()->withErrors($errorMessage);
+        }
+
+        [, $stripePrice] = StripeService::createProduct($request->event_title, $request->event_description, $price);
 
         $ticket = new Ticket([
             'organizer_user_id' => $user->id,
             'event_title' => $request->event_title,
             'event_description' => $request->event_description,
-            'price' => $request->price,
-            'stripe_price_id' => $price->id,
+            'price' => $price,
+            'stripe_price_id' => $stripePrice->id,
             'number_of_tickets' => $request->number_of_tickets,
             'number_of_reserved_tickets' => 0,
             'event_start_date' => $eventStartDate,
@@ -165,6 +175,10 @@ class TicketController extends Controller
 
             $errorMessage = [];
             if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
+                return back()->withErrors($errorMessage);
+            }
+
+            if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
 

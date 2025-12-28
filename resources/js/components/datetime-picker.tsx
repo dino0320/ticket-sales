@@ -76,7 +76,7 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
             const newDatetime = new Date(datetime)
             const time = event.target.value
             const [hours, minutes, seconds] = time.split(':')
-            newDatetime.setHours(hours === undefined ? 0 : Number(hours), Number(minutes), Number(seconds))
+            newDatetime.setHours(hours === undefined ? 0 : Number(hours), minutes === undefined ? 0 : Number(minutes), seconds === undefined ? 0 : Number(seconds))
             field.onChange(newDatetime)
           }}
         />

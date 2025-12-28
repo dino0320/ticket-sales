@@ -5,12 +5,13 @@ import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'
 import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
+import { formatCurrency } from '@/lib/utils'
 
 export default function Review({ tickets, numberOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numberOfTickets: {[id: number]: number}, totalPriceOfTickets: number}) {
   return (
     <div>
       <a href={checkout().url}><Button>Proceed to checkout</Button></a>
-      <p>${totalPriceOfTickets}</p>
+      <p>{formatCurrency(totalPriceOfTickets)}</p>
 
       {tickets.data.map((ticket) => (
         <div key={ticket.id}>

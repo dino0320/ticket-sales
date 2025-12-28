@@ -24,7 +24,7 @@ class CartService
             $totalPrice += $ticket->price * $numbersOfTickets[$ticket->id];
         }
 
-        return $totalPrice;
+        return MoneyService::convertCentsToDollars($totalPrice);
     }
 
     /**

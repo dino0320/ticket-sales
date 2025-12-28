@@ -10,6 +10,7 @@ import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'
 import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
+import { formatCurrency } from '@/lib/utils'
 import axios from 'axios';
 
 type NumberOfTickets = {[id: number]: number}
@@ -54,7 +55,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
   return (
     <div>
       <Button onClick={onClick}>Proceed to review</Button>
-      <p>${totalPriceOfTicketsState}</p>
+      <p>{formatCurrency(totalPriceOfTicketsState)}</p>
 
       {tickets.data.map((ticket) => (
         <div key={ticket.id}>

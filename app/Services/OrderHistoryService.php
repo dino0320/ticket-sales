@@ -36,7 +36,7 @@ class OrderHistoryService
         foreach ($userOrders as $userOrder) {
             $userOrdersResponse[] = [
                 'id' => $userOrder->id,
-                'amount' => $userOrder->amount,
+                'amount' => MoneyService::convertCentsToDollars($userOrder->amount),
                 'order_items' => self::getOrderItemsResponse($userOrder->order_items),
                 'order_date' => $userOrder->created_at,
             ];
@@ -58,7 +58,7 @@ class OrderHistoryService
             $orderItemsResponse[] = [
                 'event_title' => $orderItem['event_title'],
                 'event_description' => $orderItem['event_description'],
-                'price' => $orderItem['price'],
+                'price' => MoneyService::convertCentsToDollars($orderItem['price']),
                 'number_of_tickets' => $orderItem['number_of_tickets'],
             ];
         }

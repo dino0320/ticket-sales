@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Consts\CheckoutConst;
 use App\Models\Ticket;
 use App\Models\UserOrder;
 use App\Models\UserTicket;
-use Illuminate\Support\Facades\Redis;
 use InvalidArgumentException;
 use RuntimeException;
 

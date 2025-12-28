@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card'
 import { OrderItem } from '@/components/order-item'
 import type { OrderItemData } from '@/components/order-item'
+import { formatCurrency } from '@/lib/utils'
 
 export type OrderData = {
   id: number,
@@ -44,7 +45,7 @@ export function Order({ userOrder, isDetail = false }: { userOrder: OrderData, i
       <CardHeader>
         <CardTitle>Order ID: {userOrder.id}</CardTitle>
         <CardDescription>
-          ${userOrder.amount}
+          {formatCurrency(userOrder.amount)}
         </CardDescription>
       </CardHeader>
       <CardContent>

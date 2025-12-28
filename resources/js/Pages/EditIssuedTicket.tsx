@@ -24,6 +24,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
+import { formatCurrency } from '@/lib/utils'
 import { editIssuedTicketFormSchema } from '@/lib/validation-schemas'
 
 import { DatetimePicker } from '@/components/datetime-picker'
@@ -107,7 +108,7 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
                 {/* Price Field */}
                 <FormItem className="grid gap-2">
                   <FormLabel htmlFor="price">Price (USD)</FormLabel>
-                  {ticket.price}
+                  {formatCurrency(ticket.price)}
                 </FormItem>
 
                 {/* The Number of Tickets Field */}

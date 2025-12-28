@@ -1,5 +1,3 @@
-import { formatCurrency } from '@/lib/utils'
-
 import {
   Card,
   CardContent,
@@ -8,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+
+import { formatCurrency } from '@/lib/utils'
 
 export type TicketData = {
   id: number,
