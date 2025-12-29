@@ -3,34 +3,16 @@
 namespace App\Services;
 
 use App\Models\UserOrder;
-use Illuminate\Pagination\CursorPaginator;
 
 class OrderHistoryService
 {
-    /**
-     * Get paginated user orders response
-     *
-     * @param CursorPaginator $userOrders
-     * @return array
-     */
-    public static function getPaginatedUserOrdersResponse(CursorPaginator $userOrders): array
-    {
-        $userOrdersResponse = [
-            'data' => self::getUserOrdersResponse($userOrders->getCollection()->all()),
-            'prev_page_url' => $userOrders->previousPageUrl(),
-            'next_page_url' => $userOrders->nextPageUrl(),
-        ];
-
-        return $userOrdersResponse;
-    }
-
     /**
      * Get user orders response
      *
      * @param UserOrder[] $userOrders
      * @return array
      */
-    private static function getUserOrdersResponse(array $userOrders): array
+    public static function getUserOrdersResponse(array $userOrders): array
     {
         $userOrdersResponse = [];
         foreach ($userOrders as $userOrder) {

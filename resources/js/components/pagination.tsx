@@ -1,35 +1,63 @@
 import {
   Pagination as SPagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
+  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
 
+type Link = {
+  url: string | null,
+  label: string,
+  active: boolean,
+}
+
 export type PaginationData<T> = {
   data: T[],
+  links: Link[],
   prev_page_url: string | null,
   next_page_url: string | null,
 }
 
 export function Pagination<T>({ pagination }: { pagination: PaginationData<T> }) {
-  const prevPageLink = pagination.prev_page_url === null ? null : (
-    <PaginationItem>
-      <PaginationPrevious href={pagination.prev_page_url} />
-    </PaginationItem>
-  )
+  const links = pagination.links.map((link: Link, index: number) => {
+    if (index === 0) {
+      return link.url === null ? null : (
+        <PaginationItem key={index}>
+          <PaginationPrevious href={link.url} />
+        </PaginationItem>
+      )
+    }
 
-  const nextPageLink = pagination.next_page_url === null ? null : (
-    <PaginationItem>
-      <PaginationNext href={pagination.next_page_url} />
-    </PaginationItem>
-  )
+    if (index === pagination.links.length - 1) {
+      return link.url === null ? null : (
+        <PaginationItem key={index}>
+          <PaginationNext href={link.url} />
+        </PaginationItem>
+      )
+    }
+
+    if (link.url === null) {
+      return (
+        <PaginationItem key={index}>
+          <PaginationEllipsis />
+        </PaginationItem>
+      )
+    }
+
+    return (
+      <PaginationItem key={index}>
+        <PaginationLink href={link.url} isActive={link.active}>{link.label}</PaginationLink>
+      </PaginationItem>
+    )
+  })
 
   return (
     <SPagination>
       <PaginationContent>
-        {prevPageLink}
-        {nextPageLink}
+        {links}
       </PaginationContent>
     </SPagination>
   )

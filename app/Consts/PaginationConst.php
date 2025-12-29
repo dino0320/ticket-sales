@@ -2,7 +2,7 @@
 
 namespace App\Consts;
 
-class CommonConst
+class PaginationConst
 {
     /**
      * The number of records per page

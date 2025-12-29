@@ -3,10 +3,10 @@
 namespace App\Repositories;
 
 use App\Consts\CheckoutConst;
-use App\Consts\CommonConst;
+use App\Consts\PaginationConst;
 use App\Models\UserOrder;
 use App\Repositories\Repository;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserOrderRepository extends Repository
 {
@@ -20,13 +20,13 @@ class UserOrderRepository extends Repository
      *
      * @param integer $userId
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectPaginatedUserOrdersByUserId(int $userId, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectPaginatedUserOrdersByUserId(int $userId, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
         return UserOrder::where([
             ['user_id', $userId],
             ['status', CheckoutConst::ORDER_STATUS_COMPLETED],
-        ])->cursorPaginate($numberOfItemsPerPage);
+        ])->paginate($numberOfItemsPerPage);
     }
 }

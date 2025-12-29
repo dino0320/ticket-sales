@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Repositories\TicketRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
+use App\Services\PaginationService;
 use App\Services\TicketService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -48,12 +49,12 @@ class CartController extends Controller
         $user = $request->user();
         $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
+        $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Cart', [
-            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
             'numberOfTickets' => $numbersOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numbersOfTickets),
+            'totalPriceOfTickets' => CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets),
         ]);
     }
 

@@ -2,12 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Consts\CheckoutConst;
-use App\Consts\CommonConst;
-use App\Models\UserOrder;
+use App\Consts\PaginationConst;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\Repository;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserOrganizerApplicationRepository extends Repository
 {
@@ -32,10 +30,10 @@ class UserOrganizerApplicationRepository extends Repository
      *
      * @param integer $status
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectByStatus(int $status, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectByStatus(int $status, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
-        return UserOrganizerApplication::where('status', $status)->orderBy('applied_at', 'asc')->cursorPaginate($numberOfItemsPerPage);
+        return UserOrganizerApplication::where('status', $status)->orderBy('applied_at', 'asc')->paginate($numberOfItemsPerPage);
     }
 }

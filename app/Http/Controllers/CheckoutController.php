@@ -8,6 +8,7 @@ use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
+use App\Services\PaginationService;
 use App\Services\StripeService;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
@@ -34,12 +35,12 @@ class CheckoutController extends Controller
         $user = $request->user();
         $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $tickets = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
+        $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Review', [
-            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
             'numberOfTickets' => $numbersOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($tickets->getCollection(), $numbersOfTickets),
+            'totalPriceOfTickets' => CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets),
         ]);
     }
 

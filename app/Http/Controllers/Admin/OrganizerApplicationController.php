@@ -8,6 +8,7 @@ use App\Models\UserOrganizerApplication;
 use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Services\OrganizerService;
+use App\Services\PaginationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,10 +26,10 @@ class OrganizerApplicationController extends Controller
     {
         $userOrganizerApplicationRepository = new UserOrganizerApplicationRepository();
 
-        $userOrganizerApplications = $userOrganizerApplicationRepository->selectByStatus(AccountConst::ORGANIZER_STATUS_PENDING);
+        $paginator = $userOrganizerApplicationRepository->selectByStatus(AccountConst::ORGANIZER_STATUS_PENDING);
 
         return Inertia::render('Admin/OrganizerApplication', [
-            'userOrganizerApplications' => OrganizerService::getPaginatedUserOrganizerApplicationsResponse($userOrganizerApplications),
+            'userOrganizerApplications' => PaginationService::getPaginatedDataResponse($paginator, OrganizerService::getUserOrganizerApplicationsResponse($paginator->getCollection()->all())),
         ]);
     }
 

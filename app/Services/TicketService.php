@@ -7,35 +7,17 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserTicket;
 use Carbon\Carbon;
-use Illuminate\Pagination\CursorPaginator;
 use InvalidArgumentException;
 
 class TicketService
 {
-    /**
-     * Get paginated tickets response
-     *
-     * @param CursorPaginator $tickets
-     * @return array
-     */
-    public static function getPaginatedTicketsResponse(CursorPaginator $tickets): array
-    {
-        $ticketsResponse = [
-            'data' => self::getTicketsResponse($tickets->getCollection()->all()),
-            'prev_page_url' => $tickets->previousPageUrl(),
-            'next_page_url' => $tickets->nextPageUrl(),
-        ];
-
-        return $ticketsResponse;
-    }
-
     /**
      * Get tickets response
      *
      * @param Ticket[] $tickets
      * @return array
      */
-    private static function getTicketsResponse(array $tickets): array
+    public static function getTicketsResponse(array $tickets): array
     {
         $ticketsResponse = [];
         foreach ($tickets as $ticket) {

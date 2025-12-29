@@ -5,35 +5,17 @@ namespace App\Services;
 use App\Consts\AccountConst;
 use App\Models\User;
 use App\Models\UserOrganizerApplication;
-use Illuminate\Pagination\CursorPaginator;
 use InvalidArgumentException;
 
 class OrganizerService
 {
-    /**
-     * Get paginated user organizer applications response
-     *
-     * @param CursorPaginator $userOrganizerApplications
-     * @return array
-     */
-    public static function getPaginatedUserOrganizerApplicationsResponse(CursorPaginator $userOrganizerApplications): array
-    {
-        $userOrganizerApplicationsResponse = [
-            'data' => self::getUserOrganizerApplicationsResponse($userOrganizerApplications->getCollection()->all()),
-            'prev_page_url' => $userOrganizerApplications->previousPageUrl(),
-            'next_page_url' => $userOrganizerApplications->nextPageUrl(),
-        ];
-
-        return $userOrganizerApplicationsResponse;
-    }
-
     /**
      * Get user organizer applications response
      *
      * @param UserOrganizerApplication[] $userOrganizerApplications
      * @return array
      */
-    private static function getUserOrganizerApplicationsResponse(array $userOrganizerApplications): array
+    public static function getUserOrganizerApplicationsResponse(array $userOrganizerApplications): array
     {
         $userOrganizerApplicationsResponse = [];
         foreach ($userOrganizerApplications as $userOrganizerApplication) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\TicketRepository;
+use App\Services\PaginationService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Inertia\Inertia;
@@ -19,10 +20,10 @@ class HomeController extends Controller
     {
         $ticketRepository = new TicketRepository();
 
-        $tickets = $ticketRepository->selectPaginatedTicketsDuringPeriod(new Carbon());
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringPeriod(new Carbon());
 
         return Inertia::render('Home', [
-            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
         ]);
     }
 }

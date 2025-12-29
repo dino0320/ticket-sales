@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:25
 * @route '/admin/organizer-applications'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:25
 * @route '/admin/organizer-applications'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:25
 * @route '/admin/organizer-applications'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::index
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:24
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:25
 * @route '/admin/organizer-applications'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:42
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 export const show = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -60,7 +60,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:42
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.url = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -87,7 +87,7 @@ show.url = (args: { user_organizer_application: string | number } | [user_organi
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:42
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.get = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ show.get = (args: { user_organizer_application: string | number } | [user_organi
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::show
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:41
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:42
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 show.head = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -107,7 +107,7 @@ show.head = (args: { user_organizer_application: string | number } | [user_organ
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:55
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 export const updateStatus = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -122,7 +122,7 @@ updateStatus.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:55
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 updateStatus.url = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -149,7 +149,7 @@ updateStatus.url = (args: { user_organizer_application: string | number } | [use
 
 /**
 * @see \App\Http\Controllers\Admin\OrganizerApplicationController::updateStatus
-* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:54
+* @see app/Http/Controllers/Admin/OrganizerApplicationController.php:55
 * @route '/admin/organizer-applications/{user_organizer_application}'
 */
 updateStatus.put = (args: { user_organizer_application: string | number } | [user_organizer_application: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({

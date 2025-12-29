@@ -11,6 +11,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrderHistoryService;
 use App\Services\OrganizerService;
+use App\Services\PaginationService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class AccountController extends Controller
 
         $user = $request->user();
         $userTickets = $userTicketRepository->selectNotUsedTicketsByUserId($user->id);
-        $tickets = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon());
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon());
 
         $isOrganizerApplicationApplied = true;
         if (!$user->is_organizer) {
@@ -46,7 +47,7 @@ class AccountController extends Controller
         }
 
         return Inertia::render('Account', [
-            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
             'isOrganizerApplicationApplied' => $isOrganizerApplicationApplied,
         ]);
     }
@@ -62,10 +63,10 @@ class AccountController extends Controller
         $userOrderRepository = new UserOrderRepository();
 
         $user = $request->user();
-        $userOrders = $userOrderRepository->selectPaginatedUserOrdersByUserId($user->id);
+        $paginator = $userOrderRepository->selectPaginatedUserOrdersByUserId($user->id);
 
         return Inertia::render('OrderHistory', [
-            'userOrders' => OrderHistoryService::getPaginatedUserOrdersResponse($userOrders),
+            'userOrders' => PaginationService::getPaginatedDataResponse($paginator, OrderHistoryService::getUserOrdersResponse($paginator->getCollection()->all())),
         ]);
     }
 
@@ -157,10 +158,10 @@ class AccountController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $tickets = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
+        $paginator = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
 
         return Inertia::render('IssuedTicketIndex', [
-            'tickets' => TicketService::getPaginatedTicketsResponse($tickets),
+            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
         ]);
     }
 }

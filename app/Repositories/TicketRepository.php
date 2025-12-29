@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Consts\CommonConst;
+use App\Consts\PaginationConst;
 use App\Models\Ticket;
 use App\Repositories\Repository;
 use Carbon\Carbon;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TicketRepository extends Repository
 {
@@ -20,14 +20,14 @@ class TicketRepository extends Repository
      *
      * @param Carbon $now
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsDuringPeriod(Carbon $now, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectPaginatedTicketsDuringPeriod(Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
         return Ticket::where([
             ['start_date', '<=', $now],
             ['end_date', '>=', $now],
-        ])->orderBy('event_start_date', 'asc')->orderBy('id', 'asc')->cursorPaginate($numberOfItemsPerPage);
+        ])->orderBy('event_start_date', 'asc')->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
     }
 
     /**
@@ -35,11 +35,11 @@ class TicketRepository extends Repository
      *
      * @param int[] $ids
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsByIds(array $ids, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectPaginatedTicketsByIds(array $ids, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
-        return Ticket::whereIn('id', $ids)->orderBy('id', 'asc')->cursorPaginate($numberOfItemsPerPage);
+        return Ticket::whereIn('id', $ids)->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
     }
 
     /**
@@ -48,15 +48,15 @@ class TicketRepository extends Repository
      * @param int[] $ids
      * @param Carbon $now
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
         return Ticket::where('event_end_date', '>=', $now)
             ->whereIn('id', $ids)
             ->orderBy('event_start_date', 'asc')
             ->orderBy('id', 'asc')
-            ->cursorPaginate($numberOfItemsPerPage);
+            ->paginate($numberOfItemsPerPage);
     }
 
     /**
@@ -64,10 +64,10 @@ class TicketRepository extends Repository
      *
      * @param integer $organizerUserId
      * @param integer $numberOfItemsPerPage
-     * @return CursorPaginator
+     * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsByOrganizerUserId(int $organizerUserId, int $numberOfItemsPerPage = CommonConst::NUMBER_OF_RECORDS_PER_PAGE): CursorPaginator
+    public function selectPaginatedTicketsByOrganizerUserId(int $organizerUserId, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
-        return Ticket::where('organizer_user_id', $organizerUserId)->orderBy('id', 'desc')->cursorPaginate($numberOfItemsPerPage);
+        return Ticket::where('organizer_user_id', $organizerUserId)->orderBy('id', 'desc')->paginate($numberOfItemsPerPage);
     }
 }
