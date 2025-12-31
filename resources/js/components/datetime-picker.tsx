@@ -14,7 +14,11 @@ import {
 
 export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {field: ControllerRenderProps<TFieldValues> }) {
   const [open, setOpen] = React.useState(false)
+  
   const datetime: Date | undefined = field.value
+  const startDatetime = new Date()
+  const endDatetime = new Date()
+  endDatetime.setFullYear(startDatetime.getFullYear() + 3)
 
   return (
     <div className="flex gap-4">
@@ -54,6 +58,8 @@ export function DatetimePicker<TFieldValues extends FieldValues>({ field }: {fie
                 field.onChange(nextDatetime)
               }}
               defaultMonth={datetime === undefined ? new Date() : datetime}
+              startMonth={startDatetime}
+              endMonth={endDatetime}
             />
           </PopoverContent>
         </Popover>
