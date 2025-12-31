@@ -30,7 +30,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket): Response
     {
-        if (!TicketService::isDuringPeriod($ticket)) {
+        if (!TicketService::isDuringSalesPeriod($ticket)) {
             throw new NotFoundHttpException('The ticket is outside the specified time period.');
         }
 
@@ -74,6 +74,7 @@ class TicketController extends Controller
 
         return Inertia::render('EditIssuedTicket', [
             'ticket' => TicketService::getIssuedTicketResponse($ticket),
+            'isDuringSalesPeriod' => TicketService::isDuringSalesPeriod($ticket),
         ]);
     }
 
@@ -173,11 +174,18 @@ class TicketController extends Controller
             $eventEndDate = $request->date('event_end_date');
 
             $errorMessage = [];
+            if (!TicketService::canUpdateNumberOfTickets($request->number_of_tickets, $ticket, $errorMessage)) {
+                return back()->withErrors($errorMessage);
+            }
+
             if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
 
-            if (!TicketService::isDuringPeriod($ticket)) {
+            $ticket->initial_number_of_tickets = $request->number_of_tickets;
+            $ticket->number_of_tickets = $request->number_of_tickets;
+            
+            if (!TicketService::isDuringSalesPeriod($ticket)) {
                 $ticket->start_date = $startDate;
             }
 

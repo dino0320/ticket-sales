@@ -33,7 +33,7 @@ import type { IssuedTicketData } from '@/components/ticket'
 
 const formSchema = editIssuedTicketFormSchema
 
-export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}) {
+export default function EditIssuedTicket({ ticket, isDuringSalesPeriod }: { ticket: IssuedTicketData, isDuringSalesPeriod: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -112,19 +112,26 @@ export default function EditIssuedTicket({ ticket }: { ticket: IssuedTicketData}
                 </FormItem>
 
                 {/* The Number of Tickets Field */}
-                <FormField
-                  control={form.control}
-                  name="number_of_tickets"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="number_of_tickets">The Number of Tickets</FormLabel>
-                      <FormControl>
-                        <Input id="number_of_tickets" type="number" placeholder="" min={ticket.number_of_tickets} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {isDuringSalesPeriod ? (
+                  <FormItem className="grid gap-2">
+                    <FormLabel htmlFor="number_of_tickets">The Number of Tickets</FormLabel>
+                    {ticket.number_of_tickets} / {ticket.initial_number_of_tickets}
+                  </FormItem>
+                ) : (
+                  <FormField
+                    control={form.control}
+                    name="number_of_tickets"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-2">
+                        <FormLabel htmlFor="number_of_tickets">The Number of Tickets</FormLabel>
+                        <FormControl>
+                          <Input id="number_of_tickets" type="number" placeholder="" min={ticket.number_of_tickets} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* Event Start Date Field */}
                 <FormField

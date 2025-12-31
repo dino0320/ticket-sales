@@ -44,7 +44,7 @@ class OrganizerService
     }
 
     /**
-     * Wether an organizer application is applied or not
+     * Whether an organizer application is applied or not
      *
      * @param UserOrganizerApplication|null $userOrganizerApplication
      * @return boolean

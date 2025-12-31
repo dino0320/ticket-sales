@@ -20,7 +20,7 @@ class HomeController extends Controller
     {
         $ticketRepository = new TicketRepository();
 
-        $paginator = $ticketRepository->selectPaginatedTicketsDuringPeriod(new Carbon());
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriod(new Carbon());
 
         return Inertia::render('Home', [
             'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),

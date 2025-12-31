@@ -16,13 +16,13 @@ class TicketRepository extends Repository
     protected string $modelName = Ticket::class;
 
     /**
-     * Select paginated tickets during the period
+     * Select paginated tickets during the sales period
      *
      * @param Carbon $now
      * @param integer $numberOfItemsPerPage
      * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsDuringPeriod(Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
+    public function selectPaginatedTicketsDuringSalesPeriod(Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
         return Ticket::where([
             ['start_date', '<=', $now],

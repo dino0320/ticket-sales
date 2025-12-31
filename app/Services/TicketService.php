@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Consts\TicketConst;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserTicket;
@@ -57,6 +58,7 @@ class TicketService
             'event_title' => $ticket->event_title,
             'event_description' => $ticket->event_description,
             'price' => MoneyService::convertCentsToDollars($ticket->price),
+            'initial_number_of_tickets' => $ticket->initial_number_of_tickets,
             'number_of_tickets' => $ticket->number_of_tickets,
             'event_start_date' => $ticket->event_start_date,
             'event_end_date' => $ticket->event_end_date,
@@ -66,12 +68,12 @@ class TicketService
     }
 
     /**
-     * Wether a ticket is during the period
+     * Whether a ticket is during the sales period
      *
      * @param Ticket $ticket
      * @return boolean
      */
-    public static function isDuringPeriod(Ticket $ticket): bool
+    public static function isDuringSalesPeriod(Ticket $ticket): bool
     {
         $now = new Carbon();
         return $now >= $ticket->start_date && $now <= $ticket->end_date;
@@ -110,7 +112,7 @@ class TicketService
     }
 
     /**
-     * Wether the event and ticket sales dates are valid
+     * Whether the event and ticket sales dates are valid
      *
      * @param Carbon $eventStartDate
      * @param Carbon $eventEndDate
@@ -133,7 +135,7 @@ class TicketService
         }
 
         $now = new Carbon();
-        if ($ticket !== null && TicketService::isDuringPeriod($ticket)) {
+        if ($ticket !== null && TicketService::isDuringSalesPeriod($ticket)) {
             if (!$startDate->equalTo($ticket->start_date)) {
                 $errorMessage = ['start_date' => 'The ticket sales start date cannot be changed.'];
                 return false;
@@ -156,6 +158,33 @@ class TicketService
 
         if ($endDate <= $startDate) {
             $errorMessage = ['end_date' => 'The ticket sales end date must be after the ticket sales start date.'];
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Whether the number of tickets can be updated
+     *
+     * @param integer $numberOfTickets
+     * @param Ticket $ticket
+     * @param array $errorMessage
+     * @return boolean
+     */
+    public static function canUpdateNumberOfTickets(int $numberOfTickets, Ticket $ticket, array &$errorMessage = []): bool
+    {
+        if ($numberOfTickets === $ticket->initial_number_of_tickets) {
+            return true;
+        }
+
+        if ($numberOfTickets < TicketConst::NUMBER_OF_TICKETS_MIN || $numberOfTickets > TicketConst::NUMBER_OF_TICKETS_MAX) {
+            $errorMessage = ['number_of_tickets' => sprintf('The number of tickets must be more than %1$d and less than %2$d.', TicketConst::NUMBER_OF_TICKETS_MIN, TicketConst::NUMBER_OF_TICKETS_MAX)];
+            return false;
+        }
+
+        if (TicketService::isDuringSalesPeriod($ticket)) {
+            $errorMessage = ['number_of_tickets' => 'The number of tickets cannot be changed.'];
             return false;
         }
 

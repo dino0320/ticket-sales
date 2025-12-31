@@ -23,6 +23,7 @@ export type IssuedTicketData = {
   event_title: string,
   event_description: string | null,
   price: number,
+  initial_number_of_tickets: number,
   number_of_tickets: number,
   event_start_date: string,
   event_end_date: string,
