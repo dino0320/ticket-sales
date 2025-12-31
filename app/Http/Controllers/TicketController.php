@@ -125,6 +125,7 @@ class TicketController extends Controller
             'event_description' => $request->event_description,
             'price' => $price,
             'stripe_price_id' => $stripePrice->id,
+            'initial_number_of_tickets' => $request->number_of_tickets,
             'number_of_tickets' => $request->number_of_tickets,
             'number_of_reserved_tickets' => 0,
             'event_start_date' => $eventStartDate,

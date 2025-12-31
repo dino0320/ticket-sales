@@ -21,6 +21,7 @@ class Ticket extends Model
         'event_description',
         'price',
         'stripe_price_id',
+        'initial_number_of_tickets',
         'number_of_tickets',
         'number_of_reserved_tickets',
         'event_start_date',
