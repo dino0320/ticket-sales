@@ -1,8 +1,8 @@
-import SignInController from './SignInController'
+import AccountController from './AccountController'
 import OrganizerApplicationController from './OrganizerApplicationController'
 
 const Admin = {
-    SignInController: Object.assign(SignInController, SignInController),
+    AccountController: Object.assign(AccountController, AccountController),
     OrganizerApplicationController: Object.assign(OrganizerApplicationController, OrganizerApplicationController),
 }
 

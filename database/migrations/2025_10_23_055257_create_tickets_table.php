@@ -1,5 +1,6 @@
 <?php
 
+use App\Consts\TicketConst;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,11 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organizer_user_id')->references('id')->on('users');
-            $table->string('event_title');
-            $table->text('event_description')->nullable();
+            $table->string('event_title', TicketConst::EVENT_TITLE_LENGTH_MAX);
+            $table->text('event_description', TicketConst::EVENT_DESCRIPTION_LENGTH_MAX)->nullable();
             $table->unsignedInteger('price');
             $table->string('stripe_price_id');
+            $table->unsignedInteger('initial_number_of_tickets');
             $table->unsignedInteger('number_of_tickets');
             $table->unsignedInteger('number_of_reserved_tickets');
             $table->dateTime('event_start_date');

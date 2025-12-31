@@ -1,33 +1,35 @@
 import { z } from 'zod'
 
+export const nameSchema = z
+  .string()
+  .min(1, { message: 'Name must be at least 1 characters long' })
+  .max(50, { message: 'Name must be at most 50 characters long' })
+
 export const emailSchema = z.email({ message: 'Invalid email address' })
 
 export const passwordSchema = z
   .string()
   .min(8, { message: 'Password must be at least 8 characters long' })
-  .regex(/^[a-zA-Z0-9]+$/, { message: 'Password must be alphanumeric' })
+  .max(100, { message: 'Password must be at most 100 characters long' })
+  .regex(/^[\p{L}|\p{N}|\p{Z}|\p{S}|\p{P}]+$/u, { message: 'Password must be alphanumeric' })
 
-export const nameSchema = z
+export const eventTitleSchema = z
   .string()
-  .min(2, { message: 'Name must be at least 2 characters long' })
+  .min(1, { message: 'Event title must be at least 1 characters long' })
+  .max(100, { message: 'Event title must be at most 100 characters long' })
 
-export const messageSchema = z
+export const eventDescriptionSchema = z
   .string()
-  .min(10, { message: 'Message must be at least 10 characters long' })
+  .min(1, { message: 'Event description must be at least 1 character long' })
+  .max(1000, { message: 'Event description must be at most 1000 characters long' })
 
-export const descriptionSchema = z
-  .string()
-  .min(1, { message: 'Message must be at least 1 character long' })
+export const priceSchema = z.coerce.number<number>().min(1, 'Price must be at least 1').max(1000, 'Price must be at most 1000')
 
-export const urlSchema = z.url({ message: 'Invalid URL' })
+export const numberOfTicketsSchema = z.coerce.number<number>().min(1, 'The number of tickets must be at least 1').max(10000, 'The number of tickets must be at most 10000')
 
 export const dateSchema = z.date({message: 'Invalid date'})
 
-export const contactFormSchema = z.object({
-  name: nameSchema,
-  email: emailSchema,
-  message: messageSchema,
-})
+export const urlSchema = z.url({ message: 'Invalid URL' })
 
 export const loginFormSchema = z.object({
   email: emailSchema,
@@ -60,7 +62,7 @@ export const resetPasswordFormSchema = z
 
 export const applyToBeOrganizerFormSchema = z
   .object({
-    event_description: descriptionSchema,
+    event_description: eventDescriptionSchema,
     is_individual: z.boolean(),
     website_url: z.union([
       z.literal(""),
@@ -73,10 +75,10 @@ export const issueTicketFormSchema = z
     event_title: nameSchema,
     event_description: z.union([
       z.literal(""),
-      descriptionSchema,
+      eventDescriptionSchema,
     ]),
-    price: z.coerce.number<number>().min(1, 'Price must be at least 1').max(1000, 'Price must be at most 1000'),
-    number_of_tickets: z.coerce.number<number>().min(1, 'The number of tickets must be at least 1').max(10000, 'The number of tickets must be at most 10000'),
+    price: priceSchema,
+    number_of_tickets: numberOfTicketsSchema,
     event_start_date: dateSchema.optional(),
     event_end_date: dateSchema.optional(),
     start_date: dateSchema.optional(),
@@ -95,9 +97,9 @@ export const editIssuedTicketFormSchema = z
     event_title: nameSchema,
     event_description: z.union([
       z.literal(""),
-      descriptionSchema,
+      eventDescriptionSchema,
     ]),
-    number_of_tickets: z.coerce.number<number>().min(1, 'The number of tickets must be at least 1').max(10000, 'The number of tickets must be at most 10000'),
+    number_of_tickets: numberOfTicketsSchema,
     event_start_date: dateSchema,
     event_end_date: dateSchema,
     start_date: dateSchema,

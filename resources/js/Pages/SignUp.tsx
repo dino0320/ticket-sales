@@ -1,4 +1,4 @@
-import { register } from '@/actions/App/Http/Controllers/SignUpController';
+import { register } from '@/actions/App/Http/Controllers/AccountController';
 import { signIn } from '@/routes/index';
 import { Link, router } from '@inertiajs/react'
 import { z } from 'zod'

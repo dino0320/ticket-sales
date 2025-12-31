@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Consts\TicketConst;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserTicket;
@@ -157,38 +156,6 @@ class TicketService
 
         if ($endDate <= $startDate) {
             $errorMessage = ['end_date' => 'The ticket sales end date must be after the ticket sales start date.'];
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Wether the price is valid
-     *
-     * @param integer $price
-     * @return bool
-     */
-    public static function isPriceValid(int $price, array &$errorMessage = []): bool
-    {
-        if ($price < TicketConst::PRICE_MIN || $price > TicketConst::PRICE_MAX) {
-            $errorMessage = ['price' => 'The price value is invalid.'];
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Wether the number of tickets is valid
-     *
-     * @param integer $numberOfTickets
-     * @return bool
-     */
-    public static function isNumberOfTicketsValid(int $numberOfTickets, array &$errorMessage = []): bool
-    {
-        if ($numberOfTickets < TicketConst::NUMBER_OF_TICKETS_MIN || $numberOfTickets > TicketConst::NUMBER_OF_TICKETS_MAX) {
-            $errorMessage = ['number_of_tickets' => 'The number of tickets value is invalid.'];
             return false;
         }
 

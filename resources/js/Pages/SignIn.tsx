@@ -1,4 +1,4 @@
-import { authenticate } from '@/actions/App/Http/Controllers/SignInController';
+import { authenticate } from '@/actions/App/Http/Controllers/AccountController';
 import { signUp } from '@/routes/index';
 import { Link, router } from '@inertiajs/react'
 import { z } from 'zod'

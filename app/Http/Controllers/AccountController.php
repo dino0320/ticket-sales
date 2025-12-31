@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Consts\AccountConst;
+use App\Consts\TicketConst;
+use App\Models\User;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
@@ -14,9 +16,11 @@ use App\Services\OrganizerService;
 use App\Services\PaginationService;
 use App\Services\TicketService;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,6 +28,67 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends Controller
 {
+    /**
+     * Handle an incoming registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function register(Request $request): RedirectResponse
+    {
+        return DB::transaction(function () use ($request) {
+            $request->validate([
+                'name' => ['required', 'string', 'max:' . AccountConst::NAME_LENGTH_MAX],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:' . AccountConst::EMAIL_LENGTH_MAX, 'unique:' . User::class],
+                'password' => [
+                    'required',
+                    'confirmed',
+                    Password::defaults()->min(AccountConst::PASSWORD_LENGTH_MIN)->max(AccountConst::PASSWORD_LENGTH_MAX)->mixedCase()->numbers()->symbols(),
+                ],
+                'password_confirmation' => ['required'],
+            ]);
+
+            $userRepository = new UserRepository();
+
+            $user = new User([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'is_organizer' => false,
+            ]);
+        
+            $userRepository->save($user);
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            $request->session()->regenerate();
+
+            return redirect()->intended('/home');
+        });
+    }
+
+    /**
+     * Handle an authentication attempt.
+     */
+    public function authenticate(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'max:' . AccountConst::EMAIL_LENGTH_MAX],
+            'password' => ['required', 'string', 'max:' . AccountConst::PASSWORD_LENGTH_MAX],
+        ]);
+ 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+ 
+            return redirect()->intended('/home');
+        }
+ 
+        return back()->withErrors([
+            'root' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
     /**
      * Show user account
      *
@@ -80,9 +145,13 @@ class AccountController extends Controller
     {
         return DB::transaction(function () use ($request) {
             $credentials = $request->validate([
-                'email' => 'required|string|lowercase|email|max:255',
-                'password' => ['required', Password::defaults()],
-                'new_password' => ['required', 'confirmed', Password::defaults()],
+                'email' => ['required', 'string', 'max:' . AccountConst::EMAIL_LENGTH_MAX],
+                'password' => ['required', 'string', 'max:' . AccountConst::PASSWORD_LENGTH_MAX],
+                'new_password' => [
+                    'required',
+                    'confirmed',
+                    Password::defaults()->min(AccountConst::PASSWORD_LENGTH_MIN)->max(AccountConst::PASSWORD_LENGTH_MAX)->mixedCase()->numbers()->symbols(),
+                ],
                 'new_password_confirmation' => ['required'],
             ]);
 
@@ -115,9 +184,9 @@ class AccountController extends Controller
     {
         return DB::transaction(function () use ($request) {
             $request->validate([
-                'event_description' => 'required|string|max:255',
-                'is_individual' => 'required|boolean',
-                'website_url' => 'nullable|url:http,https',
+                'event_description' => ['required', 'string', 'max:' . TicketConst::EVENT_DESCRIPTION_LENGTH_MAX],
+                'is_individual' => ['required', 'boolean'],
+                'website_url' => ['nullable', 'url:http,https', 'max:' . AccountConst::URL_LENGTH_MAX],
             ]);
 
             $userRepository = new UserRepository();

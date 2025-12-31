@@ -25,7 +25,7 @@ class CartController extends Controller
     public function store(Request $request, Ticket $ticket): RedirectResponse
     {
         $request->validate([
-            'number_of_tickets' => 'required|integer',
+            'number_of_tickets' => ['required', 'integer'],
         ]);
 
         CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
@@ -68,7 +68,7 @@ class CartController extends Controller
     public function update(Request $request, Ticket $ticket): JsonResponse
     {
         $request->validate([
-            'number_of_tickets' => 'required|integer',
+            'number_of_tickets' => ['required', 'integer'],
         ]);
 
         CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);

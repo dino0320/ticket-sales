@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Consts\TicketConst;
 use App\Models\Ticket;
 use App\Models\UserTicket;
 use App\Repositories\TicketRepository;
@@ -85,14 +86,19 @@ class TicketController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'event_title' => 'required|string|max:255',
-            'event_description' => 'nullable|string|max:255',
-            'price' => 'required|decimal:1,2|min:1',
-            'number_of_tickets' => 'required|integer|min:1',
-            'event_start_date' => 'required|date',
-            'event_end_date' => 'required|date',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'event_title' => ['required', 'string', 'max:' . TicketConst::EVENT_TITLE_LENGTH_MAX],
+            'event_description' => ['nullable', 'string', 'max:' . TicketConst::EVENT_DESCRIPTION_LENGTH_MAX],
+            'price' => [
+                'required',
+                'decimal:0,2',
+                'min:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MIN),
+                'max:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MAX),
+            ],
+            'number_of_tickets' => ['required', 'integer', 'min:' . TicketConst::NUMBER_OF_TICKETS_MIN, 'max:' . TicketConst::NUMBER_OF_TICKETS_MAX],
+            'event_start_date' => ['required', 'date'],
+            'event_end_date' => ['required', 'date'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
         ]);
 
         $ticketRepository = new TicketRepository();
@@ -111,14 +117,6 @@ class TicketController extends Controller
         }
 
         $price = MoneyService::convertDollarsToCents($request->price);
-        if (!TicketService::isPriceValid($price, $errorMessage)) {
-            return back()->withErrors($errorMessage);
-        }
-        
-        if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $errorMessage)) {
-            return back()->withErrors($errorMessage);
-        }
-
         [, $stripePrice] = StripeService::createProduct($request->event_title, $request->event_description, $price);
 
         $ticket = new Ticket([
@@ -155,13 +153,13 @@ class TicketController extends Controller
     {
         return DB::transaction(function () use ($request, $ticket) {
             $request->validate([
-                'event_title' => 'required|string|max:255',
-                'event_description' => 'nullable|string|max:255',
-                'number_of_tickets' => 'required|integer|min:1',
-                'event_start_date' => 'required|date',
-                'event_end_date' => 'required|date',
-                'start_date' => 'required|date',
-                'end_date' => 'required|date',
+                'event_title' => ['required', 'string', 'max:' . TicketConst::EVENT_TITLE_LENGTH_MAX],
+                'event_description' => ['nullable', 'string', 'max:' . TicketConst::EVENT_DESCRIPTION_LENGTH_MAX],
+                'number_of_tickets' => ['required', 'integer', 'min:' . TicketConst::NUMBER_OF_TICKETS_MIN, 'max:' . TicketConst::NUMBER_OF_TICKETS_MAX],
+                'event_start_date' => ['required', 'date'],
+                'event_end_date' => ['required', 'date'],
+                'start_date' => ['required', 'date'],
+                'end_date' => ['required', 'date'],
             ]);
 
             $ticketRepository = new TicketRepository();
@@ -175,10 +173,6 @@ class TicketController extends Controller
 
             $errorMessage = [];
             if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
-                return back()->withErrors($errorMessage);
-            }
-
-            if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
 

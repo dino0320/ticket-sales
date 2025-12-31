@@ -1,6 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../wayfinder'
 /**
-* @see routes/web.php:16
+* @see routes/web.php:14
 * @route '/sign-up'
 */
 export const signUp = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -14,7 +14,7 @@ signUp.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:16
+* @see routes/web.php:14
 * @route '/sign-up'
 */
 signUp.url = (options?: RouteQueryOptions) => {
@@ -22,7 +22,7 @@ signUp.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:16
+* @see routes/web.php:14
 * @route '/sign-up'
 */
 signUp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -31,7 +31,7 @@ signUp.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:16
+* @see routes/web.php:14
 * @route '/sign-up'
 */
 signUp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -40,7 +40,7 @@ signUp.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see routes/web.php:22
+* @see routes/web.php:20
 * @route '/sign-in'
 */
 export const signIn = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -54,7 +54,7 @@ signIn.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:22
+* @see routes/web.php:20
 * @route '/sign-in'
 */
 signIn.url = (options?: RouteQueryOptions) => {
@@ -62,7 +62,7 @@ signIn.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:22
+* @see routes/web.php:20
 * @route '/sign-in'
 */
 signIn.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -71,7 +71,7 @@ signIn.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:22
+* @see routes/web.php:20
 * @route '/sign-in'
 */
 signIn.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -212,7 +212,7 @@ checkoutSuccess.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =>
 })
 
 /**
-* @see routes/web.php:54
+* @see routes/web.php:52
 * @route '/reset-password'
 */
 export const resetPassword = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -226,7 +226,7 @@ resetPassword.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:54
+* @see routes/web.php:52
 * @route '/reset-password'
 */
 resetPassword.url = (options?: RouteQueryOptions) => {
@@ -234,7 +234,7 @@ resetPassword.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:54
+* @see routes/web.php:52
 * @route '/reset-password'
 */
 resetPassword.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -243,7 +243,7 @@ resetPassword.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:54
+* @see routes/web.php:52
 * @route '/reset-password'
 */
 resetPassword.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -252,7 +252,7 @@ resetPassword.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 })
 
 /**
-* @see routes/web.php:62
+* @see routes/web.php:60
 * @route '/organizer-application'
 */
 export const organizerApplication = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -266,7 +266,7 @@ organizerApplication.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:62
+* @see routes/web.php:60
 * @route '/organizer-application'
 */
 organizerApplication.url = (options?: RouteQueryOptions) => {
@@ -274,7 +274,7 @@ organizerApplication.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:62
+* @see routes/web.php:60
 * @route '/organizer-application'
 */
 organizerApplication.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -283,7 +283,7 @@ organizerApplication.get = (options?: RouteQueryOptions): RouteDefinition<'get'>
 })
 
 /**
-* @see routes/web.php:62
+* @see routes/web.php:60
 * @route '/organizer-application'
 */
 organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -292,7 +292,7 @@ organizerApplication.head = (options?: RouteQueryOptions): RouteDefinition<'head
 })
 
 /**
-* @see routes/web.php:70
+* @see routes/web.php:68
 * @route '/issue-ticket'
 */
 export const issueTicket = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -306,7 +306,7 @@ issueTicket.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:70
+* @see routes/web.php:68
 * @route '/issue-ticket'
 */
 issueTicket.url = (options?: RouteQueryOptions) => {
@@ -314,7 +314,7 @@ issueTicket.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:70
+* @see routes/web.php:68
 * @route '/issue-ticket'
 */
 issueTicket.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -323,7 +323,7 @@ issueTicket.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:70
+* @see routes/web.php:68
 * @route '/issue-ticket'
 */
 issueTicket.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

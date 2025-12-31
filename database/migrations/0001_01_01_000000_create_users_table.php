@@ -1,5 +1,6 @@
 <?php
 
+use App\Consts\AccountConst;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', AccountConst::NAME_LENGTH_MAX);
+            $table->string('email', AccountConst::EMAIL_LENGTH_MAX)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password', AccountConst::PASSWORD_LENGTH_MAX);
             $table->rememberToken();
             $table->boolean('is_organizer');
             $table->timestamps();

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Consts\AccountConst;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SignInController extends Controller
+class AccountController extends Controller
 {
     /**
      * Handle an authentication attempt.
@@ -15,8 +16,8 @@ class SignInController extends Controller
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => 'required|string|lowercase|email|max:255',
-            'password' => 'required',
+            'email' => ['required', 'string', 'max:' . AccountConst::EMAIL_LENGTH_MAX],
+            'password' => ['required', 'string', 'max:' . AccountConst::PASSWORD_LENGTH_MAX],
         ]);
  
         if (Auth::guard('admin')->attempt($credentials)) {

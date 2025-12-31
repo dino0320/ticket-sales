@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\Admin\SignInController::authenticate
-* @see app/Http/Controllers/Admin/SignInController.php:15
+* @see \App\Http\Controllers\Admin\AccountController::authenticate
+* @see app/Http/Controllers/Admin/AccountController.php:16
 * @route '/admin/authenticate'
 */
 export const authenticate = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -15,8 +15,8 @@ authenticate.definition = {
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\Admin\SignInController::authenticate
-* @see app/Http/Controllers/Admin/SignInController.php:15
+* @see \App\Http\Controllers\Admin\AccountController::authenticate
+* @see app/Http/Controllers/Admin/AccountController.php:16
 * @route '/admin/authenticate'
 */
 authenticate.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ authenticate.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\Admin\SignInController::authenticate
-* @see app/Http/Controllers/Admin/SignInController.php:15
+* @see \App\Http\Controllers\Admin\AccountController::authenticate
+* @see app/Http/Controllers/Admin/AccountController.php:16
 * @route '/admin/authenticate'
 */
 authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -33,6 +33,6 @@ authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
-const SignInController = { authenticate }
+const AccountController = { authenticate }
 
-export default SignInController
+export default AccountController

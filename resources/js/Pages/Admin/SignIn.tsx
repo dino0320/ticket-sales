@@ -1,4 +1,4 @@
-import { authenticate } from '@/actions/App/Http/Controllers/Admin/SignInController';
+import { authenticate } from '@/actions/App/Http/Controllers/Admin/AccountController';
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'

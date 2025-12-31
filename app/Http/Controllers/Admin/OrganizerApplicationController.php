@@ -55,7 +55,7 @@ class OrganizerApplicationController extends Controller
     public function updateStatus(Request $request, UserOrganizerApplication $userOrganizerApplication): RedirectResponse
     {
         $request->validate([
-            'is_approved' => 'required|boolean',
+            'is_approved' => ['required', 'boolean'],
         ]);
 
         $userRepository = new UserRepository();

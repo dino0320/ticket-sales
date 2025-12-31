@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\OrganizerApplicationController;
-use App\Http\Controllers\Admin\SignInController as AdminSignInController;
+use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SignInController;
-use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -17,13 +15,13 @@ Route::middleware('guest')->group(function () {
         return Inertia::render('SignUp');
     })->name('sign-up');
 
-    Route::post('/register', [SignUpController::class, 'register']);
+    Route::post('/register', [AccountController::class, 'register']);
 
     Route::get('/sign-in', function () {
         return Inertia::render('SignIn');
     })->name('sign-in');
     
-    Route::post('/authenticate', [SignInController::class, 'authenticate']);
+    Route::post('/authenticate', [AccountController::class, 'authenticate']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -83,7 +81,7 @@ Route::middleware('guest:admin')->prefix('admin')->group(function () {
         return Inertia::render('Admin/SignIn');
     });
     
-    Route::post('/authenticate', [AdminSignInController::class, 'authenticate']);
+    Route::post('/authenticate', [AdminAccountController::class, 'authenticate']);
 });
 
 Route::middleware('auth:admin')->prefix('admin')->group(function () {
