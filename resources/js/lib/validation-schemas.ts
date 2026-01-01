@@ -50,7 +50,6 @@ export const registerFormSchema = z
 
 export const resetPasswordFormSchema = z
   .object({
-    email: emailSchema,
     password: passwordSchema,
     new_password: passwordSchema,
     new_password_confirmation: z.string(),

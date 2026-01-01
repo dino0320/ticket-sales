@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 
 import { LoadingButton } from '@/components/loading-button'
@@ -34,7 +33,6 @@ export default function ResetPassword() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
       password: '',
       new_password: '',
       new_password_confirmation: '',
@@ -66,27 +64,6 @@ export default function ResetPassword() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid gap-4">
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="email"
-                          placeholder="johndoe@mail.com"
-                          type="email"
-                          autoComplete="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 {/* Password Field */}
                 <FormField
                   control={form.control}
@@ -98,7 +75,7 @@ export default function ResetPassword() {
                         <PasswordInput
                           id="password"
                           placeholder="******"
-                          autoComplete="your-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>
@@ -118,7 +95,7 @@ export default function ResetPassword() {
                         <PasswordInput
                           id="new_password"
                           placeholder="******"
-                          autoComplete="new-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>
@@ -140,7 +117,7 @@ export default function ResetPassword() {
                         <PasswordInput
                           id="new_password_confirmation"
                           placeholder="******"
-                          autoComplete="new-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>

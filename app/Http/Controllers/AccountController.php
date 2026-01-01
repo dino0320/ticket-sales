@@ -15,13 +15,13 @@ use App\Services\OrderHistoryService;
 use App\Services\OrganizerService;
 use App\Services\PaginationService;
 use App\Services\TicketService;
+use App\Supports\Validation\AccountRules;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -42,9 +42,8 @@ class AccountController extends Controller
                 'password' => [
                     'required',
                     'confirmed',
-                    Password::defaults()->min(AccountConst::PASSWORD_LENGTH_MIN)->max(AccountConst::PASSWORD_LENGTH_MAX)->mixedCase()->numbers()->symbols(),
+                    AccountRules::password(),
                 ],
-                'password_confirmation' => ['required'],
             ]);
 
             $userRepository = new UserRepository();
@@ -144,24 +143,22 @@ class AccountController extends Controller
     public function resetPassword(Request $request): RedirectResponse
     {
         return DB::transaction(function () use ($request) {
-            $credentials = $request->validate([
-                'email' => ['required', 'string', 'max:' . AccountConst::EMAIL_LENGTH_MAX],
+            $request->validate([
                 'password' => ['required', 'string', 'max:' . AccountConst::PASSWORD_LENGTH_MAX],
                 'new_password' => [
                     'required',
                     'confirmed',
-                    Password::defaults()->min(AccountConst::PASSWORD_LENGTH_MIN)->max(AccountConst::PASSWORD_LENGTH_MAX)->mixedCase()->numbers()->symbols(),
+                    AccountRules::password(),
                 ],
-                'new_password_confirmation' => ['required'],
             ]);
 
             $userRepository = new UserRepository();
 
-            if (Auth::attempt($credentials)) {
+            $user = $request->user();
+            if (Hash::check($request->password, $user->password)) {
                 $request->session()->regenerate();
 
-                $user = $request->user();
-                $user->password = $request->new_password;
+                $user->password = Hash::make($request->new_password);
 
                 $userRepository->save($user);
  
@@ -169,8 +166,8 @@ class AccountController extends Controller
             }
  
             return back()->withErrors([
-                'root' => 'The provided credentials do not match our records.',
-            ])->onlyInput('email');
+                'password' => 'The current password is incorrect.',
+            ])->exceptInput();
         });
     }
 

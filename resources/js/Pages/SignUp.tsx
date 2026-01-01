@@ -114,7 +114,7 @@ export default function SignUp() {
                         <PasswordInput
                           id="password"
                           placeholder="******"
-                          autoComplete="new-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>
@@ -136,7 +136,7 @@ export default function SignUp() {
                         <PasswordInput
                           id="password_confirmation"
                           placeholder="******"
-                          autoComplete="new-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>

@@ -97,7 +97,7 @@ export default function SignIn() {
                         <PasswordInput
                           id="password"
                           placeholder="******"
-                          autoComplete="new-password"
+                          autoComplete="off"
                           {...field}
                         />
                       </FormControl>
