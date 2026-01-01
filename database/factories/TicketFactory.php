@@ -16,13 +16,15 @@ class TicketFactory extends Factory
      */
     public function definition(): array
     {
+        $numberOfTickets = fake()->randomNumber();
         return [
             'organizer_user_id' => 1,
             'event_title' => fake()->name(),
             'event_description' => fake()->text(),
             'price' => fake()->randomNumber(),
             'stripe_price_id' => 'price_1SUFodHlSPswWVDq15Vjkymj',
-            'number_of_tickets' => fake()->randomNumber(),
+            'initial_number_of_tickets' => $numberOfTickets,
+            'number_of_tickets' => $numberOfTickets,
             'number_of_reserved_tickets' => 0,
             'event_start_date' => fake()->date(),
             'event_end_date' => fake()->date(),

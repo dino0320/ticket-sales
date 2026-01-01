@@ -10,40 +10,6 @@ use InvalidArgumentException;
 class OrganizerService
 {
     /**
-     * Get user organizer applications response
-     *
-     * @param UserOrganizerApplication[] $userOrganizerApplications
-     * @return array
-     */
-    public static function getUserOrganizerApplicationsResponse(array $userOrganizerApplications): array
-    {
-        $userOrganizerApplicationsResponse = [];
-        foreach ($userOrganizerApplications as $userOrganizerApplication) {
-            $userOrganizerApplicationsResponse[] = self::getUserOrganizerApplicationResponse($userOrganizerApplication);
-        }
-
-        return $userOrganizerApplicationsResponse;
-    }
-
-    /**
-     * Get user organizer application response
-     *
-     * @param UserOrganizerApplication $userOrganizerApplications
-     * @return array
-     */
-    public static function getUserOrganizerApplicationResponse(UserOrganizerApplication $userOrganizerApplication): array
-    {
-        return [
-            'id' => $userOrganizerApplication->id,
-            'user_id' => $userOrganizerApplication->user_id,
-            'event_description' => $userOrganizerApplication->event_description,
-            'is_individual' => $userOrganizerApplication->is_individual,
-            'website_url' => $userOrganizerApplication->website_url,
-            'applied_at' => $userOrganizerApplication->applied_at,
-        ];
-    }
-
-    /**
      * Whether an organizer application is applied or not
      *
      * @param UserOrganizerApplication|null $userOrganizerApplication

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Consts\CheckoutConst;
+use App\Http\Resources\TicketResource;
 use App\Models\UserOrder;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
-use App\Services\PaginationService;
+use App\Services\MoneyService;
 use App\Services\StripeService;
-use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -38,9 +38,9 @@ class CheckoutController extends Controller
         $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Review', [
-            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
+            'tickets' => TicketResource::collection($paginator),
             'numberOfTickets' => $numbersOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets),
+            'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
         ]);
     }
 

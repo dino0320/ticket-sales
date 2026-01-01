@@ -16,13 +16,13 @@ type Link = {
 
 export type PaginationData<T> = {
   data: T[],
-  links: Link[],
-  prev_page_url: string | null,
-  next_page_url: string | null,
+  meta: {
+    links: Link[],
+  },
 }
 
 export function Pagination<T>({ pagination }: { pagination: PaginationData<T> }) {
-  const links = pagination.links.map((link: Link, index: number) => {
+  const links = pagination.meta.links.map((link: Link, index: number) => {
     if (index === 0) {
       return link.url === null ? null : (
         <PaginationItem key={index}>
@@ -31,7 +31,7 @@ export function Pagination<T>({ pagination }: { pagination: PaginationData<T> })
       )
     }
 
-    if (index === pagination.links.length - 1) {
+    if (index === pagination.meta.links.length - 1) {
       return link.url === null ? null : (
         <PaginationItem key={index}>
           <PaginationNext href={link.url} />

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Listeners\StripeEventListener;
 use App\Models\Cashier\Subscription;
 use App\Models\Cashier\SubscriptionItem;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
@@ -29,5 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Cashier::useSubscriptionItemModel(SubscriptionItem::class);
 
         Event::listen(WebhookReceived::class, StripeEventListener::class);
+
+        JsonResource::withoutWrapping();
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Consts\AccountConst;
 use App\Consts\TicketConst;
+use App\Http\Resources\TicketResource;
+use App\Http\Resources\UserOrderResource;
 use App\Models\User;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\TicketRepository;
@@ -11,10 +13,7 @@ use App\Repositories\UserOrderRepository;
 use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
-use App\Services\OrderHistoryService;
 use App\Services\OrganizerService;
-use App\Services\PaginationService;
-use App\Services\TicketService;
 use App\Supports\Validation\AccountRules;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -111,7 +110,7 @@ class AccountController extends Controller
         }
 
         return Inertia::render('Account', [
-            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
+            'tickets' => TicketResource::collection($paginator),
             'isOrganizerApplicationApplied' => $isOrganizerApplicationApplied,
         ]);
     }
@@ -130,7 +129,7 @@ class AccountController extends Controller
         $paginator = $userOrderRepository->selectPaginatedUserOrdersByUserId($user->id);
 
         return Inertia::render('OrderHistory', [
-            'userOrders' => PaginationService::getPaginatedDataResponse($paginator, OrderHistoryService::getUserOrdersResponse($paginator->getCollection()->all())),
+            'userOrders' => UserOrderResource::collection($paginator),
         ]);
     }
 
@@ -227,7 +226,7 @@ class AccountController extends Controller
         $paginator = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
 
         return Inertia::render('IssuedTicketIndex', [
-            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
+            'tickets' => TicketResource::collection($paginator),
         ]);
     }
 }

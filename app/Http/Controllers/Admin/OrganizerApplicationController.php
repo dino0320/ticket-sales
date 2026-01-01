@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Consts\AccountConst;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserOrganizerApplicationResource;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
-use App\Services\OrganizerService;
-use App\Services\PaginationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -29,7 +28,7 @@ class OrganizerApplicationController extends Controller
         $paginator = $userOrganizerApplicationRepository->selectByStatus(AccountConst::ORGANIZER_STATUS_PENDING);
 
         return Inertia::render('Admin/OrganizerApplication', [
-            'userOrganizerApplications' => PaginationService::getPaginatedDataResponse($paginator, OrganizerService::getUserOrganizerApplicationsResponse($paginator->getCollection()->all())),
+            'userOrganizerApplications' => UserOrganizerApplicationResource::collection($paginator),
         ]);
     }
 
@@ -42,7 +41,7 @@ class OrganizerApplicationController extends Controller
     public function show(UserOrganizerApplication $userOrganizerApplication): Response
     {
         return Inertia::render('Admin/OrganizerApplicationDetail', [
-            'userOrganizerApplication' => OrganizerService::getUserOrganizerApplicationResponse($userOrganizerApplication),
+            'userOrganizerApplication' => new UserOrganizerApplicationResource($userOrganizerApplication),
         ]);
     }
 

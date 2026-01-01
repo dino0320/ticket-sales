@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:209
+* @see app/Http/Controllers/TicketController.php:211
 * @route '/user-tickets/{user_ticket}/use'
 */
 export const use = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ use.definition = {
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:209
+* @see app/Http/Controllers/TicketController.php:211
 * @route '/user-tickets/{user_ticket}/use'
 */
 use.url = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ use.url = (args: { user_ticket: string | number } | [user_ticket: string | numbe
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:209
+* @see app/Http/Controllers/TicketController.php:211
 * @route '/user-tickets/{user_ticket}/use'
 */
 use.get = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ use.get = (args: { user_ticket: string | number } | [user_ticket: string | numbe
 
 /**
 * @see \App\Http\Controllers\TicketController::use
-* @see app/Http/Controllers/TicketController.php:209
+* @see app/Http/Controllers/TicketController.php:211
 * @route '/user-tickets/{user_ticket}/use'
 */
 use.head = (args: { user_ticket: string | number } | [user_ticket: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({

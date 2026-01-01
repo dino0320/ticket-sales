@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Repositories\TicketRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
-use App\Services\PaginationService;
-use App\Services\TicketService;
+use App\Services\MoneyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,9 +52,9 @@ class CartController extends Controller
         $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
 
         return Inertia::render('Cart', [
-            'tickets' => PaginationService::getPaginatedDataResponse($paginator, TicketService::getTicketsResponse($paginator->getCollection()->all())),
+            'tickets' => TicketResource::collection($paginator),
             'numberOfTickets' => $numbersOfTickets,
-            'totalPriceOfTickets' => CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets),
+            'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
         ]);
     }
 
@@ -82,7 +82,7 @@ class CartController extends Controller
 
         return response()->json([
             'numberOfTickets' => $request->number_of_tickets,
-            'differenceInTotalPrice' => CartService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket),
+            'differenceInTotalPrice' => MoneyService::convertCentsToDollars(CartService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket)),
         ]);
     }
 

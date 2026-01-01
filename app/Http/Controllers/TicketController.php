@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Consts\TicketConst;
+use App\Http\Resources\IssuedTicketResource;
+use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Models\UserTicket;
 use App\Repositories\TicketRepository;
@@ -35,7 +37,7 @@ class TicketController extends Controller
         }
 
         return Inertia::render('TicketDetail', [
-            'ticket' => TicketService::getTicketResponse($ticket),
+            'ticket' => new TicketResource($ticket),
         ]);
     }
 
@@ -57,7 +59,7 @@ class TicketController extends Controller
         TicketService::checkIfTicketIsUsed($userTicket);
 
         return Inertia::render('UserTicketDetail', [
-            'ticket' => TicketService::getTicketResponse($ticket),
+            'ticket' => new TicketResource($ticket),
             'ticket_use_url' => URL::temporarySignedRoute('user-tickets.use', now()->addMinutes(10), ['user_ticket' => $userTicket->id]),
         ]);
     }
@@ -73,7 +75,7 @@ class TicketController extends Controller
         TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
 
         return Inertia::render('EditIssuedTicket', [
-            'ticket' => TicketService::getIssuedTicketResponse($ticket),
+            'ticket' => new IssuedTicketResource($ticket),
             'isDuringSalesPeriod' => TicketService::isDuringSalesPeriod($ticket),
         ]);
     }
@@ -92,8 +94,8 @@ class TicketController extends Controller
             'price' => [
                 'required',
                 'decimal:0,2',
-                'min:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MIN),
-                'max:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MAX),
+                'min:' . MoneyService::convertDollarsToCents(TicketConst::PRICE_MIN),
+                'max:' . MoneyService::convertDollarsToCents(TicketConst::PRICE_MAX),
             ],
             'number_of_tickets' => ['required', 'integer', 'min:' . TicketConst::NUMBER_OF_TICKETS_MIN, 'max:' . TicketConst::NUMBER_OF_TICKETS_MAX],
             'event_start_date' => ['required', 'date'],

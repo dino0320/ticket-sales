@@ -12,62 +12,6 @@ use InvalidArgumentException;
 class TicketService
 {
     /**
-     * Get tickets response
-     *
-     * @param Ticket[] $tickets
-     * @return array
-     */
-    public static function getTicketsResponse(array $tickets): array
-    {
-        $ticketsResponse = [];
-        foreach ($tickets as $ticket) {
-            $ticketsResponse[] = self::getTicketResponse($ticket);
-        }
-
-        return $ticketsResponse;
-    }
-
-    /**
-     * Get ticket response
-     *
-     * @param Ticket $ticket
-     * @return array
-     */
-    public static function getTicketResponse(Ticket $ticket): array
-    {
-        return [
-            'id' => $ticket->id,
-            'event_title' => $ticket->event_title,
-            'event_description' => $ticket->event_description,
-            'price' => MoneyService::convertCentsToDollars($ticket->price),
-            'event_start_date' => $ticket->event_start_date,
-            'event_end_date' => $ticket->event_end_date,
-        ];
-    }
-
-    /**
-     * Get issued ticket response
-     *
-     * @param Ticket $ticket
-     * @return array
-     */
-    public static function getIssuedTicketResponse(Ticket $ticket): array
-    {
-        return [
-            'id' => $ticket->id,
-            'event_title' => $ticket->event_title,
-            'event_description' => $ticket->event_description,
-            'price' => MoneyService::convertCentsToDollars($ticket->price),
-            'initial_number_of_tickets' => $ticket->initial_number_of_tickets,
-            'number_of_tickets' => $ticket->number_of_tickets,
-            'event_start_date' => $ticket->event_start_date,
-            'event_end_date' => $ticket->event_end_date,
-            'start_date' => $ticket->start_date,
-            'end_date' => $ticket->end_date,
-        ];
-    }
-
-    /**
      * Whether a ticket is during the sales period
      *
      * @param Ticket $ticket
