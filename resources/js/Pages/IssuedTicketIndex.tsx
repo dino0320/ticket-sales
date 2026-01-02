@@ -15,13 +15,15 @@ export default function IssuedTicketIndex({ tickets }: { tickets: PaginationData
   }
 
   return (
-    <div>
+    <div className="space-y-1">
       <Button onClick={onClick}>Issue Ticket</Button>
 
       {tickets.data.map((ticket) => (
-        <Link key={ticket.id} href={showIssuedTicket(ticket.id)}>
-          <Ticket ticket={ticket} isEllipsis={true}/>
-        </Link>
+        <div key={ticket.id}>
+          <Link href={showIssuedTicket(ticket.id)}>
+            <Ticket ticket={ticket} isEllipsis={true}/>
+          </Link>
+        </div>
       ))}
 
       <Pagination pagination={tickets}/>

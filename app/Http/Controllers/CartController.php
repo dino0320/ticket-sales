@@ -6,13 +6,15 @@ use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Repositories\TicketRepository;
 use App\Services\CartService;
-use App\Services\CheckoutService;
 use App\Services\MoneyService;
+use App\Services\TicketService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 
 class CartController extends Controller
 {
@@ -28,7 +30,11 @@ class CartController extends Controller
             'number_of_tickets' => ['required', 'integer'],
         ]);
 
-        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        if (!TicketService::isDuringSalesPeriod($ticket)) {
+            throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
+        }
+
+        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
         $user = $request->user();
         CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets);
@@ -49,7 +55,7 @@ class CartController extends Controller
         $user = $request->user();
         $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon, array_keys($numbersOfTickets));
 
         return Inertia::render('Cart', [
             'tickets' => TicketResource::collection($paginator),
@@ -71,9 +77,14 @@ class CartController extends Controller
             'number_of_tickets' => ['required', 'integer'],
         ]);
 
-        CheckoutService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
-
         $user = $request->user();
+        if (!TicketService::isDuringSalesPeriod($ticket)) {
+            CartService::deleteUserCart($user->id, $ticket->id);
+            throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
+        }
+
+        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+
         $preNumberOfTickets = CartService::getUserCart($user->id, $ticket->id);
 
         if ($request->number_of_tickets !== $preNumberOfTickets) {

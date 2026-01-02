@@ -6,6 +6,7 @@ use App\Consts\AccountConst;
 use App\Consts\TicketConst;
 use App\Http\Resources\TicketResource;
 use App\Http\Resources\UserOrderResource;
+use App\Http\Resources\UserTicketResource;
 use App\Models\User;
 use App\Models\UserOrganizerApplication;
 use App\Repositories\TicketRepository;
@@ -14,6 +15,7 @@ use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\OrganizerService;
+use App\Services\TicketService;
 use App\Supports\Validation\AccountRules;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -100,8 +102,9 @@ class AccountController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $userTickets = $userTicketRepository->selectNotUsedTicketsByUserId($user->id);
-        $paginator = $ticketRepository->selectPaginatedTicketsDuringEventByIds(array_column($userTickets, 'ticket_id'), new Carbon());
+        $paginator = $userTicketRepository->selectPaginatedNotUsedTicketsByUserId($user->id);
+        $tickets = $ticketRepository->selectTicketsDuringEventByIds(array_unique(array_column($paginator->getCollection()->all(), 'ticket_id')), new Carbon());
+        TicketService::updateUserTicketDataInPaginator($paginator, $tickets);
 
         $isOrganizerApplicationApplied = true;
         if (!$user->is_organizer) {
@@ -110,7 +113,7 @@ class AccountController extends Controller
         }
 
         return Inertia::render('Account', [
-            'tickets' => TicketResource::collection($paginator),
+            'tickets' => UserTicketResource::collection($paginator),
             'isOrganizerApplicationApplied' => $isOrganizerApplicationApplied,
         ]);
     }

@@ -127,6 +127,7 @@ export default function EditIssuedTicket({ ticket, isDuringSalesPeriod }: { tick
                         <FormControl>
                           <Input id="number_of_tickets" type="number" placeholder="" min={ticket.number_of_tickets} {...field} />
                         </FormControl>
+                        Total number of tickets: {ticket.initial_number_of_tickets}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -164,19 +165,26 @@ export default function EditIssuedTicket({ ticket, isDuringSalesPeriod }: { tick
                 />
 
                 {/* Start Date Field */}
-                <FormField
-                  control={form.control}
-                  name="start_date"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="start_date">Start Date</FormLabel>
-                      <FormControl>
-                        <DatetimePicker field={field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {isDuringSalesPeriod ? (
+                  <FormItem className="grid gap-2">
+                    <FormLabel htmlFor="start_date">Start Date</FormLabel>
+                    {(new Date(ticket.start_date)).toLocaleString()}
+                  </FormItem>
+                ) : (
+                  <FormField
+                    control={form.control}
+                    name="start_date"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-2">
+                        <FormLabel htmlFor="start_date">Start Date</FormLabel>
+                        <FormControl>
+                          <DatetimePicker field={field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* End Date Field */}
                 <FormField

@@ -13,19 +13,31 @@ export default function Account({ tickets, isOrganizerApplicationApplied }: { ti
   const { auth } = usePage<AuthData>().props
 
   return (
-    <div>
-      <a href={resetPassword().url}><Button>Reset password</Button></a>
-      <a href={showOrderHistory().url}><Button>Order history</Button></a>
-      {isOrganizerApplicationApplied ? '' : <a href={organizerApplication().url}><Button>Organizer Application</Button></a>}
-      {auth.user.is_organizer ? <a href={showIssuedTickets().url}><Button>Issued Tickets</Button></a> : ''}
+    <div className="space-y-4">
+      <section className="space-y-1">
+        <h2 className="text-2xl font-bold">Account</h2>
 
-      {tickets.data.map((ticket) => (
-        <Link key={ticket.id} href={showUserTicket(ticket.id)}>
-          <Ticket ticket={ticket} isEllipsis={true}/>
-        </Link>
-      ))}
+        <div className="flex gap-1">
+          <a href={showOrderHistory().url}><Button>Order history</Button></a>
+          <a href={resetPassword().url}><Button variant="outline">Reset password</Button></a>
+          {isOrganizerApplicationApplied ? '' : <a href={organizerApplication().url}><Button variant="outline">Organizer Application</Button></a>}
+          {auth.user.is_organizer ? <a href={showIssuedTickets().url}><Button variant="outline">Issued Tickets</Button></a> : ''}
+        </div>
+      </section>
 
-      <Pagination pagination={tickets}/>
+      <section className="space-y-1">
+        <h2 className="text-2xl font-bold">My Tickets</h2>
+
+        {tickets.data.map((ticket) => (
+          <div key={ticket.id}>
+            <Link href={showUserTicket(ticket.id)}>
+              <Ticket ticket={ticket} isEllipsis={true}/>
+            </Link>
+          </div>
+        ))}
+
+        <Pagination pagination={tickets}/>
+      </section>
     </div>
   )
 }

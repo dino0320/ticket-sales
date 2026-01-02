@@ -9,14 +9,20 @@ import { formatCurrency } from '@/lib/utils'
 
 export default function Review({ tickets, numberOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numberOfTickets: {[id: number]: number}, totalPriceOfTickets: number}) {
   return (
-    <div>
-      <a href={checkout().url}><Button>Proceed to checkout</Button></a>
-      <p>{formatCurrency(totalPriceOfTickets)}</p>
+    <div className="space-y-1">
+      {tickets.data.length === 0 ? (
+        <p>No items in your cart.</p>
+      ) : (
+        <div>
+          <a href={checkout().url}><Button>Proceed to checkout</Button></a>
+          <p>{formatCurrency(totalPriceOfTickets)}</p>
+        </div>
+      )}
 
       {tickets.data.map((ticket) => (
         <div key={ticket.id}>
           <Ticket ticket={ticket} isEllipsis={true}/>
-          <Badge>{numberOfTickets[ticket.id]}</Badge>
+          <Badge className="text-sm">{numberOfTickets[ticket.id]}</Badge>
         </div>
       ))}
 

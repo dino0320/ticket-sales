@@ -7,11 +7,15 @@ import type { TicketData } from '@/components/ticket'
 
 export default function Home({ tickets }: { tickets: PaginationData<TicketData>}) {
   return (
-    <div>
+    <div className="space-y-1">
+      <h2 className="text-2xl font-bold">Tickets</h2>
+
       {tickets.data.map((ticket) => (
-        <Link key={ticket.id} href={show(ticket.id)}>
-          <Ticket ticket={ticket} isEllipsis={true}/>
-        </Link>
+        <div key={ticket.id}>
+          <Link href={show(ticket.id)}>
+            <Ticket ticket={ticket} isEllipsis={true}/>
+          </Link>
+        </div>
       ))}
 
       <Pagination pagination={tickets}/>

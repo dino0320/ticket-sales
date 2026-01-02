@@ -17,10 +17,12 @@ export default function OrganizerApplicationDetail({ userOrganizerApplication }:
   }
 
   return (
-    <div>
+    <div className="space-y-1">
       <OrganizerApplication userOrganizerApplication={userOrganizerApplication}/>
-      <LoadingButton onClick={() => onClick(true)} isLoading={isLoading}>Approve</LoadingButton>
-      <LoadingButton onClick={() => onClick(false)} isLoading={isLoading}>Reject</LoadingButton>
+      <div className="flex gap-1">
+        <LoadingButton onClick={() => onClick(true)} isLoading={isLoading}>Approve</LoadingButton>
+        <LoadingButton onClick={() => onClick(false)} isLoading={isLoading}>Reject</LoadingButton>
+      </div>
     </div>
   )
 }

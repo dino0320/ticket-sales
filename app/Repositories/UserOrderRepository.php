@@ -27,6 +27,6 @@ class UserOrderRepository extends Repository
         return UserOrder::where([
             ['user_id', $userId],
             ['status', CheckoutConst::ORDER_STATUS_COMPLETED],
-        ])->paginate($numberOfItemsPerPage);
+        ])->orderBy('id', 'desc')->paginate($numberOfItemsPerPage);
     }
 }

@@ -7,11 +7,13 @@ import type { OrganizerApplicationData } from '@/components/organizer-applicatio
 
 export default function OrganizerApplication({ userOrganizerApplications }: { userOrganizerApplications: PaginationData<OrganizerApplicationData>}) {
   return (
-    <div>
+    <div className="space-y-1">
       {userOrganizerApplications.data.map((userOrganizerApplication) => (
-        <Link key={userOrganizerApplication.id} href={show(userOrganizerApplication.id)}>
-          <OrganizerApplicationComponent userOrganizerApplication={userOrganizerApplication} isEllipsis={true}/>
-        </Link>
+        <div key={userOrganizerApplication.id}>
+          <Link href={show(userOrganizerApplication.id)}>
+            <OrganizerApplicationComponent userOrganizerApplication={userOrganizerApplication} isEllipsis={true}/>
+          </Link>
+        </div>
       ))}
 
       <Pagination pagination={userOrganizerApplications}/>

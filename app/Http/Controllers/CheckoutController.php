@@ -11,6 +11,8 @@ use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\MoneyService;
 use App\Services\StripeService;
+use App\Services\TicketService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -35,7 +37,7 @@ class CheckoutController extends Controller
         $user = $request->user();
         $numbersOfTickets = CartService::getUserCarts($user->id);
 
-        $paginator = $ticketRepository->selectPaginatedTicketsByIds(array_keys($numbersOfTickets));
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon(), array_keys($numbersOfTickets));
 
         return Inertia::render('Review', [
             'tickets' => TicketResource::collection($paginator),
@@ -58,16 +60,24 @@ class CheckoutController extends Controller
 
             $user = $request->user();
             $numbersOfTickets = CartService::getUserCarts($user->id);
-            $tickets = $ticketRepository->selectByIdsForUpdate(array_keys($numbersOfTickets));
+            if ($numbersOfTickets === []) {
+                throw new InvalidArgumentException("No items in the cart. user_id: {$user->id}");
+            }
 
-            CheckoutService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
+            $tickets = $ticketRepository->selectTicketsDuringSalesPeriodByIdsForUpdate(new Carbon(), array_keys($numbersOfTickets));
+            if ($tickets === []) {
+                CartService::deleteAllUserCarts($user->id);
+                throw new InvalidArgumentException("No valid tickets in the cart. user_id: {$user->id}");
+            }
+
+            TicketService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
 
             CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
         
             $userOrder = new UserOrder([
                 'user_id' => $user->id,
                 'amount' => 0,
-                'order_items' => CheckoutService::getOrderItems($numbersOfTickets, $tickets),
+                'order_items' => CheckoutService::createOrderItems($tickets, $numbersOfTickets),
                 'status' => CheckoutConst::ORDER_STATUS_PENDING,
             ]);
 

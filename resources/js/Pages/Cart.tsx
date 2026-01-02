@@ -53,17 +53,25 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
   }
 
   return (
-    <div>
-      <Button onClick={onClick}>Proceed to review</Button>
-      <p>{formatCurrency(totalPriceOfTicketsState)}</p>
+    <div className="space-y-1">
+      {tickets.data.length === 0 ? (
+        <p>No items in your cart.</p>
+      ) : (
+        <div>
+          <Button onClick={onClick}>Proceed to review</Button>
+          <p>{formatCurrency(totalPriceOfTicketsState)}</p>
+        </div>
+      )}
 
       {tickets.data.map((ticket) => (
         <div key={ticket.id}>
           <Link href={showTichet(ticket.id)}>
             <Ticket ticket={ticket} isEllipsis={true}/>
           </Link>
-          <Counter number={Number(numberOfTicketsState[ticket.id] ?? 0)} ticketId={ticket.id} updateNumber={updateNumber}/>
-          <FaRegTrashAlt onClick={() => destroyTicket(ticket.id)}/>
+          <div className="flex items-center gap-3">
+            <Counter number={Number(numberOfTicketsState[ticket.id] ?? 0)} ticketId={ticket.id} updateNumber={updateNumber}/>
+            <FaRegTrashAlt onClick={() => destroyTicket(ticket.id)}/>
+          </div>
         </div>
       ))}
 

@@ -33,4 +33,9 @@ class TicketConst
      * The max number of tickets
      */
     public const NUMBER_OF_TICKETS_MAX = 10000;
+
+    /**
+     * QR code expiration (minutes)
+     */
+    public const QR_CODE_EXPIRATION = 10;
 }

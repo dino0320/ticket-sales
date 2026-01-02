@@ -21,6 +21,8 @@ export type OrderData = {
 
 export function Order({ userOrder, isDetail = false }: { userOrder: OrderData, isDetail: boolean }) {
   const [isDetailState, setIsDetailState] = useState(isDetail);
+
+  const orderDate = new Date(userOrder.order_date)
     
   async function onClick() {
     setIsDetailState(prev => !prev)
@@ -50,10 +52,10 @@ export function Order({ userOrder, isDetail = false }: { userOrder: OrderData, i
       </CardHeader>
       <CardContent>
         {orderItems}
-        <Button onClick={onClick}>Show {isDetailState ? 'less' : 'more'}</Button>
+        <Button onClick={onClick} variant="link">Show {isDetailState ? 'less' : 'more'}</Button>
       </CardContent>
       <CardFooter>
-        {userOrder.order_date}
+        {orderDate.toLocaleString()}
       </CardFooter>
     </Card>
   )

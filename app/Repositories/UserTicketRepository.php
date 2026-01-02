@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Consts\PaginationConst;
 use App\Models\UserTicket;
 use App\Repositories\Repository;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserTicketRepository extends Repository
 {
@@ -13,14 +15,15 @@ class UserTicketRepository extends Repository
     protected string $modelName = UserTicket::class;
 
     /**
-     * Select not used tickets by user_id
+     * Select paginated not used tickets by user_id
      *
      * @param integer $userId
-     * @return UserTicket[]
+     * @param integer $numberOfItemsPerPage
+     * @return LengthAwarePaginator
      */
-    public function selectNotUsedTicketsByUserId(int $userId): array
+    public function selectPaginatedNotUsedTicketsByUserId(int $userId, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
-        return UserTicket::where('user_id', $userId)->whereNull('used_at')->get()->all();
+        return UserTicket::where('user_id', $userId)->whereNull('used_at')->paginate($numberOfItemsPerPage);
     }
 
     /**

@@ -14,7 +14,6 @@ class UserTicket extends Model
     protected $fillable = [
         'user_id',
         'ticket_id',
-        'number_of_tickets',
         'used_at',
     ];
 

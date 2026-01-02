@@ -1,28 +1,31 @@
 import { index } from '@/actions/App/Http/Controllers/Admin/OrganizerApplicationController';
-import { Link } from '@inertiajs/react'
+import { usePage, Link } from '@inertiajs/react'
 import type { ReactNode } from 'react'
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from '@/components/ui/navigation-menu'
+import type { AuthData } from '@/components/shared-data'
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
+  const { auth } = usePage<AuthData>().props
+  
+  const organizerApplication = auth.user === null ? null : (
+    <NavigationMenuItem>
+      <NavigationMenuLink asChild>
+        <Link href={index()}>Organizer Application</Link>
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  )
+
   return (
     <main>
       <header>
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link href={index()}>Organizer Application</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+            {organizerApplication}
           </NavigationMenuList>
         </NavigationMenu>
       </header>

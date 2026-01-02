@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Consts\TicketConst;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserTicket;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class TicketService
@@ -109,26 +110,20 @@ class TicketService
     }
 
     /**
-     * Whether the number of tickets can be updated
+     * Whether the number of tickets is valid
      *
-     * @param integer $numberOfTickets
-     * @param Ticket $ticket
+     * @param Carbon $eventStartDate
+     * @param Carbon $eventEndDate
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @param Ticket|null $ticket
      * @param array $errorMessage
      * @return boolean
      */
-    public static function canUpdateNumberOfTickets(int $numberOfTickets, Ticket $ticket, array &$errorMessage = []): bool
+    public static function isNumberOfTicketsValid(int $numberOfTickets, Ticket $ticket = null, array &$errorMessage = []): bool
     {
-        if ($numberOfTickets === $ticket->initial_number_of_tickets) {
-            return true;
-        }
-
-        if ($numberOfTickets < TicketConst::NUMBER_OF_TICKETS_MIN || $numberOfTickets > TicketConst::NUMBER_OF_TICKETS_MAX) {
-            $errorMessage = ['number_of_tickets' => sprintf('The number of tickets must be more than %1$d and less than %2$d.', TicketConst::NUMBER_OF_TICKETS_MIN, TicketConst::NUMBER_OF_TICKETS_MAX)];
-            return false;
-        }
-
-        if (TicketService::isDuringSalesPeriod($ticket)) {
-            $errorMessage = ['number_of_tickets' => 'The number of tickets cannot be changed.'];
+        if ($numberOfTickets < $ticket->number_of_tickets) {
+            $errorMessage = ['number_of_tickets' => 'The number of tickets must be the current number or more.'];
             return false;
         }
 
@@ -160,5 +155,65 @@ class TicketService
         if ($now < $ticket->event_start_date || $now > $ticket->event_end_date) {
             throw new InvalidArgumentException("The ticket is outside the specified time period. ticket_id: {$ticket->id}");
         }
+    }
+
+    /**
+     * Check if the given number is not less than 0 or more than the number of tickets
+     *
+     * @param integer $numberOfTickets
+     * @param Ticket $ticket
+     * @return void
+     */
+    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
+    {
+        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
+            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
+        }
+    }
+
+    /**
+     * Check if the given numbers are not less than 0 or more than the numbers of tickets
+     *
+     * @param int[] $numbersOfTickets
+     * @param Ticket[] $tickets
+     * @param int[] $numbersOfReservedTickets
+     * @return void
+     */
+    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets): void
+    {
+        foreach ($tickets as $ticket) {
+            self::checkIfNumberOfTicketsIsValid($numbersOfTickets[$ticket->id], $ticket);
+        }
+    }
+
+    /**
+     * Update user ticket data in paginator
+     *
+     * @param LengthAwarePaginator $paginator
+     * @param Ticket[] $tickets
+     * @return void
+     */
+    public static function updateUserTicketDataInPaginator(LengthAwarePaginator $paginator, array $tickets): void
+    {
+        $tickets = array_column($tickets, null, 'id');
+
+        $userTicketData = [];
+        foreach ($paginator->getCollection() as $userTicket) {
+            $ticket = $tickets[$userTicket->ticket_id] ?? null;
+            if ($ticket === null) {
+                continue;
+            }
+            
+            $userTicketData[] = [
+                'id' => $userTicket->id,
+                'event_title' => $ticket->event_title,
+                'event_description' => $ticket->event_description,
+                'price' => MoneyService::convertCentsToDollars($ticket->price),
+                'event_start_date' => $ticket->event_start_date,
+                'event_end_date' => $ticket->event_end_date,
+            ];
+        }
+
+        $paginator->setCollection(new Collection($userTicketData));
     }
 }

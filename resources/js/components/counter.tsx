@@ -10,7 +10,7 @@ export function Counter({ number, ticketId, updateNumber }: { number: number, ti
   }
 
   return (
-    <div>
+    <div className="flex items-center gap-1 text-xl">
       <CiCircleMinus onClick={() => onClick(false)}/>{number}<CiCirclePlus onClick={() => onClick()}/>
     </div>
   )

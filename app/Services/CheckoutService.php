@@ -5,41 +5,10 @@ namespace App\Services;
 use App\Models\Ticket;
 use App\Models\UserOrder;
 use App\Models\UserTicket;
-use InvalidArgumentException;
 use RuntimeException;
 
 class CheckoutService
 {
-    /**
-     * Check if the given number is not less than 0 or more than the number of tickets
-     *
-     * @param integer $numberOfTickets
-     * @param Ticket $ticket
-     * @return void
-     */
-    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
-    {
-        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
-            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
-        }
-    }
-
-    /**
-     * Check if the given numbers are not less than 0 or more than the numbers of tickets
-     *
-     * @param int[] $numbersOfTickets
-     * @param Ticket[] $tickets
-     * @param int[] $numbersOfReservedTickets
-     * @return void
-     */
-    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets): void
-    {
-        $tickets = array_column($tickets, null, 'id');
-        foreach ($numbersOfTickets as $ticketId => $numberOfTickets) {
-            self::checkIfNumberOfTicketsIsValid($numberOfTickets, $tickets[$ticketId]);
-        }
-    }
-
     /**
      * Increase the numbers of reserved tickets
      *
@@ -55,18 +24,14 @@ class CheckoutService
     }
 
     /**
-     * Get order items
+     * Create order items
      *
-     * @param int[] $numberOfTickets
      * @param Ticket[] $tickets
+     * @param int[] $numbersOfTickets
      * @return array
      */
-    public static function getOrderItems(array $numbersOfTickets, array $tickets): array
+    public static function createOrderItems(array $tickets, array $numbersOfTickets): array
     {
-        if ($numbersOfTickets === []) {
-            return [];
-        }
-
         $orderItems = [];
         foreach ($tickets as $ticket) {
             $orderItems[] = [
@@ -155,12 +120,13 @@ class CheckoutService
     {
         $userTickets = [];
         foreach ($userOrder->order_items as $orderItem) {
-            $userTickets[] = new UserTicket([
-                'user_id' => $userOrder->user_id,
-                'ticket_id' => $orderItem['ticket_id'],
-                'number_of_tickets' => $orderItem['number_of_tickets'],
-                'used_at' => null,
-            ]);
+            for ($i = 0; $i < $orderItem['number_of_tickets']; $i++) {
+                $userTickets[] = new UserTicket([
+                    'user_id' => $userOrder->user_id,
+                    'ticket_id' => $orderItem['ticket_id'],
+                    'used_at' => null,
+                ]);
+            }
         }
 
         return $userTickets;

@@ -33,7 +33,7 @@ class TicketController extends Controller
     public function show(Ticket $ticket): Response
     {
         if (!TicketService::isDuringSalesPeriod($ticket)) {
-            throw new NotFoundHttpException('The ticket is outside the specified time period.');
+            throw new NotFoundHttpException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
         }
 
         return Inertia::render('TicketDetail', [
@@ -44,23 +44,22 @@ class TicketController extends Controller
     /**
      * Show a purchased ticket detail
      *
-     * @param Ticket $ticket
+     * @param UserTicket $ticket
      * @return Response
      */
-    public function showUserTicket(Request $request, Ticket $ticket): Response
+    public function showUserTicket(UserTicket $userTicket): Response
     {
+        $ticketRepository = new TicketRepository();
+
+        $ticket = $ticketRepository->selectById($userTicket->ticket_id);
+
         TicketService::checkIfEventIsOver($ticket);
-
-        $userTicketRepository = new UserTicketRepository();
-
-        $user = $request->user();
-        $userTicket = $userTicketRepository->selectByUserIdAndTicketId($user->id, $ticket->id);
 
         TicketService::checkIfTicketIsUsed($userTicket);
 
         return Inertia::render('UserTicketDetail', [
             'ticket' => new TicketResource($ticket),
-            'ticket_use_url' => URL::temporarySignedRoute('user-tickets.use', now()->addMinutes(10), ['user_ticket' => $userTicket->id]),
+            'ticket_use_url' => URL::temporarySignedRoute('user-tickets.use', now()->addMinutes(TicketConst::QR_CODE_EXPIRATION), ['user_ticket' => $userTicket->id]),
         ]);
     }
 
@@ -94,8 +93,8 @@ class TicketController extends Controller
             'price' => [
                 'required',
                 'decimal:0,2',
-                'min:' . MoneyService::convertDollarsToCents(TicketConst::PRICE_MIN),
-                'max:' . MoneyService::convertDollarsToCents(TicketConst::PRICE_MAX),
+                'min:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MIN),
+                'max:' . MoneyService::convertCentsToDollars(TicketConst::PRICE_MAX),
             ],
             'number_of_tickets' => ['required', 'integer', 'min:' . TicketConst::NUMBER_OF_TICKETS_MIN, 'max:' . TicketConst::NUMBER_OF_TICKETS_MAX],
             'event_start_date' => ['required', 'date'],
@@ -176,18 +175,17 @@ class TicketController extends Controller
             $eventEndDate = $request->date('event_end_date');
 
             $errorMessage = [];
-            if (!TicketService::canUpdateNumberOfTickets($request->number_of_tickets, $ticket, $errorMessage)) {
+            if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $ticket, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
-
+            
             if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
-
-            $ticket->initial_number_of_tickets = $request->number_of_tickets;
-            $ticket->number_of_tickets = $request->number_of_tickets;
             
             if (!TicketService::isDuringSalesPeriod($ticket)) {
+                $ticket->initial_number_of_tickets += ($request->number_of_tickets - $ticket->number_of_tickets);
+                $ticket->number_of_tickets = $request->number_of_tickets;
                 $ticket->start_date = $startDate;
             }
 

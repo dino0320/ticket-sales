@@ -31,32 +31,50 @@ class TicketRepository extends Repository
     }
 
     /**
-     * Select paginated tickets by ids
+     * Select tickets during the sales period by ids for update
      *
+     * @param Carbon $now
+     * @param int[] $ids
+     * @return Ticket[]
+     */
+    public function selectTicketsDuringSalesPeriodByIdsForUpdate(Carbon $now, array $ids): array
+    {
+        return Ticket::where([
+            ['start_date', '<=', $now],
+            ['end_date', '>=', $now],
+        ])->whereIn('id', $ids)->lockForUpdate()->get()->all();
+    }
+
+    /**
+     * Select paginated tickets during the sales period by ids
+     *
+     * @param Carbon $now
      * @param int[] $ids
      * @param integer $numberOfItemsPerPage
      * @return LengthAwarePaginator
      */
-    public function selectPaginatedTicketsByIds(array $ids, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
+    public function selectPaginatedTicketsDuringSalesPeriodByIds(Carbon $now, array $ids, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
     {
-        return Ticket::whereIn('id', $ids)->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
+        return Ticket::where([
+            ['start_date', '<=', $now],
+            ['end_date', '>=', $now],
+        ])->whereIn('id', $ids)->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
     }
 
     /**
-     * Select paginated tickets during the event by ids
+     * Select tickets during the event by ids
      *
      * @param int[] $ids
      * @param Carbon $now
      * @param integer $numberOfItemsPerPage
-     * @return LengthAwarePaginator
+     * @return Ticket[]
      */
-    public function selectPaginatedTicketsDuringEventByIds(array $ids, Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
+    public function selectTicketsDuringEventByIds(array $ids, Carbon $now): array
     {
         return Ticket::where('event_end_date', '>=', $now)
             ->whereIn('id', $ids)
             ->orderBy('event_start_date', 'asc')
-            ->orderBy('id', 'asc')
-            ->paginate($numberOfItemsPerPage);
+            ->orderBy('id', 'asc')->get()->all();
     }
 
     /**

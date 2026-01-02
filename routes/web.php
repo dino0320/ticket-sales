@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/my-account', [AccountController::class, 'show']);
 
-    Route::get('/user-tickets/{ticket}', [TicketController::class, 'showUserTicket']);
+    Route::get('/user-tickets/{user_ticket}', [TicketController::class, 'showUserTicket']);
 
     Route::get('/user-tickets/{user_ticket}/use', [TicketController::class, 'useTicket'])->name('user-tickets.use');
 
