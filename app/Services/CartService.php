@@ -163,7 +163,13 @@ class CartService
             return;
         }
 
+        $numbersOfTickets = self::getCart($guestCartId);
+        if ($numbersOfTickets === []) {
+            return;
+        }
+
         self::deleteCart($user->id);
-        self::setCart($user->id, self::getCart($guestCartId));
+        self::setCart($user->id, $numbersOfTickets);
+        self::deleteCart($guestCartId);
     }
 }

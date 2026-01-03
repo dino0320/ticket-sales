@@ -95,6 +95,16 @@ class AccountController extends Controller
     }
 
     /**
+     * Sign out
+     */
+    public function signOut(): RedirectResponse
+    {
+        Auth::logout();
+ 
+        return redirect()->intended('/home');
+    }
+
+    /**
      * Show user account
      *
      * @param Request $request

@@ -49,13 +49,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/user-tickets/{user_ticket}/use', [TicketController::class, 'useTicket'])->name('user-tickets.use');
 
+    Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
+
     Route::get('/reset-password', function () {
         return Inertia::render('ResetPassword');
     })->name('reset-password');
     
     Route::post('/reset-password', [AccountController::class, 'resetPassword']);
 
-    Route::get('/order-history', [AccountController::class, 'showOrderHistory']);
+    Route::post('/sign-out', [AccountController::class, 'signOut']);
 
     Route::get('/organizer-application', function () {
         return Inertia::render('OrganizerApplication');

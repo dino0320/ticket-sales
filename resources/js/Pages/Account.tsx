@@ -1,7 +1,7 @@
-import { showOrderHistory,showIssuedTickets } from '@/actions/App/Http/Controllers/AccountController'
+import { signOut, showOrderHistory,showIssuedTickets } from '@/actions/App/Http/Controllers/AccountController'
 import { resetPassword, organizerApplication } from '@/routes/index'
 import { showUserTicket } from '@/actions/App/Http/Controllers/TicketController'
-import { usePage, Link } from '@inertiajs/react'
+import { usePage, Link, router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'
@@ -18,10 +18,11 @@ export default function Account({ tickets, isOrganizerApplicationApplied }: { ti
         <h2 className="text-2xl font-bold">Account</h2>
 
         <div className="flex gap-1">
-          <a href={showOrderHistory().url}><Button>Order history</Button></a>
-          <a href={resetPassword().url}><Button variant="outline">Reset password</Button></a>
+          <a href={showOrderHistory().url}><Button>Order History</Button></a>
+          <a href={resetPassword().url}><Button variant="outline">Reset Password</Button></a>
           {isOrganizerApplicationApplied ? '' : <a href={organizerApplication().url}><Button variant="outline">Organizer Application</Button></a>}
           {auth.user.is_organizer ? <a href={showIssuedTickets().url}><Button variant="outline">Issued Tickets</Button></a> : ''}
+          <Button variant="destructive" onClick={() => router.post(signOut())}>Sign Out</Button>
         </div>
       </section>
 
