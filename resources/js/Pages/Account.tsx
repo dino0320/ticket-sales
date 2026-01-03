@@ -14,6 +14,8 @@ export default function Account({ tickets, isOrganizerApplicationApplied }: { ti
 
   return (
     <div className="space-y-4">
+      <p className="text-xl font-bold">Hello, {auth.user.name}</p>
+
       <section className="space-y-1">
         <h2 className="text-2xl font-bold">Account</h2>
 
