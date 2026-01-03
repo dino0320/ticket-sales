@@ -56,15 +56,15 @@ class CheckoutController extends Controller
     {
         $userOrderRepository = new UserOrderRepository();
 
-        $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist.');
+        $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist');
  
         $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
  
         if ($session->payment_status !== 'paid') {
-            throw new InvalidArgumentException('The order hasn\'t paid.');
+            throw new InvalidArgumentException('The order hasn\'t paid');
         }
         
-        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing.');;
+        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing');
         
         $userOrder = $userOrderRepository->selectById($userOrderId);
 

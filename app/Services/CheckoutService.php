@@ -107,7 +107,7 @@ class CheckoutService
     {
         foreach ($tickets as $ticket) {
             if (($ticket->number_of_tickets - $numbersOfTickets[$ticket->id]) <= 0) {
-                throw new RuntimeException("The number of tickets is 0 or less. ticket_id: {$ticket->id}");
+                throw new RuntimeException("Not enough tickets available. ticket_id: {$ticket->id}");
             }
             
             $ticket->number_of_tickets -= $numbersOfTickets[$ticket->id];
@@ -125,7 +125,7 @@ class CheckoutService
     {
         foreach ($tickets as $ticket) {
             if (($ticket->number_of_reserved_tickets - $numbersOfTickets[$ticket->id]) < 0) {
-                throw new RuntimeException("The number of reserved tickets is less than 0. ticket_id: {$ticket->id}");
+                throw new RuntimeException("Not enough reserved tickets available. ticket_id: {$ticket->id}");
             }
             
             $ticket->number_of_reserved_tickets -= $numbersOfTickets[$ticket->id];

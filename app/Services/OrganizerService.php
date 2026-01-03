@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Consts\AccountConst;
 use App\Models\User;
 use App\Models\UserOrganizerApplication;
-use InvalidArgumentException;
+use RuntimeException;
 
 class OrganizerService
 {
@@ -40,6 +40,6 @@ class OrganizerService
             return;
         }
 
-        throw new InvalidArgumentException("The User ID is not an organizer. user_id: {$user->id}");
+        throw new RuntimeException("The user is not an organizer. user_id: {$user->id}");
     }
 }

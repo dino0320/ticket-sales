@@ -6,7 +6,7 @@ use App\Consts\CartConst;
 use App\Models\Ticket;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
-use InvalidArgumentException;
+use RuntimeException;
 
 class CartService
 {
@@ -71,7 +71,7 @@ class CartService
      */
     public static function getUserCart(int $userId, int $ticketId): int
     {
-        return Redis::hGet(self::getUserCartKey($userId), $ticketId) ?? throw new InvalidArgumentException("Can't get this ticket. ticket_id: {$ticketId}");
+        return Redis::hGet(self::getUserCartKey($userId), $ticketId) ?? throw new RuntimeException("Failed to get the ticket. ticket_id: {$ticketId}");
     }
 
     /**

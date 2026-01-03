@@ -64,7 +64,7 @@ class OrganizerApplicationController extends Controller
             throw new InvalidArgumentException("Invalid organizer application status. status: {$userOrganizerApplication->status}");
         }
 
-        $user = $userRepository->selectById($userOrganizerApplication->user_id) ?? throw new InvalidArgumentException("There is not this user. user_id: {$userOrganizerApplication->user_id}");
+        $user = $userRepository->selectById($userOrganizerApplication->user_id) ?? throw new InvalidArgumentException("The user was not found. user_id: {$userOrganizerApplication->user_id}");
 
         if ($user->is_organizer) {
             throw new InvalidArgumentException("This user is already an organizer. user_id: {$user->id}");

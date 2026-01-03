@@ -71,7 +71,7 @@ class TicketController extends Controller
      */
     public function showIssuedTicket(Request $request, Ticket $ticket): Response
     {
-        TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
+        TicketService::checkIfUserIsOrganizerOfTicket($request->user(), $ticket);
 
         return Inertia::render('EditIssuedTicket', [
             'ticket' => new IssuedTicketResource($ticket),
@@ -167,7 +167,7 @@ class TicketController extends Controller
 
             $ticketRepository = new TicketRepository();
 
-            TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
+            TicketService::checkIfUserIsOrganizerOfTicket($request->user(), $ticket);
 
             $startDate = $request->date('start_date');
             $endDate = $request->date('end_date');
@@ -216,7 +216,7 @@ class TicketController extends Controller
 
             $ticket = $ticketRepository->selectById($userTicket->ticket_id);
 
-            TicketService::checkIfUserIsOrganizerForTicket($request->user(), $ticket);
+            TicketService::checkIfUserIsOrganizerOfTicket($request->user(), $ticket);
             TicketService::checkIfTicketIsDuringEvent($ticket);
 
             $userTicket->used_at = new Carbon();

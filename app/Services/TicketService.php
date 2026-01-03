@@ -8,7 +8,7 @@ use App\Models\UserTicket;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
+use RuntimeException;
 
 class TicketService
 {
@@ -34,7 +34,7 @@ class TicketService
     {
         $now = new Carbon();
         if ($now < $ticket->event_start_date || $now > $ticket->event_end_date) {
-            throw new InvalidArgumentException("The ticket is outside the specified time period. ticket_id: {$ticket->id}");
+            throw new RuntimeException("The ticket is outside the event period. ticket_id: {$ticket->id}");
         }
     }
 
@@ -48,7 +48,7 @@ class TicketService
     {
         $now = new Carbon();
         if ($now > $ticket->event_end_date) {
-            throw new InvalidArgumentException("The event is over. ticket_id: {$ticket->id}");
+            throw new RuntimeException("The event is over. ticket_id: {$ticket->id}");
         }
     }
 
@@ -77,7 +77,7 @@ class TicketService
     public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
     {
         if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
-            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
+            throw new RuntimeException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
         }
     }
 
@@ -88,7 +88,7 @@ class TicketService
      * @param Ticket $ticket
      * @return void
      */
-    public static function checkIfUserIsOrganizerForTicket(User $user, Ticket $ticket): void
+    public static function checkIfUserIsOrganizerOfTicket(User $user, Ticket $ticket): void
     {
         OrganizerService::checkIfUserIsOrganizer($user);
 
@@ -96,7 +96,7 @@ class TicketService
             return;
         }
 
-        throw new InvalidArgumentException("The User ID is not the organizer's User ID of this ticket. user_id: {$user->id}, ticket_id: {$ticket->organizer_user_id}");
+        throw new RuntimeException("The user is not an organizer of the ticket. user_id: {$user->id}, ticket_id: {$ticket->organizer_user_id}");
     }
 
     /**
@@ -182,7 +182,7 @@ class TicketService
     public static function checkIfTicketIsUsed(UserTicket $userTicket): void
     {
         if ($userTicket->used_at !== null) {
-            throw new InvalidArgumentException("The ticket has already been used. user_ticket_id: {$userTicket->id}");
+            throw new RuntimeException("The ticket has already been used. user_ticket_id: {$userTicket->id}");
         }
     }
 
