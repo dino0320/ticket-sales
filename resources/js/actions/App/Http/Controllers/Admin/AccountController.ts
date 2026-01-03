@@ -33,6 +33,40 @@ authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
-const AccountController = { authenticate }
+/**
+* @see \App\Http\Controllers\Admin\AccountController::signOut
+* @see app/Http/Controllers/Admin/AccountController.php:37
+* @route '/admin/sign-out'
+*/
+export const signOut = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: signOut.url(options),
+    method: 'post',
+})
+
+signOut.definition = {
+    methods: ["post"],
+    url: '/admin/sign-out',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\Admin\AccountController::signOut
+* @see app/Http/Controllers/Admin/AccountController.php:37
+* @route '/admin/sign-out'
+*/
+signOut.url = (options?: RouteQueryOptions) => {
+    return signOut.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\Admin\AccountController::signOut
+* @see app/Http/Controllers/Admin/AccountController.php:37
+* @route '/admin/sign-out'
+*/
+signOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: signOut.url(options),
+    method: 'post',
+})
+
+const AccountController = { authenticate, signOut }
 
 export default AccountController

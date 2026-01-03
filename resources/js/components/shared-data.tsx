@@ -3,6 +3,7 @@ export type AuthData = {
     user: {
       name: string,
       is_organizer: boolean,
-    }
+    },
+    is_admin: boolean,
   }
 }

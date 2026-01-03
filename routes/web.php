@@ -93,6 +93,8 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         return Inertia::render('Admin/Dashboard');
     });
 
+    Route::post('/sign-out', [AdminAccountController::class, 'signOut']);
+
     Route::get('/organizer-applications', [OrganizerApplicationController::class, 'index']);
 
     Route::get('/organizer-applications/{user_organizer_application}', [OrganizerApplicationController::class, 'show']);

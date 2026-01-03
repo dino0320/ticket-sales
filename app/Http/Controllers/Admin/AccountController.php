@@ -30,4 +30,14 @@ class AccountController extends Controller
             'root' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
     }
+
+    /**
+     * Sign out
+     */
+    public function signOut(Request $request): RedirectResponse
+    {
+        Auth::logout();
+ 
+        return redirect()->intended('/home');
+    }
 }
