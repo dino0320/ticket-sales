@@ -1,17 +1,18 @@
-import { show as showTichet } from '@/actions/App/Http/Controllers/TicketController';
-import { update, destroy } from '@/actions/App/Http/Controllers/CartController';
-import { show as showReview } from '@/actions/App/Http/Controllers/CheckoutController';
+import { show as showTichet } from '@/actions/App/Http/Controllers/TicketController'
+import { update, destroy } from '@/actions/App/Http/Controllers/CartController'
+import { show as showReview } from '@/actions/App/Http/Controllers/CheckoutController'
 import { useState, useEffect } from 'react'
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaRegTrashAlt } from 'react-icons/fa'
 import { Link, router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 import { Counter } from '@/components/counter'
 import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'
 import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
 import { formatCurrency } from '@/lib/utils'
-import axios from 'axios';
+import axios from 'axios'
 
 type NumberOfTickets = {[id: number]: number}
 
@@ -38,11 +39,11 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
       const updateRoute = update(ticketId)
       const response = await axios.put(updateRoute.url, {
         number_of_tickets: number,
-      });
+      })
       setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
       setTotalPriceOfTicketsState(prev => prev - response.data.differenceInTotalPrice)
     } catch (error) {
-      console.error('Failed to update the number of thickets', error)
+      toast.error('Failed to update the number of thickets')
     }
   }
 

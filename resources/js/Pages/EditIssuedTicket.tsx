@@ -1,9 +1,9 @@
-import { update } from '@/actions/App/Http/Controllers/TicketController';
+import { update } from '@/actions/App/Http/Controllers/TicketController'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
-import { useState } from 'react';
+import { useState } from 'react'
 import { setManualFormErrors } from '@/lib/form-utils'
 
 import {
@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from 'sonner'
 
 import { formatCurrency } from '@/lib/utils'
 import { editIssuedTicketFormSchema } from '@/lib/validation-schemas'
@@ -53,6 +54,7 @@ export default function EditIssuedTicket({ ticket, isDuringSalesPeriod }: { tick
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     router.put(update(ticket.id), values, { 
+      onSuccess: () => toast.success('The ticket has been updated'),
       onError: (errors: Record<string, string>) => setManualFormErrors(errors, form, setErrorMessage),
       onFinish: () => setIsLoading(false)
     })

@@ -1,6 +1,7 @@
-import { store } from '@/actions/App/Http/Controllers/CartController';
+import { store } from '@/actions/App/Http/Controllers/CartController'
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
+import { toast } from 'sonner'
 import { LoadingButton } from '@/components/loading-button'
 import { Counter } from '@/components/counter'
 import { Ticket } from '@/components/ticket'
@@ -8,7 +9,7 @@ import type { TicketData } from '@/components/ticket'
 
 export default function TicketDetail({ ticket }: { ticket: TicketData }) {
   const [isLoading, setIsLoading] = useState(false)
-  const [numberOfTickets, setNumberOfTickets] = useState(1);
+  const [numberOfTickets, setNumberOfTickets] = useState(1)
 
   async function onClick() {
     if (isLoading) {
@@ -17,7 +18,7 @@ export default function TicketDetail({ ticket }: { ticket: TicketData }) {
 
     setIsLoading(true)
     router.post(store(ticket.id), { number_of_tickets: numberOfTickets }, {
-      onSuccess: () => console.log('The thicket was added to cart'),
+      onSuccess: () => toast.success('The ticket has been added to your cart'),
       onFinish: () => setIsLoading(false)
     })
   }
