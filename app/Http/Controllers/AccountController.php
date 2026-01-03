@@ -137,6 +137,24 @@ class AccountController extends Controller
     }
 
     /**
+     * Show issued tickets
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function showIssuedTickets(Request $request): Response
+    {
+        $ticketRepository = new TicketRepository();
+
+        $user = $request->user();
+        $paginator = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
+
+        return Inertia::render('IssuedTicketIndex', [
+            'tickets' => TicketResource::collection($paginator),
+        ]);
+    }
+
+    /**
      * Reset password
      *
      * @param Request $request
@@ -174,7 +192,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Apply to be an organizer
+     * Apply to be organizer
      *
      * @param Request $request
      * @return RedirectResponse
@@ -213,23 +231,5 @@ class AccountController extends Controller
  
             return redirect()->intended('/my-account');
         });
-    }
-
-    /**
-     * Show issued tickets
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function showIssuedTickets(Request $request): Response
-    {
-        $ticketRepository = new TicketRepository();
-
-        $user = $request->user();
-        $paginator = $ticketRepository->selectPaginatedTicketsByOrganizerUserId($user->id);
-
-        return Inertia::render('IssuedTicketIndex', [
-            'tickets' => TicketResource::collection($paginator),
-        ]);
     }
 }

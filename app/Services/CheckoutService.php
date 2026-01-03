@@ -10,17 +10,30 @@ use RuntimeException;
 class CheckoutService
 {
     /**
-     * Increase the numbers of reserved tickets
+     * Get stripe price ids
      *
-     * @param Ticket[] $tickets
-     * @param int[] $numbersOfTickets
-     * @return void
+     * @param UserOrder $userOrder
+     * @return int[]
      */
-    public static function increaseNumbersOfReservedTickets(array $tickets, array $numbersOfTickets): void
+    public static function getStripePriceIds(UserOrder $userOrder): array
     {
-        foreach ($tickets as $ticket) {
-            $ticket->number_of_reserved_tickets += $numbersOfTickets[$ticket->id];
+        $stripePriceIds = [];
+        foreach ($userOrder->order_items as $orderItem) {
+            $stripePriceIds[$orderItem['stripe_price_id']] = ($stripePriceIds[$orderItem['stripe_price_id']] ?? 0) + $orderItem['number_of_tickets'];
         }
+
+        return $stripePriceIds;
+    }
+
+    /**
+     * Get the numbers of tickets
+     *
+     * @param UserOrder $userOrder
+     * @return int[]
+     */
+    public static function getNumbersOfTickets(UserOrder $userOrder): array
+    {
+        return array_column($userOrder->order_items, 'number_of_tickets', 'ticket_id');
     }
 
     /**
@@ -48,30 +61,39 @@ class CheckoutService
     }
 
     /**
-     * Get stripe price ids
+     * Create user tickets
      *
      * @param UserOrder $userOrder
-     * @return int[]
+     * @return UserTicket[]
      */
-    public static function getStripePriceIds(UserOrder $userOrder): array
+    public static function createUserTickets(UserOrder $userOrder): array
     {
-        $stripePriceIds = [];
+        $userTickets = [];
         foreach ($userOrder->order_items as $orderItem) {
-            $stripePriceIds[$orderItem['stripe_price_id']] = ($stripePriceIds[$orderItem['stripe_price_id']] ?? 0) + $orderItem['number_of_tickets'];
+            for ($i = 0; $i < $orderItem['number_of_tickets']; $i++) {
+                $userTickets[] = new UserTicket([
+                    'user_id' => $userOrder->user_id,
+                    'ticket_id' => $orderItem['ticket_id'],
+                    'used_at' => null,
+                ]);
+            }
         }
 
-        return $stripePriceIds;
+        return $userTickets;
     }
 
     /**
-     * Get the numbers of tickets
+     * Increase the numbers of reserved tickets
      *
-     * @param UserOrder $userOrder
-     * @return int[]
+     * @param Ticket[] $tickets
+     * @param int[] $numbersOfTickets
+     * @return void
      */
-    public static function getNumbersOfTickets(UserOrder $userOrder): array
+    public static function increaseNumbersOfReservedTickets(array $tickets, array $numbersOfTickets): void
     {
-        return array_column($userOrder->order_items, 'number_of_tickets', 'ticket_id');
+        foreach ($tickets as $ticket) {
+            $ticket->number_of_reserved_tickets += $numbersOfTickets[$ticket->id];
+        }
     }
 
     /**
@@ -108,27 +130,5 @@ class CheckoutService
             
             $ticket->number_of_reserved_tickets -= $numbersOfTickets[$ticket->id];
         }
-    }
-
-    /**
-     * Create user tickets
-     *
-     * @param UserOrder $userOrder
-     * @return UserTicket[]
-     */
-    public static function createUserTickets(UserOrder $userOrder): array
-    {
-        $userTickets = [];
-        foreach ($userOrder->order_items as $orderItem) {
-            for ($i = 0; $i < $orderItem['number_of_tickets']; $i++) {
-                $userTickets[] = new UserTicket([
-                    'user_id' => $userOrder->user_id,
-                    'ticket_id' => $orderItem['ticket_id'],
-                    'used_at' => null,
-                ]);
-            }
-        }
-
-        return $userTickets;
     }
 }

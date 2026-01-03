@@ -13,7 +13,7 @@ use InvalidArgumentException;
 class TicketService
 {
     /**
-     * Whether a ticket is during the sales period
+     * Whether ticket is during sales period
      *
      * @param Ticket $ticket
      * @return boolean
@@ -25,7 +25,21 @@ class TicketService
     }
 
     /**
-     * Check if the event is over
+     * Check if ticket is during event
+     *
+     * @param Ticket $ticket
+     * @return void
+     */
+    public static function checkIfTicketIsDuringEvent(Ticket $ticket): void
+    {
+        $now = new Carbon();
+        if ($now < $ticket->event_start_date || $now > $ticket->event_end_date) {
+            throw new InvalidArgumentException("The ticket is outside the specified time period. ticket_id: {$ticket->id}");
+        }
+    }
+
+    /**
+     * Check if event is over
      *
      * @param Ticket $ticket
      * @return void
@@ -39,7 +53,36 @@ class TicketService
     }
 
     /**
-     * Check if the user is the organizer for a ticket
+     * Check if the given numbers are not less than 0 or more than the numbers of tickets
+     *
+     * @param int[] $numbersOfTickets
+     * @param Ticket[] $tickets
+     * @param int[] $numbersOfReservedTickets
+     * @return void
+     */
+    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets): void
+    {
+        foreach ($tickets as $ticket) {
+            self::checkIfNumberOfTicketsIsValid($numbersOfTickets[$ticket->id], $ticket);
+        }
+    }
+
+    /**
+     * Check if the given number is not less than 0 or more than the number of tickets
+     *
+     * @param integer $numberOfTickets
+     * @param Ticket $ticket
+     * @return void
+     */
+    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
+    {
+        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
+            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
+        }
+    }
+
+    /**
+     * Check if user is organizer of ticket
      *
      * @param User $user
      * @param Ticket $ticket
@@ -57,7 +100,7 @@ class TicketService
     }
 
     /**
-     * Whether the event and ticket sales dates are valid
+     * Whether event and ticket sales dates are valid
      *
      * @param Carbon $eventStartDate
      * @param Carbon $eventEndDate
@@ -94,7 +137,7 @@ class TicketService
             return true;
         }
 
-        // Not during the period
+        // Not during sales period
 
         if ($now > $startDate) {
             $errorMessage = ['start_date' => 'The ticket sales start date must be in the future.'];
@@ -131,7 +174,7 @@ class TicketService
     }
 
     /**
-     * Check if the ticket is used
+     * Check if ticket is used
      *
      * @param UserTicket $userTicket
      * @return void
@@ -140,49 +183,6 @@ class TicketService
     {
         if ($userTicket->used_at !== null) {
             throw new InvalidArgumentException("The ticket has already been used. user_ticket_id: {$userTicket->id}");
-        }
-    }
-
-    /**
-     * Check if the ticket is during the event
-     *
-     * @param Ticket $ticket
-     * @return void
-     */
-    public static function checkIfTicketIsDuringEvent(Ticket $ticket): void
-    {
-        $now = new Carbon();
-        if ($now < $ticket->event_start_date || $now > $ticket->event_end_date) {
-            throw new InvalidArgumentException("The ticket is outside the specified time period. ticket_id: {$ticket->id}");
-        }
-    }
-
-    /**
-     * Check if the given number is not less than 0 or more than the number of tickets
-     *
-     * @param integer $numberOfTickets
-     * @param Ticket $ticket
-     * @return void
-     */
-    public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
-    {
-        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
-            throw new InvalidArgumentException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
-        }
-    }
-
-    /**
-     * Check if the given numbers are not less than 0 or more than the numbers of tickets
-     *
-     * @param int[] $numbersOfTickets
-     * @param Ticket[] $tickets
-     * @param int[] $numbersOfReservedTickets
-     * @return void
-     */
-    public static function checkIfNumbersOfTicketsAreValid(array $numbersOfTickets, array $tickets): void
-    {
-        foreach ($tickets as $ticket) {
-            self::checkIfNumberOfTicketsIsValid($numbersOfTickets[$ticket->id], $ticket);
         }
     }
 

@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class TicketController extends Controller
 {
     /**
-     * Show a ticket detail
+     * Show ticket detail
      *
      * @param Ticket $ticket
      * @return Response
@@ -42,7 +42,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Show a purchased ticket detail
+     * Show purchased ticket detail
      *
      * @param UserTicket $ticket
      * @return Response
@@ -64,7 +64,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Show an issued ticket detail
+     * Show issued ticket detail
      *
      * @param Ticket $ticket
      * @return Response
@@ -80,7 +80,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Store a ticket
+     * Store ticket
      *
      * @param Request $request
      * @return RedirectResponse
@@ -146,7 +146,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Update a ticket
+     * Update ticket
      *
      * @param Request $request
      * @param Ticket $ticket
@@ -200,7 +200,7 @@ class TicketController extends Controller
     }
 
     /**
-     * Use a ticket
+     * Use ticket
      *
      * @param Request $request
      * @param UserTicket $userTicket

@@ -16,22 +16,7 @@ class TicketRepository extends Repository
     protected string $modelName = Ticket::class;
 
     /**
-     * Select paginated tickets during the sales period
-     *
-     * @param Carbon $now
-     * @param integer $numberOfItemsPerPage
-     * @return LengthAwarePaginator
-     */
-    public function selectPaginatedTicketsDuringSalesPeriod(Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
-    {
-        return Ticket::where([
-            ['start_date', '<=', $now],
-            ['end_date', '>=', $now],
-        ])->orderBy('event_start_date', 'asc')->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
-    }
-
-    /**
-     * Select tickets during the sales period by ids for update
+     * Select tickets during sales period by ids for update
      *
      * @param Carbon $now
      * @param int[] $ids
@@ -46,7 +31,22 @@ class TicketRepository extends Repository
     }
 
     /**
-     * Select paginated tickets during the sales period by ids
+     * Select paginated tickets during sales period
+     *
+     * @param Carbon $now
+     * @param integer $numberOfItemsPerPage
+     * @return LengthAwarePaginator
+     */
+    public function selectPaginatedTicketsDuringSalesPeriod(Carbon $now, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
+    {
+        return Ticket::where([
+            ['start_date', '<=', $now],
+            ['end_date', '>=', $now],
+        ])->orderBy('event_start_date', 'asc')->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
+    }
+
+    /**
+     * Select paginated tickets during sales period by ids
      *
      * @param Carbon $now
      * @param int[] $ids
@@ -62,7 +62,7 @@ class TicketRepository extends Repository
     }
 
     /**
-     * Select tickets during the event by ids
+     * Select tickets during event by ids
      *
      * @param int[] $ids
      * @param Carbon $now

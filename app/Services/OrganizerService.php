@@ -10,7 +10,7 @@ use InvalidArgumentException;
 class OrganizerService
 {
     /**
-     * Whether an organizer application is applied or not
+     * Whether organizer application is applied or not
      *
      * @param UserOrganizerApplication|null $userOrganizerApplication
      * @return boolean
@@ -29,7 +29,7 @@ class OrganizerService
     }
 
     /**
-     * Check if the user is an organizer
+     * Check if user is organizer
      *
      * @param User $user
      * @return void

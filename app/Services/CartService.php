@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class CartService
 {
     /**
-     * Get the total price of tickets
+     * Get total price of tickets
      *
      * @param Collection<Ticket> $tickets
      * @param int[] $numberOfTickets
@@ -28,7 +28,7 @@ class CartService
     }
 
     /**
-     * Get the difference in the total price of tickets
+     * Get difference in total price of tickets
      *
      * @param integer $preNumberOfTickets
      * @param integer $numberOfTickets
@@ -41,7 +41,7 @@ class CartService
     }
 
     /**
-     * Get a user cart key
+     * Get user cart key
      *
      * @param integer $userId
      * @return string

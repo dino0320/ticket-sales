@@ -33,7 +33,7 @@ class OrganizerApplicationController extends Controller
     }
 
     /**
-     * Show an organizer application
+     * Show organizer application
      *
      * @param UserOrganizerApplication $userOrganizerApplication
      * @return Response
@@ -46,7 +46,7 @@ class OrganizerApplicationController extends Controller
     }
 
     /**
-     * Update an organizer application status
+     * Update organizer application status
      *
      * @param UserOrganizerApplication $userOrganizerApplication
      * @return RedirectResponse

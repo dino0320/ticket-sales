@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:27
+* @see app/Http/Controllers/CartController.php:49
 * @route '/cart/{ticket}'
 */
 export const store = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:27
+* @see app/Http/Controllers/CartController.php:49
 * @route '/cart/{ticket}'
 */
 store.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ store.url = (args: { ticket: number | { id: number } } | [ticket: number | { id:
 
 /**
 * @see \App\Http\Controllers\CartController::store
-* @see app/Http/Controllers/CartController.php:27
+* @see app/Http/Controllers/CartController.php:49
 * @route '/cart/{ticket}'
 */
 store.post = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -59,7 +59,7 @@ store.post = (args: { ticket: number | { id: number } } | [ticket: number | { id
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:51
+* @see app/Http/Controllers/CartController.php:27
 * @route '/cart'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -74,7 +74,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:51
+* @see app/Http/Controllers/CartController.php:27
 * @route '/cart'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -83,7 +83,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:51
+* @see app/Http/Controllers/CartController.php:27
 * @route '/cart'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -93,7 +93,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\CartController::show
-* @see app/Http/Controllers/CartController.php:51
+* @see app/Http/Controllers/CartController.php:27
 * @route '/cart'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

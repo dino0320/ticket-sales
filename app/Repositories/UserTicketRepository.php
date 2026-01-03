@@ -15,18 +15,6 @@ class UserTicketRepository extends Repository
     protected string $modelName = UserTicket::class;
 
     /**
-     * Select paginated not used tickets by user_id
-     *
-     * @param integer $userId
-     * @param integer $numberOfItemsPerPage
-     * @return LengthAwarePaginator
-     */
-    public function selectPaginatedNotUsedTicketsByUserId(int $userId, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
-    {
-        return UserTicket::where('user_id', $userId)->whereNull('used_at')->paginate($numberOfItemsPerPage);
-    }
-
-    /**
      * Select by user_id and ticket_id
      *
      * @param integer $userId
@@ -39,5 +27,17 @@ class UserTicketRepository extends Repository
             ['user_id', $userId],
             ['ticket_id', $ticketId]
         ])->first();
+    }
+
+    /**
+     * Select paginated not used tickets by user_id
+     *
+     * @param integer $userId
+     * @param integer $numberOfItemsPerPage
+     * @return LengthAwarePaginator
+     */
+    public function selectPaginatedNotUsedTicketsByUserId(int $userId, int $numberOfItemsPerPage = PaginationConst::NUMBER_OF_RECORDS_PER_PAGE): LengthAwarePaginator
+    {
+        return UserTicket::where('user_id', $userId)->whereNull('used_at')->paginate($numberOfItemsPerPage);
     }
 }

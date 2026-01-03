@@ -47,6 +47,33 @@ class CheckoutController extends Controller
     }
 
     /**
+     * Show checkout success
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function showCheckoutSuccess(Request $request): Response
+    {
+        $userOrderRepository = new UserOrderRepository();
+
+        $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist.');
+ 
+        $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
+ 
+        if ($session->payment_status !== 'paid') {
+            throw new InvalidArgumentException('The order hasn\'t paid.');
+        }
+        
+        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing.');;
+        
+        $userOrder = $userOrderRepository->selectById($userOrderId);
+
+        return Inertia::render('CheckoutSuccess', [
+            'userOrderId' => $userOrder->id,
+        ]);
+    }
+
+    /**
      * Checkout
      *
      * @param Request $request
@@ -90,32 +117,5 @@ class CheckoutController extends Controller
 
         // Invoke external APIs outside the transaction to prevent long-term DB locks
         return StripeService::checkout($request->user(), $userOrder);
-    }
-
-    /**
-     * Show checkout success
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function showCheckoutSuccess(Request $request): Response
-    {
-        $userOrderRepository = new UserOrderRepository();
-
-        $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist.');
- 
-        $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
- 
-        if ($session->payment_status !== 'paid') {
-            throw new InvalidArgumentException('The order hasn\'t paid.');
-        }
-        
-        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing.');;
-        
-        $userOrder = $userOrderRepository->selectById($userOrderId);
-
-        return Inertia::render('CheckoutSuccess', [
-            'userOrderId' => $userOrder->id,
-        ]);
     }
 }

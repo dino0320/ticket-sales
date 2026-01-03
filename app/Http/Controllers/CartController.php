@@ -19,7 +19,29 @@ use InvalidArgumentException;
 class CartController extends Controller
 {
     /**
-     * Store a ticket to cart
+     * Show user carts
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function show(Request $request): Response
+    {
+        $ticketRepository = new TicketRepository();
+
+        $user = $request->user();
+        $numbersOfTickets = CartService::getUserCarts($user->id);
+
+        $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon, array_keys($numbersOfTickets));
+
+        return Inertia::render('Cart', [
+            'tickets' => TicketResource::collection($paginator),
+            'numberOfTickets' => $numbersOfTickets,
+            'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
+        ]);
+    }
+
+    /**
+     * Store ticket to cart
      *
      * @param Request $request
      * @return RedirectResponse
@@ -43,29 +65,7 @@ class CartController extends Controller
     }
 
     /**
-     * Show user carts
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function show(Request $request): Response
-    {
-        $ticketRepository = new TicketRepository();
-
-        $user = $request->user();
-        $numbersOfTickets = CartService::getUserCarts($user->id);
-
-        $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon, array_keys($numbersOfTickets));
-
-        return Inertia::render('Cart', [
-            'tickets' => TicketResource::collection($paginator),
-            'numberOfTickets' => $numbersOfTickets,
-            'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
-        ]);
-    }
-
-    /**
-     * Update a ticket in cart
+     * Update ticket in cart
      *
      * @param Request $request
      * @param Ticket $ticket
@@ -98,7 +98,7 @@ class CartController extends Controller
     }
 
     /**
-     * Delete a ticket from cart
+     * Delete ticket from cart
      *
      * @param Request $request
      * @param Ticket $ticket
