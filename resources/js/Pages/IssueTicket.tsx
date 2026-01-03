@@ -1,9 +1,9 @@
-import { store } from '@/actions/App/Http/Controllers/TicketController';
+import { store } from '@/actions/App/Http/Controllers/TicketController'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { router } from '@inertiajs/react'
-import { useState } from 'react';
+import { useState } from 'react'
 import { setManualFormErrors, convertZodError } from '@/lib/form-utils'
 
 import {

@@ -1,4 +1,4 @@
-import { checkout } from '@/actions/App/Http/Controllers/CheckoutController';
+import { checkout } from '@/actions/App/Http/Controllers/CheckoutController'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'

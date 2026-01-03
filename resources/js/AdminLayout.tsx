@@ -1,4 +1,4 @@
-import { index } from '@/actions/App/Http/Controllers/Admin/OrganizerApplicationController';
+import { index } from '@/actions/App/Http/Controllers/Admin/OrganizerApplicationController'
 import { usePage, Link } from '@inertiajs/react'
 import type { ReactNode } from 'react'
 import {

@@ -1,4 +1,4 @@
-import { show } from '@/actions/App/Http/Controllers/Admin/OrganizerApplicationController';
+import { show } from '@/actions/App/Http/Controllers/Admin/OrganizerApplicationController'
 import { Link } from '@inertiajs/react'
 import { Pagination } from '@/components/pagination'
 import type { PaginationData } from '@/components/pagination'

@@ -1,10 +1,10 @@
-import { authenticate } from '@/actions/App/Http/Controllers/AccountController';
-import { signUp } from '@/routes/index';
+import { authenticate } from '@/actions/App/Http/Controllers/AccountController'
+import { signUp } from '@/routes/index'
 import { Link, router } from '@inertiajs/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react';
+import { useState } from 'react'
 import { setManualFormErrors } from '@/lib/form-utils'
 
 import {

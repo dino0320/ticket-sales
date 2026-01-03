@@ -15,7 +15,7 @@ export function setManualFormErrors<TFieldValues extends FieldValues>(errors: Er
 }
 
 export function convertZodError(error: ZodError): ErrorRecord {
-    const errors: ErrorRecord = {};
+    const errors: ErrorRecord = {}
 
     error.issues.forEach((issue) => {
         const name = issue.path.length > 0 ? issue.path.join('.') : 'root'

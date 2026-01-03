@@ -20,7 +20,7 @@ export type OrderData = {
 }
 
 export function Order({ userOrder, isDetail = false }: { userOrder: OrderData, isDetail: boolean }) {
-  const [isDetailState, setIsDetailState] = useState(isDetail);
+  const [isDetailState, setIsDetailState] = useState(isDetail)
 
   const orderDate = new Date(userOrder.order_date)
     

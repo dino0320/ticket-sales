@@ -1,5 +1,5 @@
-import { showIssuedTicket } from '@/actions/App/Http/Controllers/TicketController';
-import { issueTicket } from '@/routes/index';
+import { showIssuedTicket } from '@/actions/App/Http/Controllers/TicketController'
+import { issueTicket } from '@/routes/index'
 import { Link, router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'

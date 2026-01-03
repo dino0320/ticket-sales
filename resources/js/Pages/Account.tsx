@@ -1,6 +1,6 @@
-import { showOrderHistory,showIssuedTickets } from '@/actions/App/Http/Controllers/AccountController';
-import { resetPassword, organizerApplication } from '@/routes/index';
-import { showUserTicket } from '@/actions/App/Http/Controllers/TicketController';
+import { showOrderHistory,showIssuedTickets } from '@/actions/App/Http/Controllers/AccountController'
+import { resetPassword, organizerApplication } from '@/routes/index'
+import { showUserTicket } from '@/actions/App/Http/Controllers/TicketController'
 import { usePage, Link } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/pagination'
