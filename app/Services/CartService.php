@@ -4,12 +4,36 @@ namespace App\Services;
 
 use App\Consts\CartConst;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class CartService
 {
+    /**
+     * Get cart ID
+     *
+     * @param User|null $user
+     * @return string
+     */
+    public static function getCartId(?User $user): string
+    {
+        if ($user !== null) {
+            return $user->id;
+        }
+        
+        $guestCartId = Session::get('guest_cart_id');
+        if ($guestCartId === null) {
+            $guestCartId = Str::uuid();
+            Session::put('guest_cart_id', $guestCartId);
+        }
+
+        return $guestCartId;
+    }
+
     /**
      * Get total price of tickets
      *
@@ -41,74 +65,105 @@ class CartService
     }
 
     /**
-     * Get user cart key
+     * Get cart key
      *
-     * @param integer $userId
+     * @param string $cartId
      * @return string
      */
-    private static function getUserCartKey(int $userId): string
+    private static function getCartKey(string $cartId): string
     {
-        return sprintf(CartConst::CART_KEY, $userId);
+        return sprintf(CartConst::CART_KEY, $cartId);
     }
 
     /**
-     * Get user carts
+     * Get cart
      *
-     * @param integer $userId
+     * @param string $cartId
      * @return int[]
      */
-    public static function getUserCarts(int $userId): array
+    public static function getCart(string $cartId): array
     {
-        return Redis::hGetAll(self::getUserCartKey($userId));
+        return Redis::hGetAll(self::getCartKey($cartId));
     }
 
     /**
-     * Get user cart
+     * Get the number of tickets from cart
      *
-     * @param integer $userId
+     * @param string $cartId
      * @param integer $ticketId
      * @return int
      */
-    public static function getUserCart(int $userId, int $ticketId): int
+    public static function getNumberOfTicketsFromCart(string $cartId, int $ticketId): int
     {
-        return Redis::hGet(self::getUserCartKey($userId), $ticketId) ?? throw new RuntimeException("Failed to get the ticket. ticket_id: {$ticketId}");
+        return Redis::hGet(self::getCartKey($cartId), $ticketId) ?? throw new RuntimeException("Failed to get the number of tickets from cart. cart_id: {$cartId}, ticket_id: {$ticketId}");
     }
 
     /**
-     * Increase user cart
+     * Set cart
      *
-     * @param integer $userId
+     * @param string $cartId
+     * @param int[] $numbersOfTickets
+     * @return void
+     */
+    private static function setCart(string $cartId, array $numbersOfTickets): void
+    {
+        $key = self::getCartKey($cartId);
+        Redis::hMSet($key, $numbersOfTickets);
+        Redis::expire($key, CartConst::CART_EXPIRATION);
+    }
+
+    /**
+     * Increase the number of tickets in cart
+     *
+     * @param string $cartId
      * @param integer $ticketId
      * @param integer $numberOfTickets
      * @return void
      */
-    public static function increaseUserCart(int $userId, int $ticketId, int $numberOfTickets): void
+    public static function increaseNumberOfTicketsInCart(string $cartId, int $ticketId, int $numberOfTickets): void
     {
-        $key = self::getUserCartKey($userId);
+        $key = self::getCartKey($cartId);
         Redis::hIncrBy($key, $ticketId, $numberOfTickets);
         Redis::expire($key, CartConst::CART_EXPIRATION);
     }
 
     /**
-     * Delete user cart
+     * Delete ticket in cart
      *
-     * @param integer $userId
+     * @param string $cartId
      * @param integer $ticketId
      * @return void
      */
-    public static function deleteUserCart(int $userId, int $ticketId): void
+    public static function deleteTicketInCart(string $cartId, int $ticketId): void
     {
-        Redis::hDel(self::getUserCartKey($userId), $ticketId);
+        Redis::hDel(self::getCartKey($cartId), $ticketId);
     }
 
     /**
-     * Delete all user carts
+     * Delete cart
      *
-     * @param integer $userId
+     * @param string $cartId
      * @return void
      */
-    public static function deleteAllUserCarts(int $userId): void
+    public static function deleteCart(string $cartId): void
     {
-        Redis::del(self::getUserCartKey($userId));
+        Redis::del(self::getCartKey($cartId));
+    }
+
+    /**
+     * Overwrite user cart with guest cart
+     *
+     * @param User $user
+     * @return void
+     */
+    public static function overwriteUserCartWithGuestCart(User $user): void
+    {
+        $guestCartId = Session::get('guest_cart_id');
+        if ($guestCartId === null) {
+            return;
+        }
+
+        self::deleteCart($user->id);
+        self::setCart($user->id, self::getCart($guestCartId));
     }
 }

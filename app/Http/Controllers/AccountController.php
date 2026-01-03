@@ -14,6 +14,7 @@ use App\Repositories\UserOrderRepository;
 use App\Repositories\UserOrganizerApplicationRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserTicketRepository;
+use App\Services\CartService;
 use App\Services\OrganizerService;
 use App\Services\TicketService;
 use App\Supports\Validation\AccountRules;
@@ -62,6 +63,8 @@ class AccountController extends Controller
 
             Auth::login($user);
 
+            CartService::overwriteUserCartWithGuestCart($user);
+
             $request->session()->regenerate();
 
             return redirect()->intended('/home');
@@ -80,6 +83,8 @@ class AccountController extends Controller
  
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            CartService::overwriteUserCartWithGuestCart($request->user());
  
             return redirect()->intended('/home');
         }

@@ -28,8 +28,7 @@ class CartController extends Controller
     {
         $ticketRepository = new TicketRepository();
 
-        $user = $request->user();
-        $numbersOfTickets = CartService::getUserCarts($user->id);
+        $numbersOfTickets = CartService::getCart(CartService::getCartId($request->user()));
 
         $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon, array_keys($numbersOfTickets));
 
@@ -58,8 +57,7 @@ class CartController extends Controller
 
         TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
-        $user = $request->user();
-        CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets);
+        CartService::increaseNumberOfTicketsInCart(CartService::getCartId($request->user()), $ticket->id, $request->number_of_tickets);
 
         return back();
     }
@@ -77,18 +75,18 @@ class CartController extends Controller
             'number_of_tickets' => ['required', 'integer'],
         ]);
 
-        $user = $request->user();
+        $cartId = CartService::getCartId($request->user());
         if (!TicketService::isDuringSalesPeriod($ticket)) {
-            CartService::deleteUserCart($user->id, $ticket->id);
+            CartService::deleteTicketInCart($cartId, $ticket->id);
             throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
         }
 
         TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
 
-        $preNumberOfTickets = CartService::getUserCart($user->id, $ticket->id);
+        $preNumberOfTickets = CartService::getNumberOfTicketsFromCart($cartId, $ticket->id);
 
         if ($request->number_of_tickets !== $preNumberOfTickets) {
-            CartService::increaseUserCart($user->id, $ticket->id, $request->number_of_tickets - $preNumberOfTickets);
+            CartService::increaseNumberOfTicketsInCart($cartId, $ticket->id, $request->number_of_tickets - $preNumberOfTickets);
         }
 
         return response()->json([
@@ -106,8 +104,7 @@ class CartController extends Controller
      */
     public function destroy(Request $request, Ticket $ticket): RedirectResponse
     {
-        $user = $request->user();
-        CartService::deleteUserCart($user->id, $ticket->id);
+        CartService::deleteTicketInCart(CartService::getCartId($request->user()), $ticket->id);
 
         return back();
     }

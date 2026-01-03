@@ -35,7 +35,7 @@ class CheckoutController extends Controller
         $ticketRepository = new TicketRepository();
 
         $user = $request->user();
-        $numbersOfTickets = CartService::getUserCarts($user->id);
+        $numbersOfTickets = CartService::getCart($user->id);
 
         $paginator = $ticketRepository->selectPaginatedTicketsDuringSalesPeriodByIds(new Carbon(), array_keys($numbersOfTickets));
 
@@ -86,14 +86,14 @@ class CheckoutController extends Controller
             $ticketRepository = new TicketRepository();
 
             $user = $request->user();
-            $numbersOfTickets = CartService::getUserCarts($user->id);
+            $numbersOfTickets = CartService::getCart($user->id);
             if ($numbersOfTickets === []) {
                 throw new InvalidArgumentException("No items in the cart. user_id: {$user->id}");
             }
 
             $tickets = $ticketRepository->selectTicketsDuringSalesPeriodByIdsForUpdate(new Carbon(), array_keys($numbersOfTickets));
             if ($tickets === []) {
-                CartService::deleteAllUserCarts($user->id);
+                CartService::deleteCart($user->id);
                 throw new InvalidArgumentException("No valid tickets in the cart. user_id: {$user->id}");
             }
 

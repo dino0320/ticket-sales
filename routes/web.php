@@ -10,6 +10,18 @@ use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/home', [HomeController::class, 'index']);
+
+Route::post('/cart/{ticket}', [CartController::class, 'store']);
+
+Route::get('/cart', [CartController::class, 'show']);
+
+Route::put('/cart/{ticket}', [CartController::class, 'update']);
+
+Route::delete('/cart/{ticket}', [CartController::class, 'destroy']);
+
+Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
+
 Route::middleware('guest')->group(function () {
     Route::get('/sign-up', function () {
         return Inertia::render('SignUp');
@@ -25,18 +37,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'index']);
-
-    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
-
-    Route::post('/cart/{ticket}', [CartController::class, 'store']);
-
-    Route::get('/cart', [CartController::class, 'show']);
-
-    Route::put('/cart/{ticket}', [CartController::class, 'update']);
-
-    Route::delete('/cart/{ticket}', [CartController::class, 'destroy']);
-
     Route::get('/review', [CheckoutController::class, 'show'])->name('review');
 
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
@@ -75,6 +75,8 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
 });
+
+// Admin
 
 Route::middleware('guest:admin')->prefix('admin')->group(function () {
     Route::get('/sign-in', function () {
