@@ -20,6 +20,7 @@ class TicketResource extends JsonResource
             'event_title' => $this->event_title,
             'event_description' => $this->event_description,
             'price' => MoneyService::convertCentsToDollars($this->price),
+            'number_of_tickets' => $this->number_of_tickets,
             'event_start_date' => $this->event_start_date,
             'event_end_date' => $this->event_end_date,
         ];

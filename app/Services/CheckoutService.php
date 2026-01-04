@@ -106,8 +106,8 @@ class CheckoutService
     public static function decreaseNumbersOfTickets(array $tickets, array $numbersOfTickets): void
     {
         foreach ($tickets as $ticket) {
-            if (($ticket->number_of_tickets - $numbersOfTickets[$ticket->id]) <= 0) {
-                throw new RuntimeException("Not enough tickets available. ticket_id: {$ticket->id}");
+            if ($numbersOfTickets[$ticket->id] > $ticket->number_of_tickets) {
+                throw new RuntimeException("Not enough tickets available. ticket_id: {$ticket->id}, number_of_tickets: {$ticket->number_of_tickets}, used_number_of_tickets: {$numbersOfTickets[$ticket->id]}");
             }
             
             $ticket->number_of_tickets -= $numbersOfTickets[$ticket->id];
@@ -124,8 +124,8 @@ class CheckoutService
     public static function decreaseNumbersOfReservedTickets(array $tickets, array $numbersOfTickets): void
     {
         foreach ($tickets as $ticket) {
-            if (($ticket->number_of_reserved_tickets - $numbersOfTickets[$ticket->id]) < 0) {
-                throw new RuntimeException("Not enough reserved tickets available. ticket_id: {$ticket->id}");
+            if ($numbersOfTickets[$ticket->id] > $ticket->number_of_reserved_tickets) {
+                throw new RuntimeException("Not enough reserved tickets available. ticket_id: {$ticket->id}, number_of_reserved_tickets: {$ticket->number_of_reserved_tickets}, used_number_of_tickets: {$numbersOfTickets[$ticket->id]}");
             }
             
             $ticket->number_of_reserved_tickets -= $numbersOfTickets[$ticket->id];

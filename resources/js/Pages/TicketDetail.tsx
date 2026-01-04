@@ -11,6 +11,8 @@ export default function TicketDetail({ ticket }: { ticket: TicketData }) {
   const [isLoading, setIsLoading] = useState(false)
   const [numberOfTickets, setNumberOfTickets] = useState(1)
 
+  const isOnSale = ticket.number_of_tickets !== 0;
+
   async function onClick() {
     if (isLoading) {
       return
@@ -35,7 +37,7 @@ export default function TicketDetail({ ticket }: { ticket: TicketData }) {
     <div>
       <Ticket ticket={ticket}/>
       <Counter number={numberOfTickets} ticketId={ticket.id} updateNumber={updateNumber}/>
-      <LoadingButton onClick={onClick} isLoading={isLoading}>Add to cart</LoadingButton>
+      <LoadingButton onClick={onClick} isLoading={isLoading} disabled={!isOnSale}>{isOnSale ? "Add to cart" : "Sold Out"}</LoadingButton>
     </div>
   )
 }

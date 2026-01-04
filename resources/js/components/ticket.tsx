@@ -14,6 +14,7 @@ export type TicketData = {
   event_title: string,
   event_description: string | null,
   price: number,
+  number_of_tickets: number,
   event_start_date: string,
   event_end_date: string,
 }

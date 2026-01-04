@@ -11,7 +11,7 @@ export function LoadingButton({
     asChild?: boolean
   }) {
   return (
-    <Button {...props} disabled={isLoading}>
+    <Button {...props} disabled={props.disabled || isLoading}>
       {isLoading ? <Spinner /> : ''}
       {props.children}
     </Button>

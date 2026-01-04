@@ -77,7 +77,8 @@ class TicketService
     public static function checkIfNumberOfTicketsIsValid(int $numberOfTickets, Ticket $ticket): void
     {
         if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
-            throw new RuntimeException("Invalid number_of_tickets. number_of_tickets: {$numberOfTickets}");
+            $estimatedNumberOfTickets = $ticket->number_of_tickets - $ticket->number_of_reserved_tickets;
+            throw new RuntimeException("The number of tickets is invalid. ticket_id: {$ticket->id}, number_of_tickets: {$estimatedNumberOfTickets}, used_number_of_tickets: {$numberOfTickets}");
         }
     }
 
