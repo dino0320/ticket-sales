@@ -91,7 +91,7 @@ class CartController extends Controller
 
         return response()->json([
             'numberOfTickets' => $request->number_of_tickets,
-            'differenceInTotalPrice' => MoneyService::convertCentsToDollars(CartService::getDifferenceInTotalPrice($preNumberOfTickets, $request->number_of_tickets, $ticket)),
+            'differenceInTotalPrice' => MoneyService::convertCentsToDollars(CartService::getDifferenceInTotalPrice($request->number_of_tickets, $preNumberOfTickets, $ticket)),
         ]);
     }
 

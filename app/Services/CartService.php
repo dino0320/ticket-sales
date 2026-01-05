@@ -22,7 +22,7 @@ class CartService
     public static function getCartId(?User $user): string
     {
         if ($user !== null) {
-            return $user->id;
+            return (string)$user->id;
         }
         
         $guestCartId = Session::get('guest_cart_id');
@@ -52,16 +52,16 @@ class CartService
     }
 
     /**
-     * Get difference in total price of tickets
+     * Get difference between total price of current tickets and previous tickets
      *
-     * @param integer $preNumberOfTickets
      * @param integer $numberOfTickets
+     * @param integer $preNumberOfTickets
      * @param Ticket $ticket
      * @return integer
      */
-    public static function getDifferenceInTotalPrice(int $preNumberOfTickets, int $numberOfTickets, Ticket $ticket): int
+    public static function getDifferenceInTotalPrice(int $numberOfTickets, int $preNumberOfTickets, Ticket $ticket): int
     {
-        return ($preNumberOfTickets - $numberOfTickets) * $ticket->price;
+        return ($numberOfTickets - $preNumberOfTickets) * $ticket->price;
     }
 
     /**

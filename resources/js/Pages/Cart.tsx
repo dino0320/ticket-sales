@@ -41,7 +41,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
         number_of_tickets: number,
       })
       setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
-      setTotalPriceOfTicketsState(prev => prev - response.data.differenceInTotalPrice)
+      setTotalPriceOfTicketsState(prev => prev + response.data.differenceInTotalPrice)
     } catch (error) {
       toast.error('Failed to update the number of thickets')
     }
