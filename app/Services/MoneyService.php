@@ -12,16 +12,16 @@ class MoneyService
      */
     public static function convertDollarsToCents(float $dollars): int
     {
-        return $dollars * 100;
+        return (int)($dollars * 100);
     }
 
     /**
      * Convert cents to dollars
      *
-     * @param float $cents
+     * @param integer $cents
      * @return float
      */
-    public static function convertCentsToDollars(float $cents): float
+    public static function convertCentsToDollars(int $cents): float
     {
         return $cents / 100;
     }
