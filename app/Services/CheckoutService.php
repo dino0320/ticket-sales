@@ -17,12 +17,7 @@ class CheckoutService
      */
     public static function getStripePriceIds(UserOrder $userOrder): array
     {
-        $stripePriceIds = [];
-        foreach ($userOrder->order_items as $orderItem) {
-            $stripePriceIds[$orderItem['stripe_price_id']] = ($stripePriceIds[$orderItem['stripe_price_id']] ?? 0) + $orderItem['number_of_tickets'];
-        }
-
-        return $stripePriceIds;
+        return array_column($userOrder->order_items, 'number_of_tickets', 'stripe_price_id');
     }
 
     /**
@@ -47,14 +42,7 @@ class CheckoutService
     {
         $orderItems = [];
         foreach ($tickets as $ticket) {
-            $orderItems[] = [
-                'ticket_id' => $ticket->id,
-                'event_title' => $ticket->event_title,
-                'event_description' => $ticket->event_description,
-                'price' => $ticket->price,
-                'stripe_price_id' => $ticket->stripe_price_id,
-                'number_of_tickets' => $numbersOfTickets[$ticket->id],
-            ];
+            $orderItems[] = UserOrder::createOrderItem($ticket, $numbersOfTickets[$ticket->id]);
         }
 
         return $orderItems;

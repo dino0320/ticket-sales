@@ -42,7 +42,6 @@ class CartServiceTest extends TestCase
             2 => 20,
             3 => 30,
         ];
-
         $this->assertSame(14000, CartService::getTotalPrice($tickets, $numbersOfTickets));
     }
 

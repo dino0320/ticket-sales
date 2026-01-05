@@ -26,10 +26,10 @@ class TicketFactory extends Factory
             'initial_number_of_tickets' => $numberOfTickets,
             'number_of_tickets' => $numberOfTickets,
             'number_of_reserved_tickets' => 0,
-            'event_start_date' => fake()->date(),
-            'event_end_date' => fake()->date(),
-            'start_date' => fake()->date(),
-            'end_date' => fake()->date(),
+            'event_start_date' => fake()->dateTimeBetween('-1 year'),
+            'event_end_date' => fake()->dateTimeBetween('-1 year'),
+            'start_date' => fake()->dateTimeBetween('-1 year'),
+            'end_date' => fake()->dateTimeBetween('-1 year'),
         ];
     }
 }
