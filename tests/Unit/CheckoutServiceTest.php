@@ -15,7 +15,7 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_get_stripe_price_ids(): void
     {
-        $userOrder = UserOrder::factory()->make([
+        $userOrder = new UserOrder([
             'order_items' => [
                 [
                     'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_1',
@@ -44,7 +44,7 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_get_numbers_of_tickets(): void
     {
-        $userOrder = UserOrder::factory()->make([
+        $userOrder = new UserOrder([
             'order_items' => [
                 [
                     'ticket_id' => 1,
@@ -133,7 +133,7 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_create_user_tickets(): void
     {
-        $userOrder = UserOrder::factory()->make([
+        $userOrder = new UserOrder([
             'user_id' => 1,
             'order_items' => [
                 [
