@@ -55,7 +55,7 @@ class CartController extends Controller
             throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
         }
 
-        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        TicketService::checkIfNumberOfTicketsIsValid($ticket, $request->number_of_tickets);
 
         CartService::increaseNumberOfTicketsInCart(CartService::getCartId($request->user()), $ticket->id, $request->number_of_tickets);
 
@@ -81,7 +81,7 @@ class CartController extends Controller
             throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
         }
 
-        TicketService::checkIfNumberOfTicketsIsValid($request->number_of_tickets, $ticket);
+        TicketService::checkIfNumberOfTicketsIsValid($ticket, $request->number_of_tickets);
 
         $preNumberOfTickets = CartService::getNumberOfTicketsFromCart($cartId, $ticket->id);
 

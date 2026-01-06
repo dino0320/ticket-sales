@@ -10,7 +10,6 @@ use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\MoneyService;
-use App\Services\StripeService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -97,7 +96,7 @@ class CheckoutController extends Controller
                 throw new InvalidArgumentException("No valid tickets in the cart. user_id: {$user->id}");
             }
 
-            TicketService::checkIfNumbersOfTicketsAreValid($numbersOfTickets, $tickets);
+            TicketService::checkIfNumbersOfTicketsAreValid($tickets, $numbersOfTickets);
 
             CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
         
@@ -116,6 +115,6 @@ class CheckoutController extends Controller
         
 
         // Invoke external APIs outside the transaction to prevent long-term DB locks
-        return StripeService::checkout($request->user(), $userOrder);
+        return CheckoutService::checkout($request->user(), $userOrder);
     }
 }

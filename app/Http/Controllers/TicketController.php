@@ -53,9 +53,9 @@ class TicketController extends Controller
 
         $ticket = $ticketRepository->selectById($userTicket->ticket_id);
 
-        TicketService::checkIfEventIsOver($ticket);
+        TicketService::checkIfEventIsNotOver($ticket);
 
-        TicketService::checkIfTicketIsUsed($userTicket);
+        TicketService::checkIfTicketIsNotUsed($userTicket);
 
         return Inertia::render('UserTicketDetail', [
             'ticket' => new TicketResource($ticket),
@@ -175,7 +175,7 @@ class TicketController extends Controller
             $eventEndDate = $request->date('event_end_date');
 
             $errorMessage = [];
-            if (!TicketService::isNumberOfTicketsValid($request->number_of_tickets, $ticket, $errorMessage)) {
+            if (!TicketService::isNumberOfTicketsValid($ticket, $request->number_of_tickets, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
             
@@ -212,7 +212,7 @@ class TicketController extends Controller
             $userTicketRepository = new UserTicketRepository();
             $ticketRepository = new TicketRepository();
 
-            TicketService::checkIfTicketIsUsed($userTicket);
+            TicketService::checkIfTicketIsNotUsed($userTicket);
 
             $ticket = $ticketRepository->selectById($userTicket->ticket_id);
 

@@ -78,27 +78,29 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_create_order_items(): void
     {
-        $tickets = [Ticket::factory()->make([
-            'id' => 1,
-            'event_title' => 'Test Event 1',
-            'event_description' => 'Test Event 1 Description',
-            'price' => 100,
-            'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_1',
-        ])];
-        $tickets[] = Ticket::factory()->make([
-            'id' => 2,
-            'event_title' => 'Test Event 2',
-            'event_description' => 'Test Event 2 Description',
-            'price' => 200,
-            'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_2',
-        ]);
-        $tickets[] = Ticket::factory()->make([
-            'id' => 3,
-            'event_title' => 'Test Event 3',
-            'event_description' => 'Test Event 3 Description',
-            'price' => 300,
-            'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_3',
-        ]);
+        $tickets = [
+            Ticket::factory()->make([
+                'id' => 1,
+                'event_title' => 'Test Event 1',
+                'event_description' => 'Test Event 1 Description',
+                'price' => 100,
+                'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_1',
+            ]),
+            Ticket::factory()->make([
+                'id' => 2,
+                'event_title' => 'Test Event 2',
+                'event_description' => 'Test Event 2 Description',
+                'price' => 200,
+                'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_2',
+            ]),
+            Ticket::factory()->make([
+                'id' => 3,
+                'event_title' => 'Test Event 3',
+                'event_description' => 'Test Event 3 Description',
+                'price' => 300,
+                'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_3',
+            ]),
+        ];
         $numbersOfTickets = [
             1 => 1,
             2 => 2,
@@ -170,18 +172,20 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_increase_numbers_of_reserved_tickets(): void
     {
-        $tickets = [Ticket::factory()->make([
-            'id' => 1,
-            'number_of_reserved_tickets' => 0,
-        ])];
-        $tickets[] = Ticket::factory()->make([
-            'id' => 2,
-            'number_of_reserved_tickets' => 1,
-        ]);
-        $tickets[] = Ticket::factory()->make([
-            'id' => 3,
-            'number_of_reserved_tickets' => 3,
-        ]);
+        $tickets = [
+            Ticket::factory()->make([
+                'id' => 1,
+                'number_of_reserved_tickets' => 0,
+            ]),
+            Ticket::factory()->make([
+                'id' => 2,
+                'number_of_reserved_tickets' => 1,
+            ]),
+            Ticket::factory()->make([
+                'id' => 3,
+                'number_of_reserved_tickets' => 3,
+            ]),
+        ];
         $numbersOfTickets = [
             1 => 1,
             2 => 2,
@@ -198,18 +202,20 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_decrease_numbers_of_tickets_normal(): void
     {        
-        $tickets = [Ticket::factory()->make([
-            'id' => 1,
-            'number_of_tickets' => 1,
-        ])];
-        $tickets[] = Ticket::factory()->make([
-            'id' => 2,
-            'number_of_tickets' => 3,
-        ]);
-        $tickets[] = Ticket::factory()->make([
-            'id' => 3,
-            'number_of_tickets' => 6,
-        ]);
+        $tickets = [
+            Ticket::factory()->make([
+                'id' => 1,
+                'number_of_tickets' => 1,
+            ]),
+            Ticket::factory()->make([
+                'id' => 2,
+                'number_of_tickets' => 3,
+            ]),
+            Ticket::factory()->make([
+                'id' => 3,
+                'number_of_tickets' => 6,
+            ]),
+        ];
         $numbersOfTickets = [
             1 => 1,
             2 => 2,
@@ -242,18 +248,20 @@ class CheckoutServiceTest extends TestCase
      */
     public function test_decrease_numbers_of_reserved_tickets_normal(): void
     {        
-        $tickets = [Ticket::factory()->make([
-            'id' => 1,
-            'number_of_reserved_tickets' => 1,
-        ])];
-        $tickets[] = Ticket::factory()->make([
-            'id' => 2,
-            'number_of_reserved_tickets' => 3,
-        ]);
-        $tickets[] = Ticket::factory()->make([
-            'id' => 3,
-            'number_of_reserved_tickets' => 6,
-        ]);
+        $tickets = [
+            Ticket::factory()->make([
+                'id' => 1,
+                'number_of_reserved_tickets' => 1,
+            ]),
+            Ticket::factory()->make([
+                'id' => 2,
+                'number_of_reserved_tickets' => 3,
+            ]),
+            Ticket::factory()->make([
+                'id' => 3,
+                'number_of_reserved_tickets' => 6,
+            ]),
+        ];
         $numbersOfTickets = [
             1 => 1,
             2 => 2,
