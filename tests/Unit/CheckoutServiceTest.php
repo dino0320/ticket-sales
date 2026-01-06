@@ -2,9 +2,14 @@
 
 namespace Tests\Unit;
 
+use App\Jobs\CancelOrder;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Models\UserOrder;
 use App\Services\CheckoutService;
+use Illuminate\Support\Facades\Queue;
+use Laravel\Cashier\Checkout;
+use Mockery;
 use RuntimeException;
 use Tests\TestCase;
 
@@ -274,5 +279,61 @@ class CheckoutServiceTest extends TestCase
             1 => 2,
         ];
         CheckoutService::decreaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
+    }
+
+    /**
+     * Test normal checkout()
+     */
+    public function test_checkout_normal(): void
+    {        
+        Queue::fake();
+
+        $checkout = Mockery::mock(Checkout::class);
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('checkout')
+            ->once()
+            ->andReturn($checkout);
+        $userOrder = new UserOrder([
+            'order_items' => [
+                [
+                    'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_1',
+                    'number_of_tickets' => 1,
+                ],
+            ],
+        ]);
+        $userOrder->id = 1;
+        $this->assertSame($checkout, CheckoutService::checkout($user, $userOrder));
+        
+        Queue::assertNotPushed(CancelOrder::class);
+    }
+
+    /**
+     * Test abnormal checkout()
+     */
+    public function test_checkout_abnormal(): void
+    {        
+        Queue::fake();
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Checkout failed');
+
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('checkout')
+            ->once()
+            ->andThrow(new \Exception('Checkout failed'));
+        $userOrder = new UserOrder([
+            'order_items' => [
+                [
+                    'stripe_price_id' => 'TEST_STRIPE_PRICE_ID_1',
+                    'number_of_tickets' => 1,
+                ],
+            ],
+        ]);
+        $userOrder->id = 1;
+        CheckoutService::checkout($user, $userOrder);
+        
+        Queue::assertPushed(CancelOrder::class, function (CancelOrder $job) {
+            return $job->getUserOrderId() === 1;
+        });
     }
 }

@@ -53,4 +53,9 @@ class CancelOrder implements ShouldQueue
             ]);
         });
     }
+
+    public function getUserOrderId(): int
+    {
+        return $this->userOrderId;
+    }
 }
