@@ -27,10 +27,10 @@ class OrganizerServiceTest extends TestCase
 
     /**
      * Test normal checkIfUserIsOrganizer()
-     * @doesNotPerformAssertions
      */
     public function test_check_if_user_is_organizer_normal(): void
     {
+        $this->expectNotToPerformAssertions();
         OrganizerService::checkIfUserIsOrganizer(User::factory()->make(['is_organizer' => true]));
     }
 
