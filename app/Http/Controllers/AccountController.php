@@ -97,9 +97,13 @@ class AccountController extends Controller
     /**
      * Sign out
      */
-    public function signOut(): RedirectResponse
+    public function signOut(Request $request): RedirectResponse
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
  
         return redirect()->intended('/home');
     }
@@ -118,7 +122,7 @@ class AccountController extends Controller
 
         $user = $request->user();
         $paginator = $userTicketRepository->selectPaginatedNotUsedTicketsByUserId($user->id);
-        $tickets = $ticketRepository->selectTicketsDuringEventByIds(array_unique(array_column($paginator->getCollection()->all(), 'ticket_id')), new Carbon());
+        $tickets = $ticketRepository->selectTicketsWhereEventIsNotOver(array_unique(array_column($paginator->getCollection()->all(), 'ticket_id')), new Carbon());
         TicketService::updateUserTicketDataInPaginator($paginator, $tickets);
 
         $isOrganizerApplicationApplied = true;
@@ -221,7 +225,6 @@ class AccountController extends Controller
                 'website_url' => ['nullable', 'url:http,https', 'max:' . AccountConst::URL_LENGTH_MAX],
             ]);
 
-            $userRepository = new UserRepository();
             $userOrganizerApplicationRepository = new UserOrganizerApplicationRepository();
 
             $user = $request->user();
@@ -241,7 +244,6 @@ class AccountController extends Controller
             $userOrganizerApplication->website_url = $request->website_url;
             $userOrganizerApplication->applied_at = new Carbon();
 
-            $userRepository->save($user);
             $userOrganizerApplicationRepository->save($userOrganizerApplication);
  
             return redirect()->intended('/my-account');

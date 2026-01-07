@@ -62,14 +62,14 @@ class TicketRepository extends Repository
     }
 
     /**
-     * Select tickets during event by ids
+     * Select tickets whose events have not ended
      *
      * @param int[] $ids
      * @param Carbon $now
      * @param integer $numberOfItemsPerPage
      * @return Ticket[]
      */
-    public function selectTicketsDuringEventByIds(array $ids, Carbon $now): array
+    public function selectTicketsWhereEventIsNotOver(array $ids, Carbon $now): array
     {
         return Ticket::where('event_end_date', '>=', $now)
             ->whereIn('id', $ids)
