@@ -25,10 +25,10 @@ class CartService
             return (string)$user->id;
         }
         
-        $guestCartId = Session::get('guest_cart_id');
+        $guestCartId = Session::get(CartConst::GUEST_CART_ID_KEY);
         if ($guestCartId === null) {
             $guestCartId = Str::uuid();
-            Session::put('guest_cart_id', $guestCartId);
+            Session::put(CartConst::GUEST_CART_ID_KEY, $guestCartId);
         }
 
         return $guestCartId;
@@ -83,7 +83,12 @@ class CartService
      */
     public static function getCart(string $cartId): array
     {
-        return Redis::hGetAll(self::getCartKey($cartId));
+        $numbersOfTickets = Redis::hGetAll(self::getCartKey($cartId));
+        foreach ($numbersOfTickets as $ticketId => $numberOfTickets) {
+            $numbersOfTickets[(int)$ticketId] = (int)$numberOfTickets;
+        }
+
+        return $numbersOfTickets;
     }
 
     /**
@@ -95,7 +100,7 @@ class CartService
      */
     public static function getNumberOfTicketsFromCart(string $cartId, int $ticketId): int
     {
-        return Redis::hGet(self::getCartKey($cartId), $ticketId) ?? throw new RuntimeException("Failed to get the number of tickets from cart. cart_id: {$cartId}, ticket_id: {$ticketId}");
+        return (int)Redis::hGet(self::getCartKey($cartId), $ticketId) ?? throw new RuntimeException("Failed to get the number of tickets from cart. cart_id: {$cartId}, ticket_id: {$ticketId}");
     }
 
     /**
@@ -158,7 +163,7 @@ class CartService
      */
     public static function overwriteUserCartWithGuestCart(User $user): void
     {
-        $guestCartId = Session::get('guest_cart_id');
+        $guestCartId = Session::get(CartConst::GUEST_CART_ID_KEY);
         if ($guestCartId === null) {
             return;
         }
