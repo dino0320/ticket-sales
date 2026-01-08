@@ -14,7 +14,7 @@ services:
       - host.docker.internal:host-gateway
     environment:
       APP_ENV: "local"
-      LARAVEL_ENV_ENCRYPTION_KEY: "base64:4Dy9ZtHXIT3usjNI0t+PEm7hOPMg6LulhGwyo0X3KPs="
+      LARAVEL_ENV_ENCRYPTION_KEY: "base64:oVn1cYQTt6SOJ6mYU/RRogXXDCS5mJ3N5gLxIB8RijY="
       IS_NPM_BUILT: ${IS_NPM_BUILT:-0}
     depends_on:
       composer:
