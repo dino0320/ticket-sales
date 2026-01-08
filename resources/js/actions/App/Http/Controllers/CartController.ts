@@ -103,7 +103,7 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:72
+* @see app/Http/Controllers/CartController.php:76
 * @route '/cart/{ticket}'
 */
 export const update = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -118,7 +118,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:72
+* @see app/Http/Controllers/CartController.php:76
 * @route '/cart/{ticket}'
 */
 update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -151,7 +151,7 @@ update.url = (args: { ticket: number | { id: number } } | [ticket: number | { id
 
 /**
 * @see \App\Http\Controllers\CartController::update
-* @see app/Http/Controllers/CartController.php:72
+* @see app/Http/Controllers/CartController.php:76
 * @route '/cart/{ticket}'
 */
 update.put = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -161,7 +161,7 @@ update.put = (args: { ticket: number | { id: number } } | [ticket: number | { id
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:105
+* @see app/Http/Controllers/CartController.php:111
 * @route '/cart/{ticket}'
 */
 export const destroy = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -176,7 +176,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:105
+* @see app/Http/Controllers/CartController.php:111
 * @route '/cart/{ticket}'
 */
 destroy.url = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -209,7 +209,7 @@ destroy.url = (args: { ticket: number | { id: number } } | [ticket: number | { i
 
 /**
 * @see \App\Http\Controllers\CartController::destroy
-* @see app/Http/Controllers/CartController.php:105
+* @see app/Http/Controllers/CartController.php:111
 * @route '/cart/{ticket}'
 */
 destroy.delete = (args: { ticket: number | { id: number } } | [ticket: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({

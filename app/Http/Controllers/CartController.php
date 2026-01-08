@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class CartController extends Controller
 {
@@ -34,7 +34,7 @@ class CartController extends Controller
 
         return Inertia::render('Cart', [
             'tickets' => TicketResource::collection($paginator),
-            'numberOfTickets' => $numbersOfTickets,
+            'numbersOfTickets' => $numbersOfTickets,
             'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
         ]);
     }
@@ -106,7 +106,7 @@ class CartController extends Controller
      *
      * @param Request $request
      * @param Ticket $ticket
-     * @return JsonResponse
+     * @return RedirectResponse
      */
     public function destroy(Request $request, Ticket $ticket): RedirectResponse
     {

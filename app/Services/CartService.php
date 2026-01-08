@@ -100,7 +100,8 @@ class CartService
      */
     public static function getNumberOfTicketsFromCart(string $cartId, int $ticketId): int
     {
-        return (int)Redis::hGet(self::getCartKey($cartId), $ticketId) ?? throw new RuntimeException("Failed to get the number of tickets from cart. cart_id: {$cartId}, ticket_id: {$ticketId}");
+        $numberOfTickets = Redis::hGet(self::getCartKey($cartId), $ticketId);
+        return $numberOfTickets === false ? 0 : (int)$numberOfTickets;
     }
 
     /**
