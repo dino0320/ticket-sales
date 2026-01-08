@@ -175,7 +175,7 @@ class TicketController extends Controller
             $eventEndDate = $request->date('event_end_date');
 
             $errorMessage = [];
-            if (!TicketService::isNumberOfTicketsValid($ticket, $request->number_of_tickets, $errorMessage)) {
+            if (!TicketService::isNumberOfTicketsCurrentNumberOrMore($ticket, $request->number_of_tickets, $errorMessage)) {
                 return back()->withErrors($errorMessage);
             }
             

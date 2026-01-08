@@ -96,11 +96,10 @@ class TicketServiceTest extends TestCase
     }
 
     /**
-     * Test checkIfNumbersOfTicketsAreValid()
+     * Test areNumbersOfTicketsValid()
      */
-    public function test_check_if_numbers_of_tickets_are_valid(): void
+    public function test_are_numbers_of_tickets_valid(): void
     {
-        $this->expectNotToPerformAssertions();
         $tickets = [
             Ticket::factory()->make([
                 'id' => 1,
@@ -117,15 +116,14 @@ class TicketServiceTest extends TestCase
             1 => 3,
             2 => 2,
         ];
-        TicketService::checkIfNumbersOfTicketsAreValid($tickets, $numbersOfTickets);
+        $this->assertTrue(TicketService::areNumbersOfTicketsValid($tickets, $numbersOfTickets));
     }
 
     /**
-     * Test normal checkIfNumberOfTicketsIsValid()
+     * Test IsNumberOfTicketsValid()
      */
-    public function test_check_if_number_of_tickets_is_valid_normal(): void
+    public function test_is_number_of_tickets_valid_true(): void
     {
-        $this->expectNotToPerformAssertions();
         $ticket1 = Ticket::factory()->make([
             'id' => 1,
             'number_of_tickets' => 5,
@@ -136,22 +134,9 @@ class TicketServiceTest extends TestCase
             'number_of_tickets' => 3,
             'number_of_reserved_tickets' => 0,
         ]);
-        TicketService::checkIfNumberOfTicketsIsValid($ticket1, 3);
-        TicketService::checkIfNumberOfTicketsIsValid($ticket2, 2);
-    }
-
-    /**
-     * Test abnormal checkIfNumberOfTicketsIsValid()
-     */
-    public function test_check_if_number_of_tickets_is_valid_abnormal(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $ticket = Ticket::factory()->make([
-            'id' => 1,
-            'number_of_tickets' => 5,
-            'number_of_reserved_tickets' => 2,
-        ]);
-        TicketService::checkIfNumberOfTicketsIsValid($ticket, 4);
+        $this->assertTrue(TicketService::IsNumberOfTicketsValid($ticket1, 3));
+        $this->assertTrue(TicketService::IsNumberOfTicketsValid($ticket2, 2));
+        $this->assertFalse(TicketService::IsNumberOfTicketsValid($ticket1, 4));
     }
 
     /**
@@ -410,15 +395,15 @@ class TicketServiceTest extends TestCase
     }
 
     /**
-     * Test isNumberOfTicketsValid()
+     * Test isNumberOfTicketsCurrentNumberOrMore()
      */
-    public function test_is_number_of_tickets_valid(): void
+    public function test_is_number_of_tickets_current_number_or_more(): void
     {
         $ticket = Ticket::factory()->make(['number_of_tickets' => 3]);
         $errorMessage = [];
-        $this->assertTrue(TicketService::isNumberOfTicketsValid($ticket, 4, $errorMessage));
-        $this->assertTrue(TicketService::isNumberOfTicketsValid($ticket, 3, $errorMessage));
-        $this->assertFalse(TicketService::isNumberOfTicketsValid($ticket, 2, $errorMessage));
+        $this->assertTrue(TicketService::isNumberOfTicketsCurrentNumberOrMore($ticket, 4, $errorMessage));
+        $this->assertTrue(TicketService::isNumberOfTicketsCurrentNumberOrMore($ticket, 3, $errorMessage));
+        $this->assertFalse(TicketService::isNumberOfTicketsCurrentNumberOrMore($ticket, 2, $errorMessage));
     }
 
     /**

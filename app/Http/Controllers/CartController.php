@@ -52,12 +52,16 @@ class CartController extends Controller
         ]);
 
         if (!TicketService::isDuringSalesPeriod($ticket)) {
-            throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
+            return back()->withErrors(['sales_period' => 'The ticket is outside the sales period.']);
         }
 
-        TicketService::checkIfNumberOfTicketsIsValid($ticket, $request->number_of_tickets);
+        $cartId = CartService::getCartId($request->user());
+        $numberOfTickets = CartService::getNumberOfTicketsFromCart($cartId, $ticket->id) + $request->number_of_tickets;
+        if (!TicketService::isNumberOfTicketsValid($ticket, $numberOfTickets)) {
+            return back()->withErrors(['number_of_tickets' => 'The number of tickets is invalid.']);
+        }
 
-        CartService::increaseNumberOfTicketsInCart(CartService::getCartId($request->user()), $ticket->id, $request->number_of_tickets);
+        CartService::increaseNumberOfTicketsInCart($cartId, $ticket->id, $request->number_of_tickets);
 
         return back();
     }
@@ -78,10 +82,12 @@ class CartController extends Controller
         $cartId = CartService::getCartId($request->user());
         if (!TicketService::isDuringSalesPeriod($ticket)) {
             CartService::deleteTicketInCart($cartId, $ticket->id);
-            throw new InvalidArgumentException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
+            return response()->json(['sales_period' => 'The ticket is outside the sales period.'], HttpFoundationResponse::HTTP_BAD_REQUEST);
         }
 
-        TicketService::checkIfNumberOfTicketsIsValid($ticket, $request->number_of_tickets);
+        if (!TicketService::isNumberOfTicketsValid($ticket, $request->number_of_tickets)) {
+            return response()->json(['number_of_tickets' => 'The number of tickets is invalid.'], HttpFoundationResponse::HTTP_BAD_REQUEST);
+        }
 
         $preNumberOfTickets = CartService::getNumberOfTicketsFromCart($cartId, $ticket->id);
 

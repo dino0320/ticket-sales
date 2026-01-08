@@ -59,32 +59,33 @@ class TicketService
     }
 
     /**
-     * Check if the given numbers are not less than 0 or more than the numbers of tickets
+     * Whether the given numbers are more than 0 and the numbers of tickets or less
      *
      * @param Ticket[] $tickets
      * @param int[] $numbersOfTickets
      * @return void
      */
-    public static function checkIfNumbersOfTicketsAreValid(array $tickets, array $numbersOfTickets): void
+    public static function areNumbersOfTicketsValid(array $tickets, array $numbersOfTickets): bool
     {
         foreach ($tickets as $ticket) {
-            self::checkIfNumberOfTicketsIsValid($ticket, $numbersOfTickets[$ticket->id]);
+            if (!self::isNumberOfTicketsValid($ticket, $numbersOfTickets[$ticket->id])) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
-     * Check if the given number is not less than 0 or more than the number of tickets
+     * Whether the given number is more than 0 and the number of tickets or less
      *
      * @param Ticket $ticket
      * @param integer $numberOfTickets
      * @return void
      */
-    public static function checkIfNumberOfTicketsIsValid(Ticket $ticket, int $numberOfTickets): void
+    public static function IsNumberOfTicketsValid(Ticket $ticket, int $numberOfTickets): bool
     {
-        if ($numberOfTickets <= 0 || $numberOfTickets > ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets)) {
-            $estimatedNumberOfTickets = $ticket->number_of_tickets - $ticket->number_of_reserved_tickets;
-            throw new RuntimeException("The number of tickets is invalid. ticket_id: {$ticket->id}, number_of_tickets: {$estimatedNumberOfTickets}, used_number_of_tickets: {$numberOfTickets}");
-        }
+        return ($numberOfTickets > 0 && $numberOfTickets <= ($ticket->number_of_tickets - $ticket->number_of_reserved_tickets));
     }
 
     /**
@@ -205,14 +206,14 @@ class TicketService
     }
 
     /**
-     * Whether the number of tickets is valid
+     * Whether the number of tickets is the current number or more
      *
      * @param Ticket $ticket
      * @param integer $numberOfTickets
      * @param array $errorMessage
      * @return boolean
      */
-    public static function isNumberOfTicketsValid(Ticket $ticket, int $numberOfTickets, array &$errorMessage = []): bool
+    public static function isNumberOfTicketsCurrentNumberOrMore(Ticket $ticket, int $numberOfTickets, array &$errorMessage = []): bool
     {
         if ($numberOfTickets < $ticket->number_of_tickets) {
             $errorMessage = ['number_of_tickets' => 'The number of tickets must be the current number or more.'];

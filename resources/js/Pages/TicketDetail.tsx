@@ -1,5 +1,5 @@
 import { store } from '@/actions/App/Http/Controllers/CartController'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { router } from '@inertiajs/react'
 import { toast } from 'sonner'
 import { LoadingButton } from '@/components/loading-button'
@@ -7,11 +7,20 @@ import { Counter } from '@/components/counter'
 import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
 
-export default function TicketDetail({ ticket }: { ticket: TicketData }) {
+export default function TicketDetail({ ticket, errors }: { ticket: TicketData, errors: Record<string, string> }) {
   const [isLoading, setIsLoading] = useState(false)
   const [numberOfTickets, setNumberOfTickets] = useState(1)
 
   const isOnSale = ticket.number_of_tickets !== 0;
+
+  useEffect(() => {
+    if (errors.sales_period !== undefined) {
+      toast.error(errors.sales_period)
+    }
+    if (errors.number_of_tickets !== undefined) {
+      toast.error(errors.number_of_tickets)
+    }
+  }, [errors]);
 
   async function onClick() {
     if (isLoading) {
@@ -26,7 +35,7 @@ export default function TicketDetail({ ticket }: { ticket: TicketData }) {
   }
 
   async function updateNumber(number: number) {
-    if (number < 1) {
+    if (number <= 0) {
       return
     }
 

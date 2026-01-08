@@ -14,10 +14,10 @@ import type { TicketData } from '@/components/ticket'
 import { formatCurrency } from '@/lib/utils'
 import axios from 'axios'
 
-type NumberOfTickets = {[id: number]: number}
+type NumbersOfTickets = {[id: number]: number}
 
-export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numberOfTickets: NumberOfTickets, totalPriceOfTickets: number}) {
-  const [numberOfTicketsState, setNumberOfTicketsState] = useState<NumberOfTickets>(numberOfTickets)
+export default function Cart({ tickets, numbersOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numbersOfTickets: NumbersOfTickets, totalPriceOfTickets: number}) {
+  const [numbersOfTicketsState, setNumbersOfTicketsState] = useState<NumbersOfTickets>(numbersOfTickets)
   const [totalPriceOfTicketsState, setTotalPriceOfTicketsState] = useState(totalPriceOfTickets)
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
 
   async function updateNumber(number: number, ticketId: number) {
     try {
-      if (number < 1) {
+      if (number <= 0) {
         return
       }
 
@@ -40,9 +40,17 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
       const response = await axios.put(updateRoute.url, {
         number_of_tickets: number,
       })
-      setNumberOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
+      setNumbersOfTicketsState(prev => ({...prev, [ticketId]: response.data.numberOfTickets}))
       setTotalPriceOfTicketsState(prev => prev + response.data.differenceInTotalPrice)
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.data.sales_period !== undefined) {
+        toast.error(error.response.data.sales_period)
+        return
+      }
+      if (error.response.data.number_of_tickets !== undefined) {
+        toast.error(error.response.data.number_of_tickets)
+        return
+      }
       toast.error('Failed to update the number of thickets')
     }
   }
@@ -70,7 +78,7 @@ export default function Cart({ tickets, numberOfTickets, totalPriceOfTickets }: 
             <Ticket ticket={ticket} isEllipsis={true}/>
           </Link>
           <div className="flex items-center gap-3">
-            <Counter number={Number(numberOfTicketsState[ticket.id] ?? 0)} ticketId={ticket.id} updateNumber={updateNumber}/>
+            <Counter number={Number(numbersOfTicketsState[ticket.id] ?? 0)} ticketId={ticket.id} updateNumber={updateNumber}/>
             <FaRegTrashAlt onClick={() => destroyTicket(ticket.id)}/>
           </div>
         </div>

@@ -96,7 +96,9 @@ class CheckoutController extends Controller
                 throw new InvalidArgumentException("No valid tickets in the cart. user_id: {$user->id}");
             }
 
-            TicketService::checkIfNumbersOfTicketsAreValid($tickets, $numbersOfTickets);
+            if (!TicketService::areNumbersOfTicketsValid($tickets, $numbersOfTickets)) {
+                return back()->withErrors(['number_of_tickets' => 'The number of tickets is invalid.']);
+            }
 
             CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
         
