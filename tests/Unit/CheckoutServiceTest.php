@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserOrder;
 use App\Services\CheckoutService;
+use App\Services\StripeService;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Cashier\Checkout;
 use Mockery;
@@ -297,10 +298,11 @@ class CheckoutServiceTest extends TestCase
         Queue::fake();
 
         $checkout = Mockery::mock(Checkout::class);
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('checkout')
+        $stripeService = Mockery::mock(StripeService::class);
+        $stripeService->shouldReceive('checkout')
             ->once()
             ->andReturn($checkout);
+        $user = User::factory()->make();
         $userOrder = new UserOrder([
             'order_items' => [
                 [
@@ -310,7 +312,7 @@ class CheckoutServiceTest extends TestCase
             ],
         ]);
         $userOrder->id = 1;
-        $this->assertSame($checkout, CheckoutService::checkout($user, $userOrder));
+        $this->assertSame($checkout, CheckoutService::checkout($stripeService, $user, $userOrder));
         
         Queue::assertNotPushed(CancelOrder::class);
     }
@@ -325,10 +327,11 @@ class CheckoutServiceTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Checkout failed');
 
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('checkout')
+        $stripeService = Mockery::mock(StripeService::class);
+        $stripeService->shouldReceive('checkout')
             ->once()
             ->andThrow(new \Exception('Checkout failed'));
+        $user = User::factory()->make();
         $userOrder = new UserOrder([
             'order_items' => [
                 [
@@ -338,7 +341,7 @@ class CheckoutServiceTest extends TestCase
             ],
         ]);
         $userOrder->id = 1;
-        CheckoutService::checkout($user, $userOrder);
+        CheckoutService::checkout($stripeService, $user, $userOrder);
         
         Queue::assertPushed(CancelOrder::class, function (CancelOrder $job) {
             return $job->getUserOrderId() === 1;

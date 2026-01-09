@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\CheckoutController::show
-* @see app/Http/Controllers/CheckoutController.php:32
+* @see app/Http/Controllers/CheckoutController.php:34
 * @route '/review'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::show
-* @see app/Http/Controllers/CheckoutController.php:32
+* @see app/Http/Controllers/CheckoutController.php:34
 * @route '/review'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::show
-* @see app/Http/Controllers/CheckoutController.php:32
+* @see app/Http/Controllers/CheckoutController.php:34
 * @route '/review'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::show
-* @see app/Http/Controllers/CheckoutController.php:32
+* @see app/Http/Controllers/CheckoutController.php:34
 * @route '/review'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:81
+* @see app/Http/Controllers/CheckoutController.php:85
 * @route '/checkout'
 */
 export const checkout = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -60,7 +60,7 @@ checkout.definition = {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:81
+* @see app/Http/Controllers/CheckoutController.php:85
 * @route '/checkout'
 */
 checkout.url = (options?: RouteQueryOptions) => {
@@ -69,7 +69,7 @@ checkout.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:81
+* @see app/Http/Controllers/CheckoutController.php:85
 * @route '/checkout'
 */
 checkout.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -79,7 +79,7 @@ checkout.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::checkout
-* @see app/Http/Controllers/CheckoutController.php:81
+* @see app/Http/Controllers/CheckoutController.php:85
 * @route '/checkout'
 */
 checkout.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -89,7 +89,7 @@ checkout.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\CheckoutController::showCheckoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:54
+* @see app/Http/Controllers/CheckoutController.php:57
 * @route '/checkout/success'
 */
 export const showCheckoutSuccess = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -104,7 +104,7 @@ showCheckoutSuccess.definition = {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::showCheckoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:54
+* @see app/Http/Controllers/CheckoutController.php:57
 * @route '/checkout/success'
 */
 showCheckoutSuccess.url = (options?: RouteQueryOptions) => {
@@ -113,7 +113,7 @@ showCheckoutSuccess.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\CheckoutController::showCheckoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:54
+* @see app/Http/Controllers/CheckoutController.php:57
 * @route '/checkout/success'
 */
 showCheckoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -123,7 +123,7 @@ showCheckoutSuccess.get = (options?: RouteQueryOptions): RouteDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\CheckoutController::showCheckoutSuccess
-* @see app/Http/Controllers/CheckoutController.php:54
+* @see app/Http/Controllers/CheckoutController.php:57
 * @route '/checkout/success'
 */
 showCheckoutSuccess.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

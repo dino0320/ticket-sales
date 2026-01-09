@@ -7,7 +7,7 @@ import { Ticket } from '@/components/ticket'
 import type { TicketData } from '@/components/ticket'
 import { formatCurrency } from '@/lib/utils'
 
-export default function Review({ tickets, numberOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numberOfTickets: {[id: number]: number}, totalPriceOfTickets: number}) {
+export default function Review({ tickets, numbersOfTickets, totalPriceOfTickets }: { tickets: PaginationData<TicketData>, numbersOfTickets: {[id: number]: number}, totalPriceOfTickets: number}) {
   return (
     <div className="space-y-1">
       {tickets.data.length === 0 ? (
@@ -22,7 +22,7 @@ export default function Review({ tickets, numberOfTickets, totalPriceOfTickets }
       {tickets.data.map((ticket) => (
         <div key={ticket.id}>
           <Ticket ticket={ticket} isEllipsis={true}/>
-          <Badge className="text-sm">{numberOfTickets[ticket.id]}</Badge>
+          <Badge className="text-sm">{numbersOfTickets[ticket.id]}</Badge>
         </div>
       ))}
 

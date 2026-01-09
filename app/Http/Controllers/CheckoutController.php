@@ -10,6 +10,7 @@ use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\MoneyService;
+use App\Services\StripeService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,8 +18,9 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use InvalidArgumentException;
-use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Checkout;
+use RuntimeException;
+use Stripe\Checkout\Session;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 class CheckoutController extends Controller
@@ -40,7 +42,7 @@ class CheckoutController extends Controller
 
         return Inertia::render('Review', [
             'tickets' => TicketResource::collection($paginator),
-            'numberOfTickets' => $numbersOfTickets,
+            'numbersOfTickets' => $numbersOfTickets,
             'totalPriceOfTickets' => MoneyService::convertCentsToDollars(CartService::getTotalPrice($paginator->getCollection(), $numbersOfTickets)),
         ]);
     }
@@ -49,23 +51,24 @@ class CheckoutController extends Controller
      * Show checkout success
      *
      * @param Request $request
+     * @param StripeService $stripeService
      * @return Response
      */
-    public function showCheckoutSuccess(Request $request): Response
+    public function showCheckoutSuccess(Request $request, StripeService $stripeService): Response
     {
         $userOrderRepository = new UserOrderRepository();
 
         $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist');
  
-        $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
+        $session = $stripeService->retrieveCheckoutSession($sessionId);
  
-        if ($session->payment_status !== 'paid') {
+        if ($session['payment_status'] !== Session::PAYMENT_STATUS_PAID) {
             throw new InvalidArgumentException('The order hasn\'t paid');
         }
         
         $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing');
         
-        $userOrder = $userOrderRepository->selectById($userOrderId);
+        $userOrder = $userOrderRepository->selectById((int)$userOrderId);
 
         return Inertia::render('CheckoutSuccess', [
             'userOrderId' => $userOrder->id,
@@ -76,9 +79,10 @@ class CheckoutController extends Controller
      * Checkout
      *
      * @param Request $request
+     * @param StripeService $stripeService
      * @return Checkout
      */
-    public function checkout(Request $request): Checkout
+    public function checkout(Request $request, StripeService $stripeService): Checkout
     {
         $userOrder = DB::transaction(function () use ($request) {
             $userOrderRepository = new UserOrderRepository();
@@ -93,11 +97,11 @@ class CheckoutController extends Controller
             $tickets = $ticketRepository->selectTicketsDuringSalesPeriodByIdsForUpdate(new Carbon(), array_keys($numbersOfTickets));
             if ($tickets === []) {
                 CartService::deleteCart($user->id);
-                throw new InvalidArgumentException("No valid tickets in the cart. user_id: {$user->id}");
+                throw new RuntimeException("No valid tickets in the cart. user_id: {$user->id}"); // @todo display error on frontend
             }
 
             if (!TicketService::areNumbersOfTicketsValid($tickets, $numbersOfTickets)) {
-                return back()->withErrors(['number_of_tickets' => 'The number of tickets is invalid.']);
+                throw new RuntimeException("The number of tickets is invalid. user_id: {$user->id}"); // @todo display error on frontend
             }
 
             CheckoutService::increaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
@@ -117,6 +121,6 @@ class CheckoutController extends Controller
         
 
         // Invoke external APIs outside the transaction to prevent long-term DB locks
-        return CheckoutService::checkout($request->user(), $userOrder);
+        return CheckoutService::checkout($stripeService, $request->user(), $userOrder);
     }
 }

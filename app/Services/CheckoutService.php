@@ -127,23 +127,15 @@ class CheckoutService
     /**
      * Checkout
      *
+     * @param StripeService $stripeService
      * @param User $user
      * @param UserOrder $userOrder
      * @return Checkout
      */
-    public static function checkout(User $user, UserOrder $userOrder): Checkout
+    public static function checkout(StripeService $stripeService, User $user, UserOrder $userOrder): Checkout
     {
         try {
-            $checkout = $user->checkout(CheckoutService::getStripePriceIds($userOrder), [
-                'success_url' => route('checkout-success').'?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('review'),
-                'metadata' => ['user_order_id' => $userOrder->id],
-                'payment_intent_data' => [
-                    'metadata' => ['user_order_id' => $userOrder->id],
-                ],
-            ]);
-
-            return $checkout;
+            return $stripeService->checkout($user, CheckoutService::getStripePriceIds($userOrder), ['user_order_id' => $userOrder->id]);
         } catch (Throwable $e) {
             CancelOrder::dispatch($userOrder->id);
             throw $e;

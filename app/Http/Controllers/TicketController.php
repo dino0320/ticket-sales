@@ -83,9 +83,10 @@ class TicketController extends Controller
      * Store ticket
      *
      * @param Request $request
+     * @param StripeService $stripeService
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, StripeService $stripeService): RedirectResponse
     {
         $request->validate([
             'event_title' => ['required', 'string', 'max:' . TicketConst::EVENT_TITLE_LENGTH_MAX],
@@ -119,7 +120,7 @@ class TicketController extends Controller
         }
 
         $price = MoneyService::convertDollarsToCents($request->price);
-        [, $stripePrice] = StripeService::createProduct($request->event_title, $request->event_description, $price);
+        [, $stripePrice] = $stripeService->createProduct($request->event_title, $request->event_description, $price);
 
         $ticket = new Ticket([
             'organizer_user_id' => $user->id,
