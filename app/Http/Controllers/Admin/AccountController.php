@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AccountController extends Controller
 {
@@ -26,9 +27,9 @@ class AccountController extends Controller
             return redirect()->intended('/admin/dashboard');
         }
  
-        return back()->withErrors([
+        throw ValidationException::withMessages([
             'root' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        ]);
     }
 
     /**

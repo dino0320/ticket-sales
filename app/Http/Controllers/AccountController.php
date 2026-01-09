@@ -24,8 +24,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AccountController extends Controller
@@ -89,9 +91,9 @@ class AccountController extends Controller
             return redirect()->intended('/home');
         }
  
-        return back()->withErrors([
+        throw ValidationException::withMessages([
             'root' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        ]);
     }
 
     /**
@@ -204,9 +206,9 @@ class AccountController extends Controller
                 return redirect()->intended('/my-account');
             }
  
-            return back()->withErrors([
+            throw ValidationException::withMessages([
                 'password' => 'The current password is incorrect.',
-            ])->exceptInput();
+            ]);
         });
     }
 
@@ -233,9 +235,7 @@ class AccountController extends Controller
                 'status' => AccountConst::ORGANIZER_STATUS_UNAPPROVED,
             ]);
             if ($userOrganizerApplication->status !== AccountConst::ORGANIZER_STATUS_UNAPPROVED) {
-                return back()->withErrors([
-                    'root' => 'You already applied for this.',
-                ]);
+                throw new InvalidArgumentException("Already applied. user_id: {$user->id}");
             }
 
             $userOrganizerApplication->status = AccountConst::ORGANIZER_STATUS_PENDING;

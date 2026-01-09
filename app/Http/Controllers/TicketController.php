@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -116,7 +117,7 @@ class TicketController extends Controller
 
         $errorMessage = [];
         if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, null, $errorMessage)) {
-            return back()->withErrors($errorMessage);
+            throw ValidationException::withMessages($errorMessage);
         }
 
         $price = MoneyService::convertDollarsToCents($request->price);
@@ -177,11 +178,11 @@ class TicketController extends Controller
 
             $errorMessage = [];
             if (!TicketService::isNumberOfTicketsCurrentNumberOrMore($ticket, $request->number_of_tickets, $errorMessage)) {
-                return back()->withErrors($errorMessage);
+                throw ValidationException::withMessages($errorMessage);
             }
             
             if (!TicketService::areEventAndTicketSalesDatesValid($eventStartDate, $eventEndDate, $startDate, $endDate, $ticket, $errorMessage)) {
-                return back()->withErrors($errorMessage);
+                throw ValidationException::withMessages($errorMessage);
             }
             
             if (!TicketService::isDuringSalesPeriod($ticket)) {

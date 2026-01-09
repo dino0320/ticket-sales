@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AccountController::register
-* @see app/Http/Controllers/AccountController.php:38
+* @see app/Http/Controllers/AccountController.php:40
 * @route '/register'
 */
 export const register = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ register.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::register
-* @see app/Http/Controllers/AccountController.php:38
+* @see app/Http/Controllers/AccountController.php:40
 * @route '/register'
 */
 register.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ register.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::register
-* @see app/Http/Controllers/AccountController.php:38
+* @see app/Http/Controllers/AccountController.php:40
 * @route '/register'
 */
 register.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ register.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AccountController::authenticate
-* @see app/Http/Controllers/AccountController.php:77
+* @see app/Http/Controllers/AccountController.php:79
 * @route '/authenticate'
 */
 export const authenticate = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -50,7 +50,7 @@ authenticate.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::authenticate
-* @see app/Http/Controllers/AccountController.php:77
+* @see app/Http/Controllers/AccountController.php:79
 * @route '/authenticate'
 */
 authenticate.url = (options?: RouteQueryOptions) => {
@@ -59,7 +59,7 @@ authenticate.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::authenticate
-* @see app/Http/Controllers/AccountController.php:77
+* @see app/Http/Controllers/AccountController.php:79
 * @route '/authenticate'
 */
 authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -69,7 +69,7 @@ authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AccountController::show
-* @see app/Http/Controllers/AccountController.php:117
+* @see app/Http/Controllers/AccountController.php:119
 * @route '/my-account'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -84,7 +84,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::show
-* @see app/Http/Controllers/AccountController.php:117
+* @see app/Http/Controllers/AccountController.php:119
 * @route '/my-account'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -93,7 +93,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::show
-* @see app/Http/Controllers/AccountController.php:117
+* @see app/Http/Controllers/AccountController.php:119
 * @route '/my-account'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -103,7 +103,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\AccountController::show
-* @see app/Http/Controllers/AccountController.php:117
+* @see app/Http/Controllers/AccountController.php:119
 * @route '/my-account'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -113,7 +113,7 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AccountController::showOrderHistory
-* @see app/Http/Controllers/AccountController.php:146
+* @see app/Http/Controllers/AccountController.php:148
 * @route '/order-history'
 */
 export const showOrderHistory = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -128,7 +128,7 @@ showOrderHistory.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::showOrderHistory
-* @see app/Http/Controllers/AccountController.php:146
+* @see app/Http/Controllers/AccountController.php:148
 * @route '/order-history'
 */
 showOrderHistory.url = (options?: RouteQueryOptions) => {
@@ -137,7 +137,7 @@ showOrderHistory.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::showOrderHistory
-* @see app/Http/Controllers/AccountController.php:146
+* @see app/Http/Controllers/AccountController.php:148
 * @route '/order-history'
 */
 showOrderHistory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -147,7 +147,7 @@ showOrderHistory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\AccountController::showOrderHistory
-* @see app/Http/Controllers/AccountController.php:146
+* @see app/Http/Controllers/AccountController.php:148
 * @route '/order-history'
 */
 showOrderHistory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -157,7 +157,7 @@ showOrderHistory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =
 
 /**
 * @see \App\Http\Controllers\AccountController::resetPassword
-* @see app/Http/Controllers/AccountController.php:182
+* @see app/Http/Controllers/AccountController.php:184
 * @route '/reset-password'
 */
 export const resetPassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -172,7 +172,7 @@ resetPassword.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::resetPassword
-* @see app/Http/Controllers/AccountController.php:182
+* @see app/Http/Controllers/AccountController.php:184
 * @route '/reset-password'
 */
 resetPassword.url = (options?: RouteQueryOptions) => {
@@ -181,7 +181,7 @@ resetPassword.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::resetPassword
-* @see app/Http/Controllers/AccountController.php:182
+* @see app/Http/Controllers/AccountController.php:184
 * @route '/reset-password'
 */
 resetPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -191,7 +191,7 @@ resetPassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 /**
 * @see \App\Http\Controllers\AccountController::signOut
-* @see app/Http/Controllers/AccountController.php:100
+* @see app/Http/Controllers/AccountController.php:102
 * @route '/sign-out'
 */
 export const signOut = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -206,7 +206,7 @@ signOut.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::signOut
-* @see app/Http/Controllers/AccountController.php:100
+* @see app/Http/Controllers/AccountController.php:102
 * @route '/sign-out'
 */
 signOut.url = (options?: RouteQueryOptions) => {
@@ -215,7 +215,7 @@ signOut.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::signOut
-* @see app/Http/Controllers/AccountController.php:100
+* @see app/Http/Controllers/AccountController.php:102
 * @route '/sign-out'
 */
 signOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -225,7 +225,7 @@ signOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
-* @see app/Http/Controllers/AccountController.php:219
+* @see app/Http/Controllers/AccountController.php:221
 * @route '/organizer-application'
 */
 export const applyToBeOrganizer = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -240,7 +240,7 @@ applyToBeOrganizer.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
-* @see app/Http/Controllers/AccountController.php:219
+* @see app/Http/Controllers/AccountController.php:221
 * @route '/organizer-application'
 */
 applyToBeOrganizer.url = (options?: RouteQueryOptions) => {
@@ -249,7 +249,7 @@ applyToBeOrganizer.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::applyToBeOrganizer
-* @see app/Http/Controllers/AccountController.php:219
+* @see app/Http/Controllers/AccountController.php:221
 * @route '/organizer-application'
 */
 applyToBeOrganizer.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -259,7 +259,7 @@ applyToBeOrganizer.post = (options?: RouteQueryOptions): RouteDefinition<'post'>
 
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
-* @see app/Http/Controllers/AccountController.php:164
+* @see app/Http/Controllers/AccountController.php:166
 * @route '/issued-tickets'
 */
 export const showIssuedTickets = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -274,7 +274,7 @@ showIssuedTickets.definition = {
 
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
-* @see app/Http/Controllers/AccountController.php:164
+* @see app/Http/Controllers/AccountController.php:166
 * @route '/issued-tickets'
 */
 showIssuedTickets.url = (options?: RouteQueryOptions) => {
@@ -283,7 +283,7 @@ showIssuedTickets.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
-* @see app/Http/Controllers/AccountController.php:164
+* @see app/Http/Controllers/AccountController.php:166
 * @route '/issued-tickets'
 */
 showIssuedTickets.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -293,7 +293,7 @@ showIssuedTickets.get = (options?: RouteQueryOptions): RouteDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\AccountController::showIssuedTickets
-* @see app/Http/Controllers/AccountController.php:164
+* @see app/Http/Controllers/AccountController.php:166
 * @route '/issued-tickets'
 */
 showIssuedTickets.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

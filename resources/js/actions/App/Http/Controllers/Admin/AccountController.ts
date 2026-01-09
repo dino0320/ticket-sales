@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\AccountController::authenticate
-* @see app/Http/Controllers/Admin/AccountController.php:16
+* @see app/Http/Controllers/Admin/AccountController.php:17
 * @route '/admin/authenticate'
 */
 export const authenticate = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ authenticate.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\AccountController::authenticate
-* @see app/Http/Controllers/Admin/AccountController.php:16
+* @see app/Http/Controllers/Admin/AccountController.php:17
 * @route '/admin/authenticate'
 */
 authenticate.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ authenticate.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Admin\AccountController::authenticate
-* @see app/Http/Controllers/Admin/AccountController.php:16
+* @see app/Http/Controllers/Admin/AccountController.php:17
 * @route '/admin/authenticate'
 */
 authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ authenticate.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Admin\AccountController::signOut
-* @see app/Http/Controllers/Admin/AccountController.php:37
+* @see app/Http/Controllers/Admin/AccountController.php:38
 * @route '/admin/sign-out'
 */
 export const signOut = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -50,7 +50,7 @@ signOut.definition = {
 
 /**
 * @see \App\Http\Controllers\Admin\AccountController::signOut
-* @see app/Http/Controllers/Admin/AccountController.php:37
+* @see app/Http/Controllers/Admin/AccountController.php:38
 * @route '/admin/sign-out'
 */
 signOut.url = (options?: RouteQueryOptions) => {
@@ -59,7 +59,7 @@ signOut.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Admin\AccountController::signOut
-* @see app/Http/Controllers/Admin/AccountController.php:37
+* @see app/Http/Controllers/Admin/AccountController.php:38
 * @route '/admin/sign-out'
 */
 signOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({

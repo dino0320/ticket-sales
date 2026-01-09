@@ -11,8 +11,10 @@ use App\Models\UserOrganizerApplication;
 use App\Models\UserTicket;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia as Assert;
+use InvalidArgumentException;
 use Tests\TestCase;
 
 class AccountControllerTest extends TestCase
@@ -425,6 +427,8 @@ class AccountControllerTest extends TestCase
      */
     public function test_apply_to_be_organizer_abnormal_already_applied(): void
     {
+        Exceptions::fake();
+
         $user = User::factory()->create(['id' => 1]);
 
         UserOrganizerApplication::create([
@@ -442,7 +446,7 @@ class AccountControllerTest extends TestCase
             'website_url' => 'https://example.com',
         ]);
 
-        $response->assertRedirectBack();
-        $response->assertSessionHasErrors(['root']);
+        $response->assertStatus(500);
+        Exceptions::assertReported(InvalidArgumentException::class);
     }
 }
