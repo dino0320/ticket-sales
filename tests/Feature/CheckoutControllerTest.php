@@ -198,12 +198,8 @@ class CheckoutControllerTest extends TestCase
 
         $user = User::factory()->create();
 
-        $checkout = Mockery::mock(Checkout::class);
-        $checkout->shouldReceive('toResponse');
         $stripeService = Mockery::mock(StripeService::class);
-        $stripeService->shouldReceive('checkout')
-            ->never()
-            ->andReturn($checkout);
+        $stripeService->shouldReceive('checkout')->never();
 
         $this->app->instance(StripeService::class, $stripeService); // bind a StripeService instance into the container
 
@@ -246,12 +242,8 @@ class CheckoutControllerTest extends TestCase
             2 => 2,
         ]);
 
-        $checkout = Mockery::mock(Checkout::class);
-        $checkout->shouldReceive('toResponse');
         $stripeService = Mockery::mock(StripeService::class);
-        $stripeService->shouldReceive('checkout')
-            ->never()
-            ->andReturn($checkout);
+        $stripeService->shouldReceive('checkout')->never();
 
         $this->app->instance(StripeService::class, $stripeService); // bind a StripeService instance into the container
 
@@ -296,12 +288,8 @@ class CheckoutControllerTest extends TestCase
             2 => 3,
         ]);
 
-        $checkout = Mockery::mock(Checkout::class);
-        $checkout->shouldReceive('toResponse');
         $stripeService = Mockery::mock(StripeService::class);
-        $stripeService->shouldReceive('checkout')
-            ->never()
-            ->andReturn($checkout);
+        $stripeService->shouldReceive('checkout')->never();
 
         $this->app->instance(StripeService::class, $stripeService); // bind a StripeService instance into the container
 

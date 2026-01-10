@@ -31,6 +31,52 @@ class TicketRepository extends Repository
     }
 
     /**
+     * Select tickets whose events have not ended
+     *
+     * @param int[] $ids
+     * @param Carbon $now
+     * @return Ticket[]
+     */
+    public function selectTicketsWhereEventIsNotOver(array $ids, Carbon $now): array
+    {
+        return Ticket::where('event_end_date', '>=', $now)
+            ->whereIn('id', $ids)
+            ->orderBy('event_start_date', 'asc')
+            ->orderBy('id', 'asc')->get()->all();
+    }
+
+    /**
+     * Select ticket during event by id and organizer_user_id
+     *
+     * @param integer $id
+     * @param integer $organizerUserId
+     * @param Carbon $now
+     * @return Ticket|null
+     */
+    public function selectTicketDuringEventByIdAndOrganizerUserId(int $id, int $organizerUserId, Carbon $now): ?Ticket
+    {
+        return Ticket::where('id', $id)
+            ->where([
+                ['organizer_user_id', $organizerUserId],
+                ['event_start_date', '<=', $now],
+                ['event_end_date', '>=', $now],
+            ])
+            ->first();
+    }
+
+    /**
+     * Select ticket whose event has not ended
+     *
+     * @param integer $id
+     * @param Carbon $now
+     * @return Ticket|null
+     */
+    public function selectTicketWhereEventIsNotOver(int $id, Carbon $now): ?Ticket
+    {
+        return Ticket::where('id', $id)->where('event_end_date', '>=', $now)->first();
+    }
+
+    /**
      * Select paginated tickets during sales period
      *
      * @param Carbon $now
@@ -59,22 +105,6 @@ class TicketRepository extends Repository
             ['start_date', '<=', $now],
             ['end_date', '>=', $now],
         ])->whereIn('id', $ids)->orderBy('id', 'asc')->paginate($numberOfItemsPerPage);
-    }
-
-    /**
-     * Select tickets whose events have not ended
-     *
-     * @param int[] $ids
-     * @param Carbon $now
-     * @param integer $numberOfItemsPerPage
-     * @return Ticket[]
-     */
-    public function selectTicketsWhereEventIsNotOver(array $ids, Carbon $now): array
-    {
-        return Ticket::where('event_end_date', '>=', $now)
-            ->whereIn('id', $ids)
-            ->orderBy('event_start_date', 'asc')
-            ->orderBy('id', 'asc')->get()->all();
     }
 
     /**

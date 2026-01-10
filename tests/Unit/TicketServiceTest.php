@@ -19,80 +19,14 @@ class TicketServiceTest extends TestCase
     public function test_is_during_sales_period(): void
     {
         $ticket = Ticket::factory()->make([
-            'start_date' => '2000/01/01 00:00:00',
-            'end_date' => '2000/12/31 23:59:59',
+            'start_date' => '2000-01-01 00:00:00',
+            'end_date' => '2000-12-31 23:59:59',
         ]);
-        $this->assertFalse(TicketService::isDuringSalesPeriod($ticket, new Carbon('1999/12/31 23:59:59')));
-        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000/01/01 00:00:00')));
-        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000/01/01 00:00:01')));
-        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000/12/31 23:59:59')));
-        $this->assertFalse(TicketService::isDuringSalesPeriod($ticket, new Carbon('2001/01/01 00:00:00')));
-    }
-
-    /**
-     * Test normal checkIfTicketIsDuringEvent()
-     */
-    public function test_check_if_ticket_is_during_event_normal(): void
-    {
-        $this->expectNotToPerformAssertions();
-        $ticket = Ticket::factory()->make([
-            'event_start_date' => '2000/01/01 00:00:00',
-            'event_end_date' => '2000/12/31 23:59:59',
-        ]);
-        TicketService::checkIfTicketIsDuringEvent($ticket, new Carbon('2000/01/01 00:00:00'));
-        TicketService::checkIfTicketIsDuringEvent($ticket, new Carbon('2000/01/01 00:00:01'));
-        TicketService::checkIfTicketIsDuringEvent($ticket, new Carbon('2000/12/31 23:59:59'));
-    }
-
-    /**
-     * Test abnormal (before event) checkIfTicketIsDuringEvent()
-     */
-    public function test_check_if_ticket_is_during_event_abnormal_before_event(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $ticket = Ticket::factory()->make([
-            'event_start_date' => '2000/01/01 00:00:00',
-            'event_end_date' => '2000/12/31 23:59:59',
-        ]);
-        TicketService::checkIfTicketIsDuringEvent($ticket, new Carbon('1999/12/31 23:59:59'));
-    }
-
-    /**
-     * Test abnormal (after event) checkIfTicketIsDuringEvent()
-     */
-    public function test_check_if_ticket_is_during_event_abnormal_after_event(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $ticket = Ticket::factory()->make([
-            'event_start_date' => '2000/01/01 00:00:00',
-            'event_end_date' => '2000/12/31 23:59:59',
-        ]);
-        TicketService::checkIfTicketIsDuringEvent($ticket, new Carbon('2001/01/01 00:00:00'));
-    }
-
-    /**
-     * Test normal checkIfEventIsNotOver()
-     */
-    public function test_check_if_event_is_not_over_normal(): void
-    {
-        $this->expectNotToPerformAssertions();
-        $ticket = Ticket::factory()->make([
-            'event_end_date' => '2000/12/31 23:59:59',
-        ]);
-        TicketService::checkIfEventIsNotOver($ticket, new Carbon('2000/12/31 23:59:58'));
-        TicketService::checkIfEventIsNotOver($ticket, new Carbon('2000/12/31 23:59:59'));
-    }
-
-    /**
-     * Test abnormal checkIfEventIsNotOver()
-     */
-    public function test_check_if_event_is_not_over_abnormal(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $ticket = Ticket::factory()->make([
-            'event_end_date' => '2000/12/31 23:59:59',
-        ]);
-        TicketService::checkIfEventIsNotOver($ticket, new Carbon('2001/01/01 00:00:00'));
+        $this->assertFalse(TicketService::isDuringSalesPeriod($ticket, new Carbon('1999-12-31 23:59:59')));
+        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000-01-01 00:00:00')));
+        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000-01-01 00:00:01')));
+        $this->assertTrue(TicketService::isDuringSalesPeriod($ticket, new Carbon('2000-12-31 23:59:59')));
+        $this->assertFalse(TicketService::isDuringSalesPeriod($ticket, new Carbon('2001-01-01 00:00:00')));
     }
 
     /**
@@ -187,43 +121,43 @@ class TicketServiceTest extends TestCase
     public function test_are_event_and_ticket_sales_dates_valid_date_orders(): void
     {
         $errorMessage = [];
-        $now = new Carbon('2000/01/01 00:00:00');
+        $now = new Carbon('2000-01-01 00:00:00');
         // Success
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
             $now
         ));
         // Failure (sales end date is same as sales start date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/01/01 00:00:00'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-01-01 00:00:00'),
             null,
             $errorMessage,
             $now
         ));
         // Failure (event start date is same as sales end date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2000/12/31 23:59:59'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2000-12-31 23:59:59'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
             $now
         ));
         // Failure (event end date is same as event start date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
             $now
@@ -238,33 +172,33 @@ class TicketServiceTest extends TestCase
         $errorMessage = [];
         // Success (current datetime is before sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
-            new Carbon('1999/12/31 23:59:59')
+            new Carbon('1999-12-31 23:59:59')
         ));
         // Success (current datetime is same as sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
-            new Carbon('2000/01/01 00:00:00')
+            new Carbon('2000-01-01 00:00:00')
         ));
         // Failure (current datetime is after salse start date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             null,
             $errorMessage,
-            new Carbon('2000/01/01 00:00:01')
+            new Carbon('2000-01-01 00:00:01')
         ));
     }
 
@@ -274,39 +208,39 @@ class TicketServiceTest extends TestCase
     public function test_are_event_and_ticket_sales_dates_valid_before_sale(): void
     {
         $ticket = Ticket::factory()->make([
-            'start_date' => '2000/01/01 00:00:00',
-            'end_date' => '2000/12/31 23:59:59'
+            'start_date' => '2000-01-01 00:00:00',
+            'end_date' => '2000-12-31 23:59:59'
         ]);
         $errorMessage = [];
         // Success (current datetime is before sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('1999/01/01 00:00:00'),
-            new Carbon('1999/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('1999-01-01 00:00:00'),
+            new Carbon('1999-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('1998/12/31 23:59:59')
+            new Carbon('1998-12-31 23:59:59')
         ));
         // Success (current datetime is same as sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('1999/01/01 00:00:00'),
-            new Carbon('1999/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('1999-01-01 00:00:00'),
+            new Carbon('1999-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('1999/01/01 00:00:00')
+            new Carbon('1999-01-01 00:00:00')
         ));
         // Failure (current datetime is after salse start date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('1999/01/01 00:00:00'),
-            new Carbon('1999/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('1999-01-01 00:00:00'),
+            new Carbon('1999-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('1999/01/01 00:00:01')
+            new Carbon('1999-01-01 00:00:01')
         ));
     }
 
@@ -316,39 +250,39 @@ class TicketServiceTest extends TestCase
     public function test_are_event_and_ticket_sales_dates_valid_on_sale(): void
     {
         $ticket = Ticket::factory()->make([
-            'start_date' => '2000/01/01 00:00:00',
-            'end_date' => '2000/12/31 23:59:59'
+            'start_date' => '2000-01-01 00:00:00',
+            'end_date' => '2000-12-31 23:59:59'
         ]);
         $errorMessage = [];
         // Success
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 00:00:00'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 00:00:00'),
             $ticket,
             $errorMessage,
-            new Carbon('2000/12/31 00:00:00')
+            new Carbon('2000-12-31 00:00:00')
         ));
         // Failure (salse start date is different from sales start date of ticket)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:01'),
-            new Carbon('2000/12/31 00:00:00'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:01'),
+            new Carbon('2000-12-31 00:00:00'),
             $ticket,
             $errorMessage,
-            new Carbon('2000/12/31 00:00:00')
+            new Carbon('2000-12-31 00:00:00')
         ));
         // Failure (salse end date is after current datetime)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 00:00:00'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 00:00:00'),
             $ticket,
             $errorMessage,
-            new Carbon('2000/12/31 00:00:01')
+            new Carbon('2000-12-31 00:00:01')
         ));
     }
 
@@ -358,39 +292,39 @@ class TicketServiceTest extends TestCase
     public function test_are_event_and_ticket_sales_dates_valid_after_sale(): void
     {
         $ticket = Ticket::factory()->make([
-            'start_date' => '1998/01/01 00:00:00',
-            'end_date' => '1998/12/31 23:59:59'
+            'start_date' => '1998-01-01 00:00:00',
+            'end_date' => '1998-12-31 23:59:59'
         ]);
         $errorMessage = [];
         // Success (current datetime is before sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('1999/12/31 23:59:59')
+            new Carbon('1999-12-31 23:59:59')
         ));
         // Success (current datetime is same as sales start date)
         $this->assertTrue(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('2000/01/01 00:00:00')
+            new Carbon('2000-01-01 00:00:00')
         ));
         // Failure (current datetime is after salse start date)
         $this->assertFalse(TicketService::areEventAndTicketSalesDatesValid(
-            new Carbon('2001/01/01 00:00:00'),
-            new Carbon('2001/12/31 23:59:59'),
-            new Carbon('2000/01/01 00:00:00'),
-            new Carbon('2000/12/31 23:59:59'),
+            new Carbon('2001-01-01 00:00:00'),
+            new Carbon('2001-12-31 23:59:59'),
+            new Carbon('2000-01-01 00:00:00'),
+            new Carbon('2000-12-31 23:59:59'),
             $ticket,
             $errorMessage,
-            new Carbon('2000/01/01 00:00:01')
+            new Carbon('2000-01-01 00:00:01')
         ));
     }
 
@@ -422,7 +356,7 @@ class TicketServiceTest extends TestCase
     public function test_check_if_ticket_is_not_used_abnormal(): void
     {
         $this->expectException(RuntimeException::class);
-        $userTicket = new UserTicket(['used_at' => '2000/01/01 00:00:00']);
+        $userTicket = new UserTicket(['used_at' => '2000-01-01 00:00:00']);
         TicketService::checkIfTicketIsNotUsed($userTicket);
     }
 
@@ -452,16 +386,16 @@ class TicketServiceTest extends TestCase
                 'event_title' => 'Test Event 1',
                 'event_description' => 'Test Event 1 Description',
                 'price' => 100,
-                'event_start_date' => '2001/01/01 00:00:00',
-                'event_end_date' => '2001/12/31 23:59:59',
+                'event_start_date' => '2001-01-01 00:00:00',
+                'event_end_date' => '2001-12-31 23:59:59',
             ]),
             Ticket::factory()->make([
                 'id' => 2,
                 'event_title' => 'Test Event 2',
                 'event_description' => 'Test Event 2 Description',
                 'price' => 200,
-                'event_start_date' => '2002/01/01 00:00:00',
-                'event_end_date' => '2002/12/31 23:59:59',
+                'event_start_date' => '2002-01-01 00:00:00',
+                'event_end_date' => '2002-12-31 23:59:59',
             ]),
         ];
         TicketService::updateUserTicketDataInPaginator($paginator, $tickets);

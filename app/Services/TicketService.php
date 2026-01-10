@@ -27,38 +27,6 @@ class TicketService
     }
 
     /**
-     * Check if ticket is during event
-     *
-     * @param Ticket $ticket
-     * @param Carbon|null $now
-     * @return void
-     */
-    public static function checkIfTicketIsDuringEvent(Ticket $ticket, ?Carbon $now = null): void
-    {
-        $now ??= new Carbon();
-        if ($now->between($ticket->event_start_date, $ticket->event_end_date)) {
-            return;
-        }
-        
-        throw new RuntimeException("The ticket is outside the event period. ticket_id: {$ticket->id}");
-    }
-
-    /**
-     * Check if event is not over
-     *
-     * @param Ticket $ticket
-     * @param Carbon|null $now
-     * @return void
-     */
-    public static function checkIfEventIsNotOver(Ticket $ticket, ?Carbon $now = null): void
-    {
-        $now ??= new Carbon();
-        if ($now > $ticket->event_end_date) {
-            throw new RuntimeException("The event is over. ticket_id: {$ticket->id}");
-        }
-    }
-
-    /**
      * Whether the given numbers are more than 0 and the numbers of tickets or less
      *
      * @param Ticket[] $tickets

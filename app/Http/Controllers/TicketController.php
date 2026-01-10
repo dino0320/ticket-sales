@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TicketController extends Controller
@@ -34,7 +35,7 @@ class TicketController extends Controller
     public function show(Ticket $ticket): Response
     {
         if (!TicketService::isDuringSalesPeriod($ticket)) {
-            throw new NotFoundHttpException("The ticket is outside the sales period. ticket_id: {$ticket->id}");
+            throw new NotFoundHttpException('The ticket is outside the sales period.');
         }
 
         return Inertia::render('TicketDetail', [
@@ -52,9 +53,10 @@ class TicketController extends Controller
     {
         $ticketRepository = new TicketRepository();
 
-        $ticket = $ticketRepository->selectById($userTicket->ticket_id);
-
-        TicketService::checkIfEventIsNotOver($ticket);
+        $ticket = $ticketRepository->selectTicketWhereEventIsNotOver($userTicket->ticket_id, new Carbon());
+        if ($ticket === null) {
+            throw new NotFoundHttpException("The ticket's event has ended.");
+        }
 
         TicketService::checkIfTicketIsNotUsed($userTicket);
 
@@ -191,6 +193,8 @@ class TicketController extends Controller
                 $ticket->start_date = $startDate;
             }
 
+            $ticket->event_title = $request->event_title;
+            $ticket->event_description = $request->event_description;
             $ticket->end_date = $endDate;
             $ticket->event_start_date = $eventStartDate;
             $ticket->event_end_date = $eventEndDate;
@@ -216,12 +220,13 @@ class TicketController extends Controller
 
             TicketService::checkIfTicketIsNotUsed($userTicket);
 
-            $ticket = $ticketRepository->selectById($userTicket->ticket_id);
+            $now = new Carbon();
+            $ticket = $ticketRepository->selectTicketDuringEventByIdAndOrganizerUserId($userTicket->ticket_id, $request->user()->id, $now);
+            if ($ticket === null) {
+                throw new InvalidArgumentException();
+            }
 
-            TicketService::checkIfUserIsOrganizerOfTicket($request->user(), $ticket);
-            TicketService::checkIfTicketIsDuringEvent($ticket);
-
-            $userTicket->used_at = new Carbon();
+            $userTicket->used_at = $now;
 
             $userTicketRepository->save($userTicket);
 
