@@ -15,11 +15,11 @@ jobs:
       run: |
         touch .env
         docker compose up -d
-        ls node_modules
+        ls -la
 
     - name: Execute tests (Unit and Feature tests)
       run: |
-        ls node_modules
+        ls -la
         # npm build
         docker compose exec web bash -c "cd /srv/ticket-sales.com &&
           \. /root/.nvm/nvm.sh &&
