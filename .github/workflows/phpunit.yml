@@ -1,0 +1,21 @@
+name: PHPUnit
+
+on:
+  workflow_call:
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Start services
+      run: IS_NPM_BUILT=1 docker compose up -d
+
+    - name: Execute tests (Unit and Feature tests)
+      run: docker compose exec web bash -c "cd /srv/blackjack && php artisan test"
+    
+    - name: Stop services
+      run: docker compose down -v
