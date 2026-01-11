@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
+use Throwable;
 
 class CancelOrder implements ShouldQueue
 {
@@ -30,28 +32,32 @@ class CancelOrder implements ShouldQueue
      */
     public function handle(): void
     {
-        DB::transaction(function () {
-            $userOrderRepository = new UserOrderRepository();
-            $ticketRepository = new TicketRepository();
+        try {
+            DB::transaction(function () {
+                $userOrderRepository = new UserOrderRepository();
+                $ticketRepository = new TicketRepository();
         
-            $userOrder = $userOrderRepository->selectById($this->userOrderId);
-            if ($userOrder === null || $userOrder->status !== CheckoutConst::ORDER_STATUS_PENDING) {
-                return;
-            }
+                $userOrder = $userOrderRepository->selectById($this->userOrderId);
+                if ($userOrder === null || $userOrder->status !== CheckoutConst::ORDER_STATUS_PENDING) {
+                    throw new RuntimeException("Failed to get a pending user order. user_order_id:{$this->userOrderId}");
+                }
 
-            $tickets = $ticketRepository->selectByIdsForUpdate(array_column($userOrder->order_items, 'ticket_id'));
-            $numbersOfTickets = CheckoutService::getNumbersOfTickets($userOrder);
-            CheckoutService::decreaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
+                $tickets = $ticketRepository->selectByIdsForUpdate(array_column($userOrder->order_items, 'ticket_id'));
+                $numbersOfTickets = CheckoutService::getNumbersOfTickets($userOrder);
+                CheckoutService::decreaseNumbersOfReservedTickets($tickets, $numbersOfTickets);
 
-            $userOrder->status = CheckoutConst::ORDER_STATUS_CANCELED;
+                $userOrder->status = CheckoutConst::ORDER_STATUS_CANCELED;
  
-            $userOrderRepository->save($userOrder);
-            $ticketRepository->upsert($tickets);
+                $userOrderRepository->save($userOrder);
+                $ticketRepository->upsert($tickets);
 
-            Log::info('The order is canceled.', [
-                'user_order_id' => $this->userOrderId,
-            ]);
-        });
+                Log::info('The order is canceled.', [
+                    'user_order_id' => $this->userOrderId,
+                ]);
+            });
+        } catch (Throwable $e) {
+            Log::error($e);
+        }
     }
 
     public function getUserOrderId(): int
