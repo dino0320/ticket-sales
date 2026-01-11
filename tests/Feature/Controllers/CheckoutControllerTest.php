@@ -1,13 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Consts\CartConst;
 use App\Consts\CheckoutConst;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserOrder;
-use App\Services\StripeService;
+use App\Services\Stripe\Session;
+use App\Services\Stripe\StripeService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Exceptions;
@@ -18,7 +19,7 @@ use InvalidArgumentException;
 use Laravel\Cashier\Checkout;
 use Mockery;
 use RuntimeException;
-use Stripe\Checkout\Session;
+use Stripe\Checkout\Session as CheckoutSession;
 use Tests\TestCase;
 
 class CheckoutControllerTest extends TestCase
@@ -115,15 +116,12 @@ class CheckoutControllerTest extends TestCase
 
         $sessionId = 'TEST_SESSION_ID';
         $stripeService = Mockery::mock(StripeService::class);
-        $stripeService->shouldReceive('retrieveCheckoutSession')
+        $stripeService->shouldReceive('createStripeSession')
             ->once()
             ->withArgs([$sessionId])
-            ->andReturn([
-                'payment_status' => Session::PAYMENT_STATUS_PAID,
-                'metadata' => [
-                    'user_order_id' => $userOrder->id,
-                ],
-            ]);
+            ->andReturn(new Session(CheckoutSession::PAYMENT_STATUS_PAID, [
+                'user_order_id' => $userOrder->id,
+            ]));
 
         $this->app->instance(StripeService::class, $stripeService); // bind a StripeService instance into the container
 

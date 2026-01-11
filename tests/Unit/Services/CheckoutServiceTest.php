@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 use App\Jobs\CancelOrder;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserOrder;
 use App\Services\CheckoutService;
-use App\Services\StripeService;
+use App\Services\Stripe\StripeService;
 use Illuminate\Support\Facades\Queue;
 use Laravel\Cashier\Checkout;
 use Mockery;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserTicket;
-use App\Services\StripeService;
+use App\Services\Stripe\StripeService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Exceptions;

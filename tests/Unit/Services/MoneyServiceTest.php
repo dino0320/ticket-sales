@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 use App\Services\MoneyService;
 use PHPUnit\Framework\TestCase;
