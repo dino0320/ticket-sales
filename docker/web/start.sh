@@ -12,15 +12,16 @@ cp .env.$APP_ENV .env
 php artisan migrate:fresh --force
 php artisan db:seed --class=AdminSeeder
 
-# Install Xdebug
-if [ "$APP_ENV" = "local" ]; then
-  pecl install xdebug-3.3.1
-  cp docker/web/php/conf.d/99-xdebug.ini /etc/php.d/99-xdebug.ini
-fi
-
 # nvm is not loaded so load it
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Install Xdebug
+if [ "$APP_ENV" = "local" ]; then
+  npm ci
+  pecl install xdebug-3.3.1
+  cp docker/web/php/conf.d/99-xdebug.ini /etc/php.d/99-xdebug.ini
+fi
 
 if [ "$APP_ENV" = "production" ] || [ $IS_NPM_BUILT -eq 1 ]; then
   npm run build
