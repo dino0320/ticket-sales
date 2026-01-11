@@ -19,7 +19,6 @@ jobs:
     - name: Execute tests (Unit and Feature tests)
       run: |
         set -euxo pipefail
-        docker compose exec web bash -c "cd /srv/ticket-sales.com && ls -l node_modules"
         # npm build
         docker compose exec web bash -c "cd /srv/ticket-sales.com && \. /root/.nvm/nvm.sh && npm ci && npm run build"
         docker compose exec web bash -c "cd /srv/ticket-sales.com && php artisan test"
