@@ -19,7 +19,7 @@ jobs:
     - name: Execute tests (Unit and Feature tests)
       run: |
         # nvm is not loaded so load it
-        docker compose exec web bash -c "cd /srv/ticket-sales.com && export NVM_DIR=\"$HOME/.nvm\" && \"$NVM_DIR/nvm.sh\""
+        docker compose exec web bash -c "cd /srv/ticket-sales.com && /root/nvm.sh\""
         docker compose exec web bash -c "cd /srv/ticket-sales.com && php artisan test"
     
     - name: Stop services
