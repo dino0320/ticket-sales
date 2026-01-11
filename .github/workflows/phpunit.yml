@@ -20,7 +20,7 @@ jobs:
       run: |
         set -euxo pipefail
         # npm build
-        docker compose exec web bash -c "cd /srv/ticket-sales.com && \. /root/.nvm/nvm.sh && npm -v"
+        docker compose exec web bash -c "cd /srv/ticket-sales.com && \. /root/.nvm/nvm.sh && npm run build"
         docker compose exec web bash -c "cd /srv/ticket-sales.com && php artisan test"
     
     - name: Stop services
