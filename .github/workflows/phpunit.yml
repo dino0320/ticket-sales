@@ -17,7 +17,7 @@ jobs:
         IS_NPM_BUILT=1 docker compose up -d
 
     - name: Execute tests (Unit and Feature tests)
-      run: docker compose exec web bash -c "cd /srv/blackjack && php artisan test"
+      run: docker compose exec web bash -c "cd /srv/ticket-sales.com && php artisan test"
     
     - name: Stop services
       run: docker compose down -v
