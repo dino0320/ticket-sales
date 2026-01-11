@@ -11,7 +11,7 @@ use App\Repositories\TicketRepository;
 use App\Repositories\UserTicketRepository;
 use App\Services\MoneyService;
 use App\Services\OrganizerService;
-use App\Services\StripeService;
+use App\Services\Stripe\StripeService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;

@@ -1,15 +1,38 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Stripe;
 
 use App\Models\User;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Checkout;
+use Laravel\Cashier\Events\WebhookReceived;
 use Stripe\StripeClient;
 
 class StripeService
 {
     private StripeClient $stripeClient;
+
+    /**
+     * Get metadata from webhook received event
+     *
+     * @param WebhookReceived $event
+     * @return array
+     */
+    public static function getMetadataFromEvent(WebhookReceived $event): array
+    {
+        return $event->payload['data']['object']['metadata'] ?? [];
+    }
+
+    /**
+     * Get amount from webhook received event
+     *
+     * @param WebhookReceived $event
+     * @return integer|null
+     */
+    public static function getAmountFromEvent(WebhookReceived $event): ?int
+    {
+        return $event->payload['data']['object']['amount'] ?? null;
+    }
 
     public function __construct()
     {
@@ -17,19 +40,15 @@ class StripeService
     }
 
     /**
-     * Retrieve Checkout Session object
+     * Create Stripe Session
      *
      * @param string $sessionId
-     * @return array{payment_status:string, metadata:array}
+     * @return Session
      */
-    public function retrieveCheckoutSession(string $sessionId): array
+    public function createStripeSession(string $sessionId): Session
     {
         $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
-
-        return [
-            'payment_status' => $session->payment_status,
-            'metadata' => $session['metadata'] ?? [],
-        ];
+        return new Session($session['payment_status'], $session['metadata'] ?? []);
     }
 
     /**

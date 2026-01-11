@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\UserOrder;
 use App\Models\UserTicket;
+use App\Services\Stripe\StripeService;
 use Laravel\Cashier\Checkout;
 use RuntimeException;
 use Throwable;

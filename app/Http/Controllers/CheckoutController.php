@@ -10,7 +10,8 @@ use App\Repositories\UserOrderRepository;
 use App\Services\CartService;
 use App\Services\CheckoutService;
 use App\Services\MoneyService;
-use App\Services\StripeService;
+use App\Services\Stripe\Session;
+use App\Services\Stripe\StripeService;
 use App\Services\TicketService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,7 +21,6 @@ use Inertia\Response;
 use InvalidArgumentException;
 use Laravel\Cashier\Checkout;
 use RuntimeException;
-use Stripe\Checkout\Session;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 class CheckoutController extends Controller
@@ -60,13 +60,13 @@ class CheckoutController extends Controller
 
         $sessionId = $request->get('session_id') ?? throw new SessionNotFoundException('The Session ID doesn\'t exist');
  
-        $session = $stripeService->retrieveCheckoutSession($sessionId);
+        $session = $stripeService->createStripeSession($sessionId);
  
-        if ($session['payment_status'] !== Session::PAYMENT_STATUS_PAID) {
+        if ($session->paymentStatus !== Session::PAYMENT_STATUS_PAID) {
             throw new InvalidArgumentException('The order hasn\'t paid');
         }
         
-        $userOrderId = $session['metadata']['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing');
+        $userOrderId = $session->metadata['user_order_id'] ?? throw new InvalidArgumentException('The order ID is missing');
         
         $userOrder = $userOrderRepository->selectById((int)$userOrderId);
 
