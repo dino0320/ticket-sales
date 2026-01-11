@@ -47,8 +47,10 @@ permissions:
 jobs:
   laravel-tests:
     uses: ./.github/workflows/phpunit.yml
-    
+
   deploy:
+    needs: laravel-tests
+    
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
