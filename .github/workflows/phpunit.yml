@@ -12,7 +12,9 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Start services
-      run: IS_NPM_BUILT=1 docker compose up -d
+      run: |
+        touch .env
+        IS_NPM_BUILT=1 docker compose up -d
 
     - name: Execute tests (Unit and Feature tests)
       run: docker compose exec web bash -c "cd /srv/blackjack && php artisan test"
