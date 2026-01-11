@@ -20,8 +20,8 @@ jobs:
       run: |
         # npm build
         docker compose exec web bash -c "cd /srv/ticket-sales.com &&
-          ls node_modules
           \. /root/.nvm/nvm.sh &&
+          npm ci &&
           npm run build"
         # test
         docker compose exec web bash -c "cd /srv/ticket-sales.com && php artisan test"
