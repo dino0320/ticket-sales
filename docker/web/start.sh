@@ -10,7 +10,7 @@ php artisan env:decrypt --force --env=$APP_ENV
 cp .env.$APP_ENV .env
 
 php artisan migrate:fresh --force
-php artisan db:seed --class=AdminSeeder
+php artisan app:create-admin-user
 
 # nvm is not loaded so load it
 export NVM_DIR="$HOME/.nvm"
