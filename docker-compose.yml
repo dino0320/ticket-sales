@@ -48,5 +48,3 @@ services:
   stripe:
     build: ./docker/stripe
     tty: true
-    env_file:
-      - .env
