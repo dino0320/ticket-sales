@@ -7,6 +7,7 @@ use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Checkout;
 use Laravel\Cashier\Events\WebhookReceived;
 use Stripe\StripeClient;
+use Stripe\StripeObject;
 
 class StripeService
 {
@@ -48,7 +49,14 @@ class StripeService
     public function createStripeSession(string $sessionId): Session
     {
         $session = Cashier::stripe()->checkout->sessions->retrieve($sessionId);
-        return new Session($session['payment_status'], $session['metadata'] ?? []);
+        /**
+         * @var StripeObject $metadata
+         */
+        $metadata = $session['metadata'] ?? [];
+        if ($metadata !== []) {
+            $metadata = $metadata->toArray();
+        }
+        return new Session($session['payment_status'], $metadata);
     }
 
     /**
