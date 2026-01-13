@@ -29,7 +29,7 @@ export function OrganizerApplication({ userOrganizerApplication, isEllipsis = fa
         {userOrganizerApplication.is_individual ? 'Individual' : 'Company'}
       </CardContent>
       <CardFooter>
-        {userOrganizerApplication.applied_at}
+        {(new Date(userOrganizerApplication.applied_at)).toLocaleString()}
       </CardFooter>
     </Card>
   )
