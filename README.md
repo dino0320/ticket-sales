@@ -1,60 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Ticket Sales
+This is a portfolio project for a ticket sales EC site. I used full-stack technologies, but I focused mainly on backend development.  
+I built this project to practice designing a production-ready backend, including payment processing and concurrency control.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project features automated deployment to AWS using GitHub Actions.  
+Access to the live application is available upon request to help reduce hosting costs.
 
-## About Laravel
+### Screenshots
+Screenshots are intentionally minimal, as this project focuses on backend
+architecture rather than UI design.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#### Home
+![Home image](images_for_readme/home.png)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Cart
+Uses Valkey to manage cart state.  
+Manages reserved stock using database transactions.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+![Cart image](images_for_readme/cart.png)
 
-## Learning Laravel
+#### Stripe Checkout
+Stripe Checkout with webhook-based order confirmation.  
+(`4242` is a part of Stripe test card number.)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+![Stripe Checkout image](images_for_readme/stripe_checkout.png)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### Order History
+![Order History image](images_for_readme/order_history.png)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Purchased Ticket
+The QR code can only be scanned by the organizer of the ticket.
 
-## Laravel Sponsors
+![Purchased Ticket image](images_for_readme/purchased_ticket.png)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### Organizer Ticket Editor
+![Organizer Ticket Editor image](images_for_readme/ticket_editor.png)
 
-### Premium Partners
+#### Admin Organizer Approval
+![Admin Organizer Approval image](images_for_readme/organizer_approval.png)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Technologies Used (Back end)
+- Laravel 12
+- Nginx
+- PHP 8.2
+- Composer
+- PostgreSQL 17.6
+- Valkey
+- Docker / Docker Compose
+- Stripe
+- GitHub Actions
+- AWS
+  - Amazon ECS (Fargate)
+  - Amazon RDS
+  - Amazon ElastiCache
+  - Amazon ECR
+  - Amazon S3
+  - Amazon CloudWatch
+  - Application Load Balancer
+  - VPC Endpoint
+  - NAT Gateway
 
-## Contributing
+### Automated Testing / CI
+This project includes PHPUnit tests set up with GitHub Actions.  
+Tests run automatically before the deployment.  
+Workflow file: `.github/workflows/phpunit.yml`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Technologies Used (Front end)
+- HTML
+- CSS (Tailwind + Shadcn)
+- TypeScript
+- Inertia + React
+- Vite (Asset Bundler)
 
-## Code of Conduct
+## Architecture Diagram
+![Architecture Diagram](images_for_readme/architecture_diagram.png)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Features
+### General User
+- User Registration and Authentication (Sign Up / Sign In)
+- Cart
+- Secure checkout flow with stock and reserved stock management
+- Ticket usage (QR code)
+- Order History
 
-## Security Vulnerabilities
+### Organizer User
+- Ticket Editor (Create / Update)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Admin User
+- Organizer Approval
+
+## Getting Started
+Follow these steps to get this project up and running locally.
+
+### Prerequisites
+- Docker / Docker Compose
+- Stripe Account
+
+### Installation
+1. Clone this repository  
+  ```bash
+  git clone https://github.com/dino0320/ticket-sales.git
+  cd ticket-sales
+  ```
+
+2. Start the services with Docker Compose  
+  ```bash
+  IS_NPM_BUILT=1 docker compose up -d
+  ```
+
+3. Start a Stripe local webhook listener  
+  ```bash
+  docker compose exec stripe bash
+  stripe listen --forward-to web:80/stripe/webhook --api-key=<Your Stripe Secret Key>
+  ```
+
+4. Set your Stripe keys in the generated `.env` file  
+  You should get your Stripe webhook secret key when you start the Stripe local listener.  
+  ```.env
+  STRIPE_KEY=<Your Stripe Public Key>
+  STRIPE_SECRET=<Your Stripe Secret Key>
+  STRIPE_WEBHOOK_SECRET=<Your Stripe Webhook Secret Key>
+  ```
+
+5. Access the app at http://localhost/home  
+
+## What I Focused On
+- Backend architecture and domain separation
+- Transaction management for ticket inventory
+- Stripe payment and webhook handling
+- Automated testing for services, controllers, jobs, and event listeners
+- CI/CD with GitHub Actions and AWS ECS
+
+## Future Improvements
+- Rate limiting for malicious attacks
+- Creating a middleware for organizer users
+- Search and filter features
+- User-facing error handling and error messages
+- Admin enhancements
 
 ## License
 
