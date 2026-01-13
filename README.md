@@ -56,8 +56,8 @@ The QR code can only be scanned by the organizer of the ticket.
   - Amazon S3
   - Amazon CloudWatch
   - Application Load Balancer
-  - VPC Endpoint
-  - NAT Gateway
+  - VPC Endpoint (used to reduce NAT Gateway costs for AWS services)
+  - NAT Gateway (used only for Stripe)
 
 ### Automated Testing / CI
 This project includes PHPUnit tests set up with GitHub Actions.  
