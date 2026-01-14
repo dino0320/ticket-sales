@@ -14,7 +14,7 @@ architecture rather than UI design.
 
 #### Cart
 Uses Valkey to manage cart state.  
-Manages reserved stock using database transactions.
+Manages stock using database transactions.
 
 ![Cart image](images_for_readme/cart.png)
 
@@ -124,11 +124,11 @@ Follow these steps to get this project up and running locally.
 5. Access the app at http://localhost/home  
 
 ## What I Focused On
-- Backend architecture and domain separation
-- Transaction management for ticket inventory
-- Stripe payment and webhook handling
-- Automated testing for services, controllers, jobs, and event listeners
-- CI/CD with GitHub Actions and AWS ECS
+- Design and implement e-commerce backend architecture
+- Manage ticket inventory transactions
+- Handle Stripe payments and webhooks
+- Automated testing of services, controllers, jobs, and event listeners
+- CI/CD setup with GitHub Actions and AWS ECS
 
 ## Future Improvements
 - Rate limiting for malicious attacks
