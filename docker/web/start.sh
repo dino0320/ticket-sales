@@ -13,8 +13,7 @@ php artisan migrate:fresh --force
 php artisan app:create-admin-user
 
 # nvm is not loaded so load it
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+source ~/.bashrc
 
 # Install Xdebug
 if [ "$APP_ENV" = "local" ]; then
