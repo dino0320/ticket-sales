@@ -12,6 +12,10 @@ if [ "$APP_ENV" = "local" ]; then
   # nvm is not loaded so load it
   source ~/.bashrc
   npm ci
+
+if [ $IS_NPM_BUILT -eq 1 ]; then
+  npm run build
+fi
 fi
 
 php artisan env:decrypt --force --env=$APP_ENV
