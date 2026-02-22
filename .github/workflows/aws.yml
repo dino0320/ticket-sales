@@ -75,13 +75,10 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t composer ./docker/composer
-        docker run --rm -v `pwd`:/srv/ticket-sales.com composer bash -c "chmod 755 /srv/ticket-sales.com/docker/composer/start.sh && /srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
-        
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/web/Dockerfile .
+        docker build --target production -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/web/Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 

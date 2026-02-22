@@ -6,28 +6,19 @@ PROJECT_PATH=/srv/ticket-sales.com
 
 cd $PROJECT_PATH
 
+# composer install and npm ci
+if [ "$APP_ENV" = "local" ]; then
+  composer install
+  # nvm is not loaded so load it
+  source ~/.bashrc
+  npm ci
+fi
+
 php artisan env:decrypt --force --env=$APP_ENV
 cp .env.$APP_ENV .env
 
 php artisan migrate:fresh --force
 php artisan app:create-admin-user
-
-# nvm is not loaded so load it
-source ~/.bashrc
-
-# Install Xdebug
-if [ "$APP_ENV" = "local" ]; then
-  npm ci
-  pecl install xdebug-3.3.1
-  cp docker/web/php/conf.d/99-xdebug.ini /etc/php.d/99-xdebug.ini
-fi
-
-if [ "$APP_ENV" = "production" ] || [ $IS_NPM_BUILT -eq 1 ]; then
-  npm run build
-fi
-
-# Add the nginx user to the root group for permission access
-usermod -aG root nginx
 
 # Give permissions for log output etc.
 chmod 775 "$PROJECT_PATH/storage/logs"

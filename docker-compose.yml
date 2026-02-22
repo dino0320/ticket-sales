@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
+      target: local
     volumes:
       - .:/srv/ticket-sales.com
     ports:
@@ -17,17 +18,8 @@ services:
       LARAVEL_ENV_ENCRYPTION_KEY: "base64:oVn1cYQTt6SOJ6mYU/RRogXXDCS5mJ3N5gLxIB8RijY="
       IS_NPM_BUILT: ${IS_NPM_BUILT:-0}
     depends_on:
-      composer:
-        condition: service_completed_successfully
       db:
         condition: service_healthy
-
-  composer:
-    build: ./docker/composer
-    volumes:
-      - .:/srv/ticket-sales.com
-    command: bash -c "chmod 755 /srv/ticket-sales.com/docker/composer/start.sh &&
-             /srv/ticket-sales.com/docker/composer/start.sh /srv/ticket-sales.com"
 
   db:
     build: ./docker/db

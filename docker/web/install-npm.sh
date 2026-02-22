@@ -8,8 +8,3 @@ source ~/.bashrc
 
 VERSION=$1
 nvm install $VERSION
-
-PROJECT_PATH=$2
-cd $PROJECT_PATH
-
-npm ci
