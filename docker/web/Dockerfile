@@ -1,9 +1,7 @@
 # --- Stage 1: Install PHP dependencies for production ---
 FROM composer:2.7.6 AS composer_production
 WORKDIR /app
-RUN apk update && \
-    apk add --no-cache libpng-dev && \
-    docker-php-ext-install bcmath
+RUN docker-php-ext-install bcmath
 COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
