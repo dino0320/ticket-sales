@@ -13,6 +13,11 @@ jobs:
     
     - name: Start services
       run: IS_NPM_BUILT=1 docker compose up -d
+    
+    - name: Wait for App Readiness (Build & Migration)
+      run: |
+        # Wait up to 3 minutes (180 seconds)
+        timeout 180s bash -c 'until docker compose exec web test -f /tmp/app-ready; do echo "Waiting for setup to finish..."; sleep 5; done'
 
     - name: Execute tests (Unit and Feature tests)
       run: docker compose exec web php artisan test

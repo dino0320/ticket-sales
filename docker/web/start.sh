@@ -28,6 +28,9 @@ php artisan app:create-admin-user
 chmod 775 "$PROJECT_PATH/storage/logs"
 chmod 775 "$PROJECT_PATH/storage/framework/views"
 
+# Create a ready flag
+touch /tmp/app-ready
+
 # Start php-fpm and NGINX
 # By using -g "daemon off;", NGINX runs in the foreground, preventing the container from exiting automatically
 php-fpm
