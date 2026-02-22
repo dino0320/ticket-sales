@@ -21,8 +21,8 @@ FROM node:20.19.6-alpine AS node_production
 WORKDIR /app
 RUN apk update && apk add --no-cache php83 php83-mbstring php83-tokenizer && \
     ln -sf /usr/bin/php83 /usr/bin/php
-COPY --from=composer_node_helper /app/vendor ./vendor
 COPY . .
+COPY --from=composer_node_helper /app/vendor ./vendor
 RUN npm ci && npm run build
 
 
