@@ -57,8 +57,7 @@ RUN usermod -aG root nginx
 
 # --- Stage 5: Development environment (Local) ---
 FROM base AS local
-ARG PROJECT_PATH=/srv/ticket-sales.com
-WORKDIR $PROJECT_PATH
+WORKDIR /srv/ticket-sales.com
 
 # Install Composer, Node.js and Xdebug
 
@@ -81,8 +80,7 @@ RUN chmod 755 /tmp/install-composer.sh && /tmp/install-composer.sh /usr/local/bi
 
 # --- Stage 6: Production environment ---
 FROM base AS production
-ARG PROJECT_PATH=/srv/ticket-sales.com
-WORKDIR $PROJECT_PATH
+WORKDIR /srv/ticket-sales.com
 COPY . .
 COPY --from=composer_production /app/vendor ./vendor
 COPY --from=node_production /app/public/build ./public/build
