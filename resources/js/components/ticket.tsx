@@ -1,13 +1,14 @@
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { CalendarDays } from 'lucide-react'
 
-import { formatCurrency } from '@/lib/utils'
+import { cn, formatCurrency, formatEventDate } from '@/lib/utils'
 
 export type TicketData = {
   id: number,
@@ -32,23 +33,40 @@ export type IssuedTicketData = {
   end_date: string,
 }
 
-export function Ticket({ ticket, isEllipsis = false }: { ticket: TicketData, isEllipsis?: boolean }) {
-  const eventStartDate = new Date(ticket.event_start_date)
-  const eventEndDate = new Date(ticket.event_end_date)
+export function Ticket({ ticket, isEllipsis = false, className }: { ticket: TicketData, isEllipsis?: boolean, className?: string }) {
+  const isSoldOut = ticket.number_of_tickets === 0
+  const isLowStock = !isSoldOut && ticket.number_of_tickets <= 10
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{ticket.event_title}</CardTitle>
-        <CardDescription className={isEllipsis ? 'overflow-ellipsis' : ''}>
-          {ticket.event_description}
-        </CardDescription>
+    <Card className={cn(
+      'group transition-all duration-200 hover:border-primary/30 hover:shadow-md',
+      className,
+    )}>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-3">
+          <CardTitle className="text-lg leading-snug">{ticket.event_title}</CardTitle>
+          <div className="flex shrink-0 flex-col items-end gap-1.5">
+            <span className="text-lg font-bold text-primary">{formatCurrency(ticket.price)}</span>
+            {isSoldOut ? (
+              <Badge variant="destructive">Sold Out</Badge>
+            ) : isLowStock ? (
+              <Badge variant="secondary">{ticket.number_of_tickets} left</Badge>
+            ) : (
+              <Badge variant="outline" className="text-muted-foreground">Available</Badge>
+            )}
+          </div>
+        </div>
+        {ticket.event_description && (
+          <CardDescription className={cn('line-clamp-2', isEllipsis && 'overflow-ellipsis')}>
+            {ticket.event_description}
+          </CardDescription>
+        )}
       </CardHeader>
-      <CardContent>
-        {formatCurrency(ticket.price)}
-      </CardContent>
-      <CardFooter>
-        {eventStartDate.toLocaleString()} - {eventEndDate.toLocaleString()}
+      <CardFooter className="border-t pt-4 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <CalendarDays className="size-4 shrink-0 text-primary/70" />
+          <span>{formatEventDate(ticket.event_start_date, ticket.event_end_date)}</span>
+        </div>
       </CardFooter>
     </Card>
   )
